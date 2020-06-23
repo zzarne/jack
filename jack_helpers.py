@@ -17,13 +17,11 @@
 ### along with this program; if not, write to the Free Software
 ### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import string
 import re
+import string
 
 import jack_plugins
-
 from jack_globals import *
-
 
 helpers = {
     'builtin': {
@@ -51,13 +49,13 @@ helpers = {
         'bitrate_factor': 1,
         'status_start': "%",
         'percent_fkt': r"""
-s = string.split(i['buf'], '\r')
+s = i['buf'].split('\r')
 if len(s) >= 2:
     s = s[-2]
 if len(s) == 1:
     s = s[0]
-y0 = string.find(s, "[")
-y1 = string.find(s, "%]")
+y0 = s.find("[")
+y1 = s.find("%]")
 if y0 != -1 and y1 != -1:
     try:
         percent = float(s[y0 + 1:y1])
@@ -77,11 +75,11 @@ else:
         'bitrate_factor': 1000,
         'status_start': "%",
         'percent_fkt': r"""
-s = string.split(i['buf'], '\r')
+s = i['buf'].split('\r')
 if len(s) >= 4:
     s = s[-2]
-    if string.find(s, "%") >= 0:
-        y = string.split(s, " ", 3)
+    if s.find("%") >= 0:
+        y = s.split(" ", 3)
         percent = float(y[0]) / (i['track'][LEN] * CDDA_BLOCKSIZE / 2) * 100.0
     else:
         percent = 0
@@ -96,14 +94,14 @@ if len(s) >= 4:
         'bitrate_factor': 1000,
         'status_start': "%",
         'percent_fkt': r"""
-s = string.split(i['buf'], '\r')
+s = i['buf'].split('\r')
 if len(s) >= 2: s = s[-2]
 if len(s) == 1: s = s[0]
-if string.find(s, "%") >= 0:
-    y = string.split(s, " / ")
-    y0 = string.split(y[0])[-1]
-    y1 = string.split(y[1])[0]
-    percent=float(y0) / float(y1) * 100.0
+if s.find("%") >= 0:
+    y = s.split(" / ")
+    y0 = y[0].split()[-1]
+    y1 = y[1].split()[0]
+    percent = float(y0) / float(y1) * 100.0
 else:
     percent = 0
 """,
@@ -121,17 +119,17 @@ else:
         'bitrate_factor': 1,
         'status_start': "%",
         'percent_fkt': r"""
-s = string.split(i['buf'], '\r')
+s = i['buf'].split('\r')
 if len(s) >= 2: s=s[-2]
 if len(s) == 1: s=s[0]
-if string.find(s, "%") >= 0:       # status reporting starts here
-    y = string.split(s, "/")
-    y1 = string.split(y[1], "(")[0]
+if s.find("%") >= 0:       # status reporting starts here
+    y = s.split("/")
+    y1 = y[1].split("(")[0]
     percent = float(y[0]) / float(y1) * 100.0
-elif string.find(s, "Frame:") >= 0:    # older versions, like 3.13
-    y = string.split(s, "/")
-    y0 = string.split(y[0], "[")[-1]
-    y1 = string.split(y[1], "]")[0]
+elif s.find("Frame:") >= 0:    # older versions, like 3.13
+    y = s.split("/")
+    y0 = y[0].split("[")[-1]
+    y1 = y[1]s.split("]")[0]
     percent = float(y0) / float(y1) * 100.0
 else:
     percent = 0
@@ -150,14 +148,14 @@ else:
         'bitrate_factor': 1,
         'status_start': "%",
         'percent_fkt': r"""
-s = string.split(i['buf'], '\r')
+s = i['buf'].split('\r')
 if len(s) >= 2: s=s[-2]
 if len(s) == 1: s=s[0]
-if string.find(s, "%") >= 0: # status reporting starts here
-    s = replace(s, "\000", " ")
-    y = string.split(s, "/")
-    y0 = string.split(y[0], "{")[-1]
-    y1 = string.split(y[1], "}")[0]
+if s.find("%") >= 0: # status reporting starts here
+    s = s.replace("\000", " ")
+    y = s.split("/")
+    y0 = y[0].split("{")[-1]
+    y1 = y[1].split("}")[0]
     percent = float(y0) / float(y1) * 100.0
 else:
     percent = 0
@@ -172,11 +170,11 @@ else:
         'bitrate_factor': 1000,
         'status_start': "%",
         'percent_fkt': r"""
-s = string.split(i['buf'], '\r')
+s = i['buf'].split('\r')
 if len(s) >= 2: s=s[-2]
-if string.find(s, "Status:") != -1:
-    y = string.split(s[8:])
-    percent = float(string.split(y[0], '%')[0])
+if s.find("Status:") != -1:
+    y = s[8:].split()
+    percent = float(y[0].split('%')[0])
 else:
     percent = 0
 """,
@@ -194,10 +192,10 @@ else:
         'bitrate_factor': 1,
         'status_start': "%",
         'percent_fkt': r"""
-s = string.split(i['buf'], '\r')
+s = i['buf'].split('\r')
 if len(s) >= 2: s = s[-2]
-if string.find(s, "ETA:") != -1:
-    y = string.strip(string.split(s, '%')[0])
+if s.find("ETA:") != -1:
+    y = s.split('%')[0].strip()
     if len(y) == 0:
         percent = 0
     else:
@@ -213,20 +211,20 @@ else:
         'vbr-cmd': "flac -o %o %i",
         'vbr-otf-cmd': "flac --channels 2 --bps 16 --sample-rate 44100 --force-raw-format --endian=big --sign=signed -o %o -",
         'status_blocksize': 160,
-        'status_start': "%", 
+        'status_start': "%",
         'percent_fkt': r"""
-s = string.split(i['buf'], '\r')    
+s = i['buf'].split('\r')
 if len (s) >= 2: s = s[-2]
-if len (s) == 1: s = s[0]       
-y0 = string.rfind(s, ": ")             
-y1 = string.find (s, "%", y0)
-if y0 != -1 and y1 != -1: 
+if len (s) == 1: s = s[0]
+y0 = s.rfind(": ")
+y1 = s.find("%", y0)
+if y0 != -1 and y1 != -1:
     try:
         percent = float(s[y0 + 1:y1])
     except ValueError:
         percent = 0
-else:                   
-    percent = 0         
+else:
+    percent = 0
 """,
     },
 
@@ -239,10 +237,10 @@ else:
         'status_blocksize': 160,
         'status_start': "-.-",
         'percent_fkt': r"""
-s = string.split(i['buf'], '\r')
+s = i['buf'].split('\r')
 if len(s) >= 3:
     s = s[-3]
-    s = string.split(string.strip(s))
+    s = s.strip().split()
     if len(s) >= 3 and s[2] == "kbps" and s[0] != "-.-":
         percent = float(s[0])
     else:
@@ -260,7 +258,7 @@ if len(s) >= 3:
         'status_fkt': r"""
 # (== PROGRESS == [                              | 013124 00 ] == :^D * ==)
 # (== PROGRESS == [                       >      .| 011923 00 ] == :-) . ==)
-tmp = string.split(i['buf'], "\r")
+tmp = i['buf'].split("\r")
 if len(tmp) >= 2:
     tmp = tmp[-2] + " "
     new_status = tmp[17:48] + tmp[49:69] # 68->69 because of newer version
@@ -269,10 +267,10 @@ else:
 """,
         'otf-status_fkt': r"""
 buf = i['buf']
-tmp = string.split(buf, "\n")
+tmp = buf.split("\n")
 new_status = ""
 if len(tmp) >= 2:
-    tmp = string.split(tmp[-2], " @ ")
+    tmp = tmp[-2].split(" @ ")
     if tmp[0] == "##: -2 [wrote]":
         percent = (float(tmp[1]) - (i['track'][START] * CDDA_BLOCKSIZE / 2.0)) / (i['track'][LEN] * CDDA_BLOCKSIZE / 2.0) * 100.0
         new_status = "[otf - reading, %2i%%]" % percent
@@ -284,10 +282,10 @@ if 0 and cf['_debug']: # disabled for now
     tmpf=open("%s.debug.%02d.txt" % (jack_version.prog_name, exited_proc['track'][NUM]), "w")
     tmpf.write(exited_proc['buf'])
     del tmpf
-tmps = string.split(exited_proc['buf'], '\r')
+tmps = exited_proc['buf'].split('\r')
 tmps.reverse()
 for tmp in tmps:
-    if string.find(tmp, "PROGRESS") != -1:
+    if tmp.find("PROGRESS") != -1:
         last_status = tmp
         break
 final_status = ("%sx" % jack_functions.pprint_speed(speed)) + last_status[16:48] + "]"
@@ -314,7 +312,7 @@ final_status = "[otf - done]"
 # inbetween (to be precise: the first number on each line)
         'toc_fkt': r"""
 for l in p.readlines():
-    l = string.rstrip(l)
+    l = l.rstrip()
     if not l:
         continue
     if l.startswith("TOTAL"):
@@ -338,7 +336,7 @@ for l in p.readlines():
         'status_blocksize': 200,
         'status_start': "percent_done:",
         'status_fkt': r"""
-tmp = string.split(i['buf'], "\r")
+tmp = i['buf'].split("\r")
 if len(tmp) >= 2:
     tmp = tmp[-2].lstrip()
     pct = tmp.find("%")
@@ -371,11 +369,11 @@ while 1:
     if not l:
         break
     if l[0] == "T" and l[1] in string.digits and l[2] in string.digits and l[3] == ":":
-        num, start, length, type, pre, copy, ch, dummy = string.split(l)[:8]
+        num, start, length, type, pre, copy, ch, dummy = l.split()[:8]
         if type == "audio":
             num = int(num[1:3])
             start = int(start)
-            length = string.replace(length,".", ":")
+            length = length.replace(".", ":")
             length = timestrtoblocks(length)
             pre = pre == "pre-emphasized"
             copy = copy != "copydenied"
@@ -392,7 +390,7 @@ while 1:
     l = p.readline()
     if not l:
         break
-    l = string.strip(l)
+    l = l.strip()
     # new cdda2wav
     if starts_with(l, "Table of Contents: total tracks"):
         new_toc1 = 1
@@ -405,10 +403,10 @@ while 1:
         continue
 
     if new_toc2 and l and l[0] in string.digits:
-        l = string.split(l, "(")[1:]
+        l = l.split("(")[1:]
         for i in l:
-            x = string.split(i, ")")[0]
-            x = string.strip(x)
+            x = i.split(")")[0]
+            x = x.strip()
             try:
                 new_starts.append(int(x))
             except:
@@ -416,11 +414,11 @@ while 1:
         continue
 
     if new_toc1 and l and l[0] in string.digits:
-        l = string.split(l, "(")[1:]
+        l = l.split("(")[1:]
         for i in l:
-            if string.find(i, ":") >= 0:
-                x = string.split(i, ")")[0]
-                x = replace(x, ".", ":")
+            if i.find(":") >= 0:
+                x = i.split(")")[0]
+                x = x.replace(".", ":")
                 new_lengths.append(timestrtoblocks(x))
         continue
 
@@ -428,7 +426,7 @@ while 1:
     if l and l[0:11] == "Album title":
         start = 1
     elif l and start:
-        l = string.split(l)
+        l = l.split()
         if l[0] == "Leadout:":
             start = 0
         else:
@@ -440,8 +438,8 @@ while 1:
             else:
                 channels = 0
             t_start = int(l[1])
-            msf = string.split(l[2], ":")
-            sf = string.split(msf[1], ".")
+            msf = l[2].split(":")
+            sf = msf[1].split(".")
             t_length = int(sf[1]) + int(sf[0]) * 75 + int(msf[0]) * 60 * 75
             erg.append([num, t_length, t_start, l[5] == "copyallowed", l[4] != "linear", channels, 1, cf['_bitrate'], cf['_name'] % num])
 if new_c2w and len(new_lengths) == len(new_starts) - 1:
@@ -456,10 +454,10 @@ if new_c2w and len(new_lengths) == len(new_starts) - 1:
         'status_blocksize': 100,
         'status_start': "total:",
         'status_fkt': r"""
-tmp = string.split(i['buf'], "\r")
+tmp = i['buf'].split("\r")
 if len(tmp) >= 2:
-    if string.find(tmp[-2], 'total:') != -1:
-        new_status = string.strip(tmp[-2])
+    if tmp[-2].find('total:') != -1:
+        new_status = tmp[-2].strip()
     else:
         new_status = "waiting..."
 else:
@@ -472,11 +470,11 @@ final_status = ("%s" % jack_functions.pprint_speed(speed)) + "x [ DAE done with 
         'toc_cmd': "dagrab -d %d -i 2>&1",
         'toc_fkt': r"""
 while l:
-    l = string.strip(l)
+    l = l.strip()
     if l and l[0:5] == "track":
         start = 1
     elif l and start:
-        l = string.split(l)
+        l = l.split()
         if l[3] == "leadout":
             start = 0
         else:
@@ -497,9 +495,9 @@ while l:
         'status_blocksize': 100,
         'status_start': "total:",
         'status_fkt': r"""
-x = string.split(i['buf'], '\r')[-2]
-if string.find(x, 'total:') != -1:
-    new_status = string.strip(string.split(i['buf'], '\r')[-2])
+x = i['buf'].split('\r')[-2]
+if x.find('total:') != -1:
+    new_status = i['buf'].split('\r')[-2]).strip()
 else:
     new_status = "waiting..."
 """,
@@ -510,9 +508,9 @@ final_status = ("%s" % jack_functions.pprint_speed(speed)) + "x [ DAE done with 
         'toc_cmd': "tosha -d %d -iq 2>&1",
         'toc_fkt': r"""
 while l:
-    l = string.rstrip(l)
+    l = l.rstrip()
     if l:
-        l = string.split(l)
+        l = l.split()
         num = int(l[0])
         erg.append([num, 1 + int(l[3]) - int(l[2]), int(l[2]), 0, 0, 2, 1, cf['_bitrate'], cf['_name'] % num])
     l = p.readline()

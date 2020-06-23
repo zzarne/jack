@@ -16,7 +16,6 @@
 ### along with this program; if not, write to the Free Software
 ### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import string
 import sys
 import os
 import jack_version
@@ -25,7 +24,7 @@ from jack_config import cf
 def indent(pre, msg):
     print(pre, end=' ')
 
-    msg = string.split(msg)
+    msg = msg.split()
     p = len(pre)
     y = p
     for i in msg:

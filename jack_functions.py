@@ -20,9 +20,7 @@
 import codecs
 import traceback
 import sndhdr
-import types
 import stat
-import string
 import sys
 import os
 import locale
@@ -57,10 +55,10 @@ def df(fs = ".", blocksize = 1024):
     else:
         # Not very portable
         p = os.popen("df " + fs)
-        s = string.split(string.rstrip(p.readline()))
+        s = p.readline().rstrip().split()
         for i in range(len(s)):
             if s[i] == "Available":
-                s = string.split(string.rstrip(p.readline()))
+                s = p.readline().rstrip().split()
                 p.close()
                 return int(s[i]) * int(blocksize)
         p.close()
@@ -68,7 +66,7 @@ def df(fs = ".", blocksize = 1024):
 def get_sysload_linux_proc():
     "extract sysload from /proc/loadavg, linux only (?)"
     f = open("/proc/loadavg", "r")
-    loadavg = float(string.split(f.readline())[0])
+    loadavg = float(f.readline().split()[0])
     return loadavg
 
 def pprint_i(num, fmt = "%i%s", scale = 2.0**10, max = 4):
@@ -85,9 +83,9 @@ def pprint_i(num, fmt = "%i%s", scale = 2.0**10, max = 4):
         if num > 999:
             return fmt % (num, c)
         elif num >= 100:
-            return string.replace(fmt, "%i", "%s") % (repr(num)[:3], c)
+            return fmt.replace("%i", "%s") % (repr(num)[:3], c)
         else:
-            return string.replace(fmt, "%i", "%s") % (repr(num)[:4], c)
+            return fmt.replace("%i", "%s") % (repr(num)[:4], c)
     else:
         return fmt % (num, c)
 
@@ -118,7 +116,7 @@ def pprint_speed(s, len=4):
 def gettoc(toc_prog):
     "Returns track list"
     if 'toc_cmd' in jack_helpers.helpers[toc_prog]:
-        cmd = string.replace(jack_helpers.helpers[toc_prog]['toc_cmd'], "%d", cf['_cd_device'])
+        cmd = jack_helpers.helpers[toc_prog]['toc_cmd'].replace("%d", cf['_cd_device'])
         p = os.popen(cmd)
         start = 0
         erg = []
@@ -172,7 +170,7 @@ def guesstoc(names):
             if not extra_bytes == 0:
                 warning("this is not CDDA block-aligned: " + repr(i))
                 yes = input("May I strip %d bytes (= %.4fseconds) off the end? " % (extra_bytes, extra_bytes / 2352.0 / 75.0))
-                if not string.upper((yes + "x")[0]) == "Y":
+                if not (yes + "x")[0].upper() == "Y":
                     print("Sorry, I can't process non-aligned files (yet). Bye!")
                     sys.exit()
                 f = open(i, "r+")
@@ -222,12 +220,12 @@ def guesstoc(names):
     return erg
 
 #XXX will be moved to jack_convert
-def timestrtoblocks(str):
+def timestrtoblocks(s):
     "convert mm:ss:ff to blocks"
-    str = string.split(str, ":")
-    blocks = int(str[2])
-    blocks = blocks + int(str[1]) * CDDA_BLOCKS_PER_SECOND
-    blocks = blocks + int(str[0]) * 60 * CDDA_BLOCKS_PER_SECOND
+    s = s.split(":")
+    blocks = int(s[2])
+    blocks = blocks + int(s[1]) * CDDA_BLOCKS_PER_SECOND
+    blocks = blocks + int(s[0]) * 60 * CDDA_BLOCKS_PER_SECOND
     return blocks
 
 B_MM, B_SS, B_FF = 0, 1, 2
@@ -240,9 +238,9 @@ def blockstomsf(blocks):
     ff = blocks % CDDA_BLOCKS_PER_SECOND
     return mm, ss, ff, blocks
 
-def starts_with(str, x):
-    "checks whether str starts with a given string x"
-    return str[0:len(x)] == x
+def starts_with(s, x):
+    "checks whether s starts with a given string x"
+    return s[0:len(x)] == x
 
 ## #XXX the following will be used if all references to it have been updated.
 ## meanwhile the wrapper below is used.
@@ -286,7 +284,7 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
                 actual_track.channels = 2
             toc.append(actual_track)
             break
-        line = string.strip(line)
+        line = line.strip()
 
 ## everytime we encounter "TRACK" we increment num and append the actual
 ## track to the toc.
@@ -332,9 +330,9 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
 ## example: FILE "data.wav" 08:54:22 04:45:53
 
         elif starts_with(line, "FILE "):
-            filename = line[string.find(line, "\"") + 1:string.rfind(line, "\"")]
-            offsets = string.strip(line[string.rfind(line, "\"") + 1:])
-            start, length = string.split(offsets)[:2]
+            filename = line[line.find("\"") + 1:line.rfind("\"")]
+            offsets = line[line.rfind("\"") + 1:].strip()
+            start, length = offsets.split()[:2]
 
 ## convert time string to blocks(int), update info.
 
@@ -349,7 +347,7 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
 ## by setting the pregap attribute.
 
         elif starts_with(line, "START "):
-            actual_track.pregap = jack_CDTime.CDTime(string.split(line)[1]).blocks
+            actual_track.pregap = jack_CDTime.CDTime(line.split()[1]).blocks
 
     f.close()
     return toc
@@ -464,10 +462,10 @@ def check_genre_txt(genre):
             return None
 
     elif isinstance(genre, str):
-        if string.upper(genre) == "HELP":
-            info("available genres: " + string.join([x for x in eyeD3.genres if x != 'Unknown'], ", "))
+        if genre.upper() == "HELP":
+            info("available genres: " + str.join([x for x in eyeD3.genres if x != 'Unknown'], ", "))
             sys.exit(0)
-        elif string.upper(genre) == "NONE":
+        elif genre.upper() == "NONE":
             return 255 # set genre to [unknown]
         else:
             try:

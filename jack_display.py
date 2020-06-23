@@ -111,10 +111,10 @@ def sig_handler(sig, frame):
 
 #/ end of sig_handler /#
 
-def center_line(str, fill = " ", fill_sep = " ", fill_r = "", width = 80):
-    "return str centered, filled with fill chars"
+def center_line(s, fill = " ", fill_sep = " ", fill_r = "", width = 80):
+    "return s centered, filled with fill chars"
     width = jack_term.size_x
-    free = width - len(str)
+    free = width - len(s)
     if free >= 2:
         if not fill_r:
             fill_r = fill
@@ -123,9 +123,9 @@ def center_line(str, fill = " ", fill_sep = " ", fill_r = "", width = 80):
         right = free / 2 + (free % 2)
         left_c = fill * (left / length) + fill_sep * (left % length)
         right_c = fill_sep * (right % length) + fill_r * (right / length)
-        return left_c + str + right_c
+        return left_c + s + right_c
     else:
-        return str
+        return s
 
 def exit(why = 0):
     "call my own cleanum fkt. and exit"

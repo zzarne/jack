@@ -17,7 +17,6 @@
 ### along with this program; if not, write to the Free Software
 ### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import string
 import signal
 import select
 import time
@@ -172,35 +171,35 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
             last_update = last_update - cf['_update_interval']
             cmd = jack_term.tmod.getkey()
             sys.stdin.flush()
-            if string.upper(cmd) == "Q":
+            if cmd.upper() == "Q":
                 jack_display.exit()
-            elif not pause and string.upper(cmd) == "P":
+            elif not pause and cmd.upper() == "P":
                 pause = 1
                 flags = flags[:1] + "P" + flags[2:]
-            elif string.upper(cmd) == "C" or pause and string.upper(cmd) == "P":
+            elif cmd.upper() == "C" or pause and cmd.upper() == "P":
                 pause = 0
                 flags = flags[:1] + " " + flags[2:]
-            elif not flags[3] == "e" and string.upper(cmd) == "E":
+            elif not flags[3] == "e" and cmd.upper() == "E":
                 for i in jack_children.children:
                     if i['type'] == "encoder":
                         os.kill(i['pid'], signal.SIGSTOP)
                         flags = flags[:3] + "e" + flags[4:]
-            elif flags[3] == "e" and string.upper(cmd) == "E":
+            elif flags[3] == "e" and cmd.upper() == "E":
                 for i in jack_children.children:
                     if i['type'] == "encoder":
                         os.kill(i['pid'], signal.SIGCONT)
                         flags = flags[:3] + " " + flags[4:]
-            elif not flags[2] == "r" and string.upper(cmd) == "R":
+            elif not flags[2] == "r" and cmd.upper() == "R":
                 for i in jack_children.children:
                     if i['type'] == "ripper":
                         os.kill(i['pid'], signal.SIGSTOP)
                         flags = flags[:2] + "r" + flags[3:]
-            elif flags[2] == "r" and string.upper(cmd) == "R":
+            elif flags[2] == "r" and cmd.upper() == "R":
                 for i in jack_children.children:
                     if i['type'] == "ripper":
                         os.kill(i['pid'], signal.SIGCONT)
                         flags = flags[:2] + " " + flags[3:]
-            elif string.upper(cmd) == "U":
+            elif cmd.upper() == "U":
                 cycles = 29     # do periodic stuff _now_
             else:
                 jack_term.tmod.move_pad(cmd)
@@ -394,7 +393,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
                             #jack_term.tmod.dae_stat_upd(i['track'][NUM], None, i['percent'])
         
                 elif i['type'] == "image_reader":
-                    line = string.strip(jack_status.get_2_line(i['buf'], default=""))
+                    line = jack_status.get_2_line(i['buf'], default="").strip()
                     if line:
                         jack_status.dae_stat_upd(i['track'][NUM], line)
                         if line.startswith("Error"):
@@ -442,7 +441,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
             else:
                 eta_hms = ""
 
-            if string.strip(flags[1:-1]):
+            if flags[1:-1].strip():
                 print_flags = " " + flags
             else:
                 print_flags = ""

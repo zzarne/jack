@@ -19,7 +19,6 @@
 
 DEBUG = 0
 
-import string, types
 from os import stat
 from stat import ST_SIZE
 from io import StringIO
@@ -107,7 +106,7 @@ def find_xing(framelen):
     "read (and skip) the Xing header if present"
     where = f.tell()
     x = f.read(framelen)
-    pos = string.find(x, "Xing")
+    pos = x.find("Xing")
     if pos >= 0:
         f.seek(where + pos + 4)
         decode_xing()

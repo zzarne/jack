@@ -13,17 +13,17 @@ plugin_helpers = {
         'bitrate_factor': 1,
         'status_start': "%",
         'percent_fkt': r"""
-s = string.split(i['buf'], '\r')
+s = i['buf'].split('\r')
 if len(s) >= 2: s=s[-2]
 if len(s) == 1: s=s[0]
-if string.find(s, "%") >= 0:       # status reporting starts here
-    y = string.split(s, "/")
-    y1 = string.split(y[1], "(")[0]
+if s.find("%") >= 0:       # status reporting starts here
+    y = s.split("/")
+    y1 = y[1].split("(")[0]
     percent = float(y[0]) / float(y1) * 100.0
-elif string.find(s, "Frame:") >= 0:    # older versions, like 3.13
-    y = string.split(s, "/")
-    y0 = string.split(y[0], "[")[-1]
-    y1 = string.split(y[1], "]")[0]
+elif s.find("Frame:") >= 0:    # older versions, like 3.13
+    y = s.split("/")
+    y0 = y[0].split("[")[-1]
+    y1 = y[1].split("]")[0]
     percent = float(y0) / float(y1) * 100.0
 else:
     percent = 0

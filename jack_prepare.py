@@ -16,8 +16,6 @@
 ### along with this program; if not, write to the Free Software
 ### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import string
-import types
 import pprint
 import os, sys
 import difflib, shutil
@@ -254,12 +252,12 @@ def gen_todo():
         # example: "1,2,4-8,12-" ->  [ 1,2,4,5,6,7,8,12,13,...,n ]
         tlist = []
         if cf['_tracks']:
-            tracks = string.split(cf['_tracks'], ",")
+            tracks = cf['_tracks'].split(",")
         else:
-            tracks = string.split(jack_playorder.order, ",")
+            tracks = jack_playorder.order.split(",")
         for k in tracks:
-            if string.find(k, '-') >= 0:
-                k = string.split(k, '-')
+            if k.find('-') >= 0:
+                k = k.split('-')
                 lower_limit = jack_misc.safe_int(k[0], "Track '%s' is not a number." % k[0])
                 if k[1]:
                     upper_limit = jack_misc.safe_int(k[1], "Track '%s' is not a number." % k[1])
@@ -384,13 +382,13 @@ def read_progress(status, todo):
                 break
 
             # strip doesn't work here as we may have trailing spaces
-            buf = string.replace(buf, "\n", "")
+            buf = buf.replace("\n", "")
 
             # ignore empty lines
             if not buf:
                 continue
 
-            buf = string.split(buf, cf['_progr_sep'], 3)
+            buf = buf.split(cf['_progr_sep'], 3)
             try:
                 num = int(buf[0])
             except ValueError:
@@ -417,7 +415,7 @@ def read_progress(status, todo):
                 else:
                     error("more undos than renames, exit.")
             else:
-                names = string.split(j[0], '-->', 1)
+                names = j[0].split('-->', 1)
                 if status[i]['names'][-1] == names[0]:
                     status[i]['names'].append(names[1])
             if type(i) == int:
@@ -444,7 +442,7 @@ def read_progress(status, todo):
 
         if status[i]['patch']:
             for j in status[i]['patch']:
-                p_what, p_from, dummy, p_to = string.split(j)
+                p_what, p_from, dummy, p_to = j.split()
                 p_from = int(p_from)
                 p_to = int(p_to)
                 if tracknum[i][fields.index(p_what)] == p_from:

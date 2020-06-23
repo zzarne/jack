@@ -26,9 +26,7 @@ import os
 import sys
 import time
 import wave
-import types
 import posix
-import string
 import select
 import signal
 import pprint

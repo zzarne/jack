@@ -16,7 +16,6 @@
 ### along with this program; if not, write to the Free Software
 ### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import string
 import os, sys
 import locale
 
@@ -108,17 +107,17 @@ def tag(freedb_rename):
             t_comm = ""
             if not cf['_only_dae'] and cf['_set_id3tag']:
                 if len(t_name) > 30:
-                    if string.find(t_name, "(") != -1 and string.find(t_name, ")") != -1:
+                    if t_name.find("(") != -1 and t_name.find(")") != -1:
                         # we only use the last comment
-                        t_comm = string.split(t_name, "(")[-1]
+                        t_comm = t_name.split("(")[-1]
                         if t_comm[-1] == ")":
                             t_comm = t_comm[:-1]
                             if t_comm[-1] == " ":
                                 t_comm = t_comm[:-1]
-                            t_name2 = string.replace(t_name, " (" + t_comm + ") ", "")
-                            t_name2 = string.replace(t_name2, " (" + t_comm + ")", "")
-                            t_name2 = string.replace(t_name2, "(" + t_comm + ") ", "")
-                            t_name2 = string.replace(t_name2, "(" + t_comm + ")", "")
+                            t_name2 = t_name.replace(" (" + t_comm + ") ", "")
+                            t_name2 = t_name2.replace(" (" + t_comm + ")", "")
+                            t_name2 = t_name2.replace("(" + t_comm + ") ", "")
+                            t_name2 = t_name2.replace("(" + t_comm + ")", "")
                         else:
                             t_comm = ""
                 if jack_helpers.helpers[cf['_encoder']]['target'] == "mp3":

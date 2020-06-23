@@ -19,7 +19,6 @@
 import os
 import sys
 import string
-import types
 
 import jack_argv
 import jack_version

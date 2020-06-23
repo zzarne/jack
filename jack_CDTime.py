@@ -16,16 +16,14 @@
 ### along with this program; if not, write to the Free Software
 ### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import string, types
-
 CDDA_BLOCKS_PER_SECOND = 75
 
-def strtoblocks(str):
+def strtoblocks(s):
     "convert mm:ss:ff to blocks"
-    str = string.split(str, ":")
-    blocks = string.atoi(str[2])
-    blocks = blocks + string.atoi(str[1]) * CDDA_BLOCKS_PER_SECOND
-    blocks = blocks + string.atoi(str[0]) * 60 * CDDA_BLOCKS_PER_SECOND
+    s = s.split(":")
+    blocks = int(s[2])
+    blocks = blocks + int(s[1]) * CDDA_BLOCKS_PER_SECOND
+    blocks = blocks + int(s[0]) * 60 * CDDA_BLOCKS_PER_SECOND
     return blocks
 
 def blockstomsf(blocks):
@@ -64,7 +62,7 @@ class CDTime:
                     if new_val[0] in ('"', "'"):
                         new_val = new_val[1:-1]
             try:
-                blocks = string.atoi(new_val)
+                blocks = int(new_val)
             except:
                 if type(new_val) == bytes:
                     blocks = strtoblocks(new_val)

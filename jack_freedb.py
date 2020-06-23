@@ -174,7 +174,7 @@ def interpret_db_file(all_tracks, todo, freedb_form_file, verb, dirs = 0, warn =
                     warning("Cannot substitute unusable character %d."
 % (char_i+1))
                 else:
-                    newname = string.replace(newname, a, b)
+                    newname = newname.replace(a, b)
             filenames.append(newname)
             num += 1
         names_available = 1
@@ -202,7 +202,7 @@ def local_freedb(cd_id, freedb_dir, outfile = "/tmp/testfilefreedb"):
                 outf = open (outfile, "w")
                 buf = inf.readline()
                 while buf:
-                    buf = string.replace(buf, "\n", "")    # we need trailing spaces
+                    buf = buf.replace("\n", "")    # we need trailing spaces
                     if buf != ".":
                         outf.write(buf + "\n")
                     buf = inf.readline()
@@ -262,7 +262,7 @@ def freedb_template(tracks, names = "", revision = 0):
     f.write("DISCID=" + freedb_id(tracks) + "\n")
     if names:
         if names[1][0]: # various
-            if string.find(string.upper(names[0][0]), "VARIOUS") >= 0:
+            if (names[0][0]).upper().find("VARIOUS") >= 0:
                 f.write(freedb_split("DTITLE", "Various / " + names[0][1]))
             else:
                 f.write(freedb_split("DTITLE", "Various / " + names[0][0] + " - " + names[0][1]))
@@ -347,7 +347,7 @@ def freedb_query(cd_id, tracks, file):
                     buf = str(buf, "latin-1")
                 if not buf:
                     break
-                buf = string.rstrip(buf)
+                buf = buf.rstrip()
                 if buf != ".":
                     print("%2i" % num + ".) " + buf.encode(locale.getpreferredencoding(), "replace"))
                     matches.append(buf)
@@ -366,13 +366,13 @@ def freedb_query(cd_id, tracks, file):
                     sys.exit()
  
             buf = matches[x-1]
-            buf = string.split(buf, " ", 2)
+            buf = buf.split(" ", 2)
             freedb_cat = buf[0]
             cd_id = buf[1]
             err = 0
  
         elif buf[0:3] == "200":
-            buf = string.split(buf)
+            buf = buf.split()
             freedb_cat = buf[1]
         elif buf[0:3] == "202":
             if cf['_cont_failed_query']:
@@ -399,7 +399,7 @@ def freedb_query(cd_id, tracks, file):
             of = open(file, "w")
             buf = f.readline()
             while buf:
-                buf = string.rstrip(buf)
+                buf = buf.rstrip()
                 if buf != ".":
                     of.write(buf + "\n")
                 buf = f.readline()
@@ -408,13 +408,13 @@ def freedb_query(cd_id, tracks, file):
             jack_progress.status_all['freedb_cat'] = freedb_cat
             err = 0
         else:
-            print(string.rstrip(buf))
+            print(buf.rstrip())
             print(f.read())
             warning("could not query freedb entry")
             err = 1
         f.close()
     else:
-        print(string.rstrip(buf))
+        print(buf.rstrip())
         print(f.read())
         warning("could not check freedb category")
         err = 2
@@ -435,16 +435,16 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
             line = str(line, "utf-8")
         except UnicodeDecodeError:
             line = str(line, "latin-1")
-        line = string.replace(line, "\n", "")  # cannot use rstrip, we need trailing
+        line = line.replace("\n", "")  # cannot use rstrip, we need trailing
                                         # spaces
-        line = string.replace(line, "\r", "")  # I consider "\r"s as bugs in db info
+        line = line.replace("\r", "")  # I consider "\r"s as bugs in db info
         if jack_functions.starts_with(line, "# Revision:"):
             revision = int(line[11:])
         for i in ["DISCID", "DTITLE", "DYEAR", "DGENRE", "TTITLE", "EXTD", "EXTT", "PLAYORDER"]:
             if jack_functions.starts_with(line, i):
                 buf = line
-                if string.find(buf, "=") != -1:
-                    buf = string.split(buf, "=", 1)
+                if buf.find("=") != -1:
+                    buf = buf.split("=", 1)
                     if buf[1]:
                         if buf[0] in freedb:
                             if buf[0] == "DISCID":
@@ -483,7 +483,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
         read_id = "00000000"
     else:
         read_id = freedb['DISCID']
-        read_ids = string.split(freedb['DISCID'], ",")
+        read_ids = freedb['DISCID'].split(",")
         id_matched = 0
         for i in read_ids:
             if i == cd_id:
@@ -507,20 +507,20 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
         jack_playorder.order = freedb('PLAYORDER')
  
     dtitle = freedb['DTITLE']
-    dtitle = string.replace(dtitle, " / ", "/")    # kill superflous slashes
-    dtitle = string.replace(dtitle, "/ ", "/")
-    dtitle = string.replace(dtitle, " /", "/")
-    dtitle = string.replace(dtitle, "(unknown disc title)", "(unknown artist)/(unknown disc title)") # yukk!
+    dtitle = dtitle.replace(" / ", "/")    # kill superflous slashes
+    dtitle = dtitle.replace("/ ", "/")
+    dtitle = dtitle.replace(" /", "/")
+    dtitle = dtitle.replace("(unknown disc title)", "(unknown artist)/(unknown disc title)") # yukk!
     if not dtitle:
         dtitle = "(unknown artist)/(unknown disc title)"
-    if string.find(dtitle,"/") == -1:
+    if dtitle.find("/") == -1:
         if cf['_various'] == 1:
             dtitle = "Various/" + dtitle
             warning("bad disc title, using %s. Please fix and submit." % dtitle)
         else:
             dtitle = "(unknown artist)/" + dtitle
 
-    names = [string.split(dtitle,"/",1)]
+    names = [dtitle.split("/", 1)]
     year = -1
     if 'DYEAR' in freedb:
         try:
@@ -549,13 +549,13 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
         else:
             warning("DGENRE should be a string, not an integer.")
     if 'EXTD' in freedb and 'DYEAR' not in freedb:
-        extra_tag_pos = string.find(freedb['EXTD'], "YEAR:")
+        extra_tag_pos = freedb['EXTD'].find("YEAR:")
         if extra_tag_pos >= 0:
             arg = freedb['EXTD'][extra_tag_pos + 5:].lstrip().split()[0]
             if arg.isdigit():
                 year = int(arg)
     if 'EXTD' in freedb and 'DGENRE' not in freedb:
-        extra_tag_pos = string.find(freedb['EXTD'], "ID3G:")
+        extra_tag_pos = freedb['EXTD'].find("ID3G:")
         if extra_tag_pos >= 0:
             arg = freedb['EXTD'][extra_tag_pos + 5:].lstrip().split()[0]
             if arg.isdigit():
@@ -569,7 +569,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
             warning("the disc's title must be set to \"artist / title\" (\"DTITLE\").")
         err = 6
  
-    if string.upper(names[0][0]) in ("VARIOUS", "VARIOUS ARTISTS", "SAMPLER", "COMPILATION", "DIVERSE", "V.A.", "VA"):
+    if (names[0][0]).upper() in ("VARIOUS", "VARIOUS ARTISTS", "SAMPLER", "COMPILATION", "DIVERSE", "V.A.", "VA"):
         if not cf['_various'] and not ['argv', False] in cf['various']['history']:
             cf['_various'] = 1
  
@@ -641,21 +641,21 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
                         for b in braces:
                             if b[0] in candidate:
                                 brace = 1
-                                where2 = string.find(l, candidate) + len(candidate)
+                                where2 = l.find(candidate) + len(candidate)
                                 where = where2
-                                while string.find(l, b[1], where) != -1:
-                                    where = string.find(l, b[1], where) + len(candidate)
+                                while l.find(b[1], where) != -1:
+                                    where = l.find( b[1], where) + len(candidate)
                                     matches = matches + 1
                                 where = where2
                                 if not b[1] in candidate:
-                                    while string.find(l, candidate, where) != -1:
-                                        where = string.find(l, candidate, where) + len(candidate)
+                                    while l.find(candidate, where) != -1:
+                                        where = l.find(candidate, where) + len(candidate)
                                         matches = matches + 1
                                 break   # only treat the first pair of braces
                         if not brace:
-                            while string.find(l, candidate, where) != -1:
+                            while l.find(candidate, where) != -1:
                                 matches = matches + 1
-                                where = string.find(l, candidate, where) + len(candidate)
+                                where = l.find(candidate, where) + len(candidate)
                         if matches == 0:    # not found
                             all_matched = 0
                             break
@@ -708,11 +708,11 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
                     closing_brace = j[1]
                     break
             for i in titles:
-                buf = string.split(i, sep, 1)
+                buf = i.split(sep, 1)
                 if closing_brace:
                     lenbefore = len(buf[0] + buf[1])
-                    buf[0] = string.replace(buf[0], closing_brace, "")
-                    buf[1] = string.replace(buf[1], closing_brace, "")
+                    buf[0] = buf[0].replace(closing_brace, "")
+                    buf[1] = buf[1].replace(closing_brace, "")
                     lenafter = len(buf[0] + buf[1])
                     if lenafter != lenbefore - len(closing_brace):
                         if verb:
@@ -746,13 +746,13 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
         t = []
         for j in [0, 1]:
             if i[j]:
-                i[j] = string.strip(i[j])
-                while string.find(i[j], "    ") != -1:
-                    i[j] = string.replace(i[j], "    ", " ")
+                i[j] = i[j].strip()
+                while i[j].find("    ") != -1:
+                    i[j] = i[j].replace("    ", " ")
                 while i[j][0] == '"' and i[j][-1] == '"':
                     i[j] = i[j][1:-1]
-                while i[j][0] == '"' and string.find(i[j][1:], '"') != -1:
-                    i[j] = string.replace(i[j][1:], '"', '', 1)
+                while i[j][0] == '"' and i[j][1:].find('"') != -1:
+                    i[j] = i[j][1:].replace('"', '', 1)
             x = i[j].encode(locale.getpreferredencoding(), "replace")
             t.append(x)
         locale_names.append(t)
@@ -803,14 +803,14 @@ def do_freedb_submit(file, cd_id, cat = None):
                 buf = f.readline()
                 if not buf:
                     break
-                buf = string.rstrip(buf)
+                buf = buf.rstrip()
                 if buf != ".":
                     cat.append(buf)
             f.close()
             cat = choose_cat(cat)
 
         else:
-            error("LSCAT failed: " + string.rstrip(buf) + f.read())
+            error("LSCAT failed: " + buf.rstrip() + f.read())
 
     print("OK, using category `" + cat + "'.")
     email = freedb_servers[cf['_freedb_server']]['my_mail']
@@ -898,7 +898,7 @@ def do_freedb_mailsubmit(file, cd_id, cat = None):
     if not cat:
         cat = choose_cat()
     print("OK, using `" + cat + "'.")
-    if string.find(freedb_servers[cf['_freedb_server']]['my_mail'], "@") >= 1 and len(freedb_servers[cf['_freedb_server']]['my_mail']) > 3:
+    if freedb_servers[cf['_freedb_server']]['my_mail'].find("@") >= 1 and len(freedb_servers[cf['_freedb_server']]['my_mail']) > 3:
         return os.system("( echo 'To: " + freedb_servers[cf['_freedb_server']]['mail'] + "'; echo From: '" + freedb_servers[cf['_freedb_server']]['my_mail'] + "'; echo 'Subject: cddb " + cat + " " + cd_id + "' ; cat '" + file + "' ) | " + sendmail)
     else:
         print("please set your e-mail address. aborting...")

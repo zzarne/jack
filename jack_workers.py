@@ -18,7 +18,6 @@
 
 import sndhdr
 import signal
-import string
 import posix
 import array
 import fcntl
@@ -72,7 +71,7 @@ def start_new_process(args, nice_value = 0):
 def start_new_ripper(track, ripper):
     "start a new DAE process"
     helper = helpers[cf['_ripper']]
-    cmd = string.split(helper['cmd'])
+    cmd = helper['cmd'].split()
     args = []
     for i in cmd:
         if i == "%n": args.append(repr(track[NUM]))
@@ -89,9 +88,9 @@ def start_new_encoder(track, encoder):
     "start a new encoder process"
     helper = helpers[cf['_encoder']]
     if cf['_vbr']:
-        cmd = string.split(helper['vbr-cmd'])
+        cmd = helper['vbr-cmd'].split()
     else:
-        cmd = string.split(helper['cmd'])
+        cmd = helper['cmd'].split()
 
     args = []
     for i in cmd:
@@ -161,7 +160,7 @@ def start_new_otf(track, ripper, encoder):
     data['rip']['fd'], rip_err = os.pipe()
     data['enc']['fd'], enc_err = os.pipe()
     args = []
-    for i in string.split(helpers[ripper]['otf-cmd']):
+    for i in helpers[ripper]['otf-cmd'].split():
         if i == "%n": args.append(repr(track[NUM]))
         elif i == "%d": args.append(cf['_cd_device'])
         else: args.append(i)
@@ -186,9 +185,9 @@ def start_new_otf(track, ripper, encoder):
     data['rip']['prog'] = cf['_ripper']
     data['rip']['track'] = track
     if cf['_vbr']:
-        cmd = string.split(helpers[cf['_encoder']]['vbr-otf-cmd'])
+        cmd = helpers[cf['_encoder']]['vbr-otf-cmd'].split()
     else:
-        cmd = string.split(helpers[cf['_encoder']]['otf-cmd'])
+        cmd = helpers[cf['_encoder']]['otf-cmd'].split()
     args = []
     for i in cmd:
         if i == "%r":
@@ -265,20 +264,20 @@ def ripread(track, offset = 0):
             image_offset = -offset
 
         else:
-            if string.upper(cf['_image_file'])[-4:] == ".CDR":
+            if cf['_image_file'].upper()[-4:] == ".CDR":
                 hdr = ('cdr', 44100, 2, -1, 16) # Unknown header, assuming cdr
 #
 ## assume old cdrdao which started at track 1, not at block 0
                 image_offset = -offset
 
-            elif string.upper(cf['_image_file'])[-4:] == ".BIN":
+            elif cf['_image_file'].upper()[-4:] == ".BIN":
                 hdr = ('bin', 44100, 2, -1, 16) # Unknown header, assuming bin
 #
 ## assume new cdrdao which starts at block 0, byteorder is reversed.
                 my_swap_byteorder = not my_swap_byteorder
                 image_offset = 0
 
-            elif string.upper(cf['_image_file'])[-4:] == ".RAW":
+            elif cf['_image_file'].upper()[-4:] == ".RAW":
                 hdr = ('bin', 44100, 2, -1, 16) # Unknown header, assuming raw
                 image_offset = 0
 

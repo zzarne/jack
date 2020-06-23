@@ -18,10 +18,8 @@
 
 import sys
 import signal
-import types
 import os
 import stat
-import string
 
 import jack_functions
 import jack_globals
@@ -163,7 +161,7 @@ def safe_float(number, message):
 
 def unusable_charmap(x):
     for i in range(len(cf['_unusable_chars'])):
-        x = string.replace(x, cf['_unusable_chars'][i], cf['_replacement_chars'][i])
+        x = x.replace(cf['_unusable_chars'][i], cf['_replacement_chars'][i])
     return x
     
 def mkdirname(names, template):
@@ -222,7 +220,7 @@ def ex_edit(file):
     if "EDITOR" in os.environ:
         editor = os.environ['EDITOR']
     print("invoking your editor,", editor, "...")
-    os.system(string.split(editor)[0] + " " + file)
+    os.system(editor.split()[0] + " " + file)
 
 def has_track(l, num):
     for i in range(len(l)):

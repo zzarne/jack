@@ -16,7 +16,6 @@
 ### along with this program; if not, write to the Free Software
 ### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import string, types
 import sys
 import os
 
@@ -26,7 +25,7 @@ def id(x):
     return x
 
 def multi_replace(s, rules, where, filter = id, warn = 0):
-    "like string.replace but take list (('from0', 'to0'), ('from1', 'to1'))..."
+    "like str.replace but take list (('from0', 'to0'), ('from1', 'to1'))..."
 
     if warn == 2:
         do_warn = jack_globals.error
@@ -79,7 +78,7 @@ def loadavg():
     "extract sysload from /proc/loadavg, linux only (?)"
     try:
         f = open("/proc/loadavg", "r")
-        load = float(string.split(f.readline())[0])
+        load = float(f.readline().split()[0])
         return load
     except:
         return -1

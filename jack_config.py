@@ -17,9 +17,7 @@
 ### along with this program; if not, write to the Free Software
 ### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import types
 import os
-import string
 import jack_misc
 import locale
 import sys
@@ -784,6 +782,6 @@ replacement_chars = ["ae", "oe", "ue", "Ae", "Oe", "Ue", "ss", ""]""",
 for i in list(cf.keys()):
     # expand long options
     if 'long' in cf[i] and cf[i]['long'] == "AUTO":
-        cf[i]['long'] = string.replace(i, "_", "-")
+        cf[i]['long'] = i.replace("_", "-")
     # init history
     cf[i]['history'] = [ ["config", cf[i]['val'],],]
