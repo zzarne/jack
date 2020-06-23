@@ -95,7 +95,7 @@ def tag(freedb_rename):
         if cf['_id3_genre'] == -1 and len(track_names[0]) == 4:
             cf['_id3_genre'] = track_names[0][3]
 
-        print "Tagging",
+        print("Tagging", end=' ')
         for i in jack_ripstuff.all_tracks_todo_sorted:
             sys.stdout.write(".") ; sys.stdout.flush()
             mp3name = i[NAME] + ext
@@ -152,28 +152,28 @@ def tag(freedb_rename):
                             f.vc['DATE'] = str(cf['_id3_year'])
                         f.save()
                     else:
-                        print
-                        print "Please install python-mutagen package."
-                        print "Without it, you'll not be able to tag FLAC tracks."
+                        print()
+                        print("Please install python-mutagen package.")
+                        print("Without it, you'll not be able to tag FLAC tracks.")
                 elif jack_helpers.helpers[cf['_encoder']]['target'] == "ogg":
                     vf = ogg.vorbis.VorbisFile(mp3name)
                     oggi = vf.comment()
                     oggi.clear()
                     oggi.add_tag('ALBUM', a_title.encode("utf-8"))
-                    oggi.add_tag('TRACKNUMBER', `i[NUM]`)
+                    oggi.add_tag('TRACKNUMBER', repr(i[NUM]))
                     oggi.add_tag('TITLE', t_name.encode("utf-8"))
                     oggi.add_tag('ARTIST', t_artist.encode("utf-8"))
                     if cf['_id3_genre'] != -1:
                         oggi.add_tag('GENRE', id3genres[cf['_id3_genre']])
                     if cf['_id3_year'] != -1:
-                        oggi.add_tag('DATE', `cf['_id3_year']`)
+                        oggi.add_tag('DATE', repr(cf['_id3_year']))
                     oggi.write_to(mp3name)
             if freedb_rename:
                 newname = jack_freedb.filenames[i[NUM]]
                 try:
-                    i[NAME] = unicode(i[NAME], "utf-8")
+                    i[NAME] = str(i[NAME], "utf-8")
                 except UnicodeDecodeError:
-                    i[NAME] = unicode(i[NAME], "latin-1")
+                    i[NAME] = str(i[NAME], "latin-1")
                 if i[NAME] != newname:
                     p_newname = newname.encode(locale.getpreferredencoding(), "replace")
                     u_newname = newname
@@ -183,13 +183,13 @@ def tag(freedb_rename):
                     ok = 1
                     if os.path.exists(newname + ext):
                         ok = 0
-                        print 'NOT renaming "' + p_mp3name + '" to "' + p_newname + ext + '" because dest. exists.'
+                        print('NOT renaming "' + p_mp3name + '" to "' + p_newname + ext + '" because dest. exists.')
                         if cf['_keep_wavs']:
-                            print 'NOT renaming "' + p_wavname + '" to "' + p_newname + ".wav" + '" because dest. exists.'
+                            print('NOT renaming "' + p_wavname + '" to "' + p_newname + ".wav" + '" because dest. exists.')
                     elif cf['_keep_wavs'] and os.path.exists(newname + ".wav"):
                         ok = 0
-                        print 'NOT renaming "' + p_wavname + '" to "' + p_newname + ".wav" + '" because dest. exists.'
-                        print 'NOT renaming "' + p_mp3name + '" to "' + p_newname + ext + '" because WAV dest. exists.'
+                        print('NOT renaming "' + p_wavname + '" to "' + p_newname + ".wav" + '" because dest. exists.')
+                        print('NOT renaming "' + p_mp3name + '" to "' + p_newname + ext + '" because WAV dest. exists.')
                     if ok:
                         if not cf['_only_dae']:
                             try:
@@ -203,25 +203,25 @@ def tag(freedb_rename):
                         jack_functions.progress(i[NUM], "ren", "%s-->%s" % (i[NAME], u_newname))
                     elif cf['_silent_mode']:
                         jack_functions.progress(i[NUM], "err", "while renaming track")
-        print
+        print()
 
     if not cf['_silent_mode']:
         if jack_freedb.names_available:
-            print "Done with \"" + p_artist + " - " + p_title + "\"."
+            print("Done with \"" + p_artist + " - " + p_title + "\".")
         else:
-            print "All done.",
+            print("All done.", end=' ')
         if cf['_set_id3tag'] and cf['_id3_year'] != -1:
-            print "Year: %4i" % cf['_id3_year'],
-            if cf['_id3_genre'] == -1: print
+            print("Year: %4i" % cf['_id3_year'], end=' ')
+            if cf['_id3_genre'] == -1: print()
         if cf['_set_id3tag'] and cf['_id3_genre'] != -1:
             if cf['_id3_genre'] <0 or cf['_id3_genre'] > len(id3genres):
-                print "Genre: [unknown]"
+                print("Genre: [unknown]")
             else:
-                print "Genre: %s" % id3genres[cf['_id3_genre']]
+                print("Genre: %s" % id3genres[cf['_id3_genre']])
         if cf['_vbr'] and not cf['_only_dae']:
-            print "Avg. bitrate: %03.0fkbit" % ((total_size * 0.008) / (total_length / 75))
+            print("Avg. bitrate: %03.0fkbit" % ((total_size * 0.008) / (total_length / 75)))
         else:
-            print
+            print()
 
     if jack_m3u.m3u:
         os.environ["JACK_JUST_ENCODED"] = "\n".join(jack_m3u.m3u)

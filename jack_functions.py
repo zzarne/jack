@@ -53,7 +53,7 @@ def df(fs = ".", blocksize = 1024):
 
     if statvfs_found:
         (f_bsize, f_frsize, f_blocks, f_bfree, f_bavail, f_files, f_ffree, f_favail, f_flag, f_namemax) = statvfs(fs)
-        return long(f_bavail) * long(f_bsize)
+        return int(f_bavail) * int(f_bsize)
     else:
         # Not very portable
         p = os.popen("df " + fs)
@@ -62,7 +62,7 @@ def df(fs = ".", blocksize = 1024):
             if s[i] == "Available":
                 s = string.split(string.rstrip(p.readline()))
                 p.close()
-                return int(s[i]) * long(blocksize)
+                return int(s[i]) * int(blocksize)
         p.close()
 
 def get_sysload_linux_proc():
@@ -85,9 +85,9 @@ def pprint_i(num, fmt = "%i%s", scale = 2.0**10, max = 4):
         if num > 999:
             return fmt % (num, c)
         elif num >= 100:
-            return string.replace(fmt, "%i", "%s") % (`num`[:3], c)
+            return string.replace(fmt, "%i", "%s") % (repr(num)[:3], c)
         else:
-            return string.replace(fmt, "%i", "%s") % (`num`[:4], c)
+            return string.replace(fmt, "%i", "%s") % (repr(num)[:4], c)
     else:
         return fmt % (num, c)
 
@@ -117,7 +117,7 @@ def pprint_speed(s, len=4):
 
 def gettoc(toc_prog):
     "Returns track list"
-    if jack_helpers.helpers[toc_prog].has_key('toc_cmd'):
+    if 'toc_cmd' in jack_helpers.helpers[toc_prog]:
         cmd = string.replace(jack_helpers.helpers[toc_prog]['toc_cmd'], "%d", cf['_cd_device'])
         p = os.popen(cmd)
         start = 0
@@ -159,21 +159,21 @@ def guesstoc(names):
             blocks = int(x['length'] * CDDA_BLOCKS_PER_SECOND + 0.5)
             erg.append([num, blocks, start, 0, 0, 2, 1, x['bitrate'], i_name])
             progr.append([num, "dae", "  *   [          simulated           ]"])
-            progr.append([num, "enc", `x['bitrate']`, "[ s i m u l a t e d %3ikbit]" % (x['bitrate'] + 0.5)])
+            progr.append([num, "enc", repr(x['bitrate']), "[ s i m u l a t e d %3ikbit]" % (x['bitrate'] + 0.5)])
         elif i_ext == ".WAV":
             x = sndhdr.whathdr(i)
             if not x:
                 error("this is not WAV-format: " + i)
             if x != ('wav', 44100, 2, -1, 16):
-                error("unsupportet format " + `x` +  " in " + i)
+                error("unsupportet format " + repr(x) +  " in " + i)
             blocks = jack_utils.filesize(i)
             blocks = blocks - 44    # substract WAV header
             extra_bytes = blocks % CDDA_BLOCKSIZE
             if not extra_bytes == 0:
-                warning("this is not CDDA block-aligned: " + `i`)
-                yes = raw_input("May I strip %d bytes (= %.4fseconds) off the end? " % (extra_bytes, extra_bytes / 2352.0 / 75.0))
+                warning("this is not CDDA block-aligned: " + repr(i))
+                yes = input("May I strip %d bytes (= %.4fseconds) off the end? " % (extra_bytes, extra_bytes / 2352.0 / 75.0))
                 if not string.upper((yes + "x")[0]) == "Y":
-                    print "Sorry, I can't process non-aligned files (yet). Bye!"
+                    print("Sorry, I can't process non-aligned files (yet). Bye!")
                     sys.exit()
                 f = open(i, "r+")
                 f.seek(-extra_bytes, 2)
@@ -190,7 +190,7 @@ def guesstoc(names):
                 bitrate = temp_rate = int(x.raw_total(0) * 8 / x.time_total(0) / 1000 + 0.5)
                 erg.append([num, blocks, start, 0, 0, 2, 1, bitrate, i_name])
                 progr.append([num, "dae", "  *   [          simulated           ]"])
-                progr.append([num, "enc", `bitrate`, "[ s i m u l a t e d %3ikbit]" % bitrate])
+                progr.append([num, "enc", repr(bitrate), "[ s i m u l a t e d %3ikbit]" % bitrate])
             else:
                 error("The OGG Python bindings are not installed.")
         elif i_ext == ".FLAC":
@@ -207,13 +207,13 @@ def guesstoc(names):
                     blocks = bitrate = 0
                 erg.append([num, blocks, start, 0, 0, 2, 1, bitrate, i_name])
                 progr.append([num, "dae", "  *   [          simulated           ]"])
-                progr.append([num, "enc", `bitrate`, "[ s i m u l a t e d %3ikbit]" % bitrate])
+                progr.append([num, "enc", repr(bitrate), "[ s i m u l a t e d %3ikbit]" % bitrate])
             else:
                 error("The FLAC Python bindings are not installed.")
         else:
             error("don't know how to handle %s files." % i_ext)
         if cf['_name'] % num != i_name:
-            progr.append([num, "ren", cf['_name'] % num + "-->" + unicode(i_name, cf['_charset'], "replace")])
+            progr.append([num, "ren", cf['_name'] % num + "-->" + str(i_name, cf['_charset'], "replace")])
         num = num + 1
         start = start + blocks
     for i in progr:     # this is deferred so that it is only written if no
@@ -255,7 +255,7 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
         error("Can't open TOC file '%s': file does not exist." % os.path.abspath(tocfile))
     try:
         f = open(tocfile, "r")
-    except (IOError, OSError), e:
+    except (IOError, OSError) as e:
         error("Can't open TOC file '%s': %s" % (os.path.abspath(tocfile), e))
 
     tocpath, tocfiledummy = os.path.split(tocfile)
@@ -376,7 +376,7 @@ def cdrdao_puttoc(tocfile, tracks, cd_id):     # put toc to cdrdao toc-file
     f.write("CD_DA\n\n")
     f.write("// DB-ID=" + cd_id + "\n\n")
     for i in tracks:
-        f.write("// Track " + `i[NUM]` + "\n")      # comments are cool
+        f.write("// Track " + repr(i[NUM]) + "\n")      # comments are cool
         if i[CH] in (2, 4):
             f.write("TRACK AUDIO\n")
         if i[CH] == 0:
@@ -409,7 +409,7 @@ def cdrdao_puttoc(tocfile, tracks, cd_id):     # put toc to cdrdao toc-file
 
 def tracksize(list, dont_dae = [], blocksize = 1024):
     "Calculates all kind of sizes for a track or a list of tracks."
-    if list and type(list[0]) == types.IntType:
+    if list and type(list[0]) == int:
         list = ((list, ))
     peak, at, blocks = 0, 0, 0
     encoded_size = wavsize = cdrsize = 0
@@ -434,20 +434,20 @@ def tracksize(list, dont_dae = [], blocksize = 1024):
 def progress(track, what="error", data="error", data2 = None):
     "append a line to the progress file"
     global progress_changed
-    if type(track) in (types.TupleType, types.ListType):
+    if type(track) in (tuple, list):
         if len(track) == 3:
             track, what, data = track
         elif len(track) == 4:
             track, what, data, data2 = track
         else:
-            error("illegal progress entry:" + `track` + " (" + `type(track)` + ")")
+            error("illegal progress entry:" + repr(track) + " (" + repr(type(track)) + ")")
 
-    if type(track) == types.IntType:
+    if type(track) == int:
         first = "%02i" % track
-    elif type(track) == types.StringType:
+    elif type(track) == bytes:
         first = track
     else:
-        error("illegal progress entry:" + `track` + " (" + `type(track)` + ")")
+        error("illegal progress entry:" + repr(track) + " (" + repr(type(track)) + ")")
     progress_changed = 1
     f = codecs.open (cf['_progress_file'], "a", "utf-8")
     f.write(first + cf['_progr_sep'] + what + cf['_progr_sep'] + data)

@@ -23,5 +23,5 @@ setup( # Distribution meta-data
     'jack_targets', 'jack_term', 'jack_utils', 'jack_version', 'jack_workers']
 )
 
-print "If you have installed the modules, copy jack to some place in your $PATH,"
-print "like /usr/local/bin/."
+print("If you have installed the modules, copy jack to some place in your $PATH,")
+print("like /usr/local/bin/.")

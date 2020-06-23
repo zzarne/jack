@@ -59,9 +59,9 @@ def gen_printable_names(track_names, todo):
 
     if jack_freedb.names_available and cf['_show_names']:
         if cf['_various']:
-            max_name_len = max(map(lambda x: len(track_names[x[NUM]][0] + " - " + track_names[x[NUM]][1]), todo))
+            max_name_len = max([len(track_names[x[NUM]][0] + " - " + track_names[x[NUM]][1]) for x in todo])
         else:
-            max_name_len = max(map(lambda x: len(track_names[x[NUM]][1]), todo))
+            max_name_len = max([len(track_names[x[NUM]][1]) for x in todo])
         max_name_len = len("01 ") + max_name_len
         if cf['_show_time']:
             max_name_len = max_name_len + 6

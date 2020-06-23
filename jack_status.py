@@ -34,7 +34,7 @@ def init(todo):
         enc_cache[i[NUM]] = ""
 
 def extract(status):
-    for i in status.keys():
+    for i in list(status.keys()):
         if status[i]['dae']:
             dae_status[i] = status[i]['dae']
         if status[i]['enc']:
@@ -53,9 +53,9 @@ def dae_stat_upd(num, string):
 def print_status(form = 'normal'):
     for i in jack_ripstuff.all_tracks_todo_sorted:
         if form != 'normal' or not jack_ripstuff.printable_names:
-            print cf['_name'] % i[NUM] + ":", dae_status[i[NUM]], enc_status[i[NUM]]
+            print(cf['_name'] % i[NUM] + ":", dae_status[i[NUM]], enc_status[i[NUM]])
         else:
-            print jack_ripstuff.printable_names[i[NUM]] + ":", dae_status[i[NUM]], enc_status[i[NUM]]
+            print(jack_ripstuff.printable_names[i[NUM]] + ":", dae_status[i[NUM]], enc_status[i[NUM]])
 
 def get_2_line(buf, default="A failure occured"):
     tmp = string.split(buf, "\n")

@@ -53,7 +53,7 @@ def init():
     options_string = "Options:" \
         + (" bitrate=%i" % cf['_bitrate']) * (not cf['_vbr']) + " vbr" * cf['_vbr'] \
         + " reorder" * cf['_reorder'] \
-        + " read-ahead=" + `cf['_read_ahead']` \
+        + " read-ahead=" + repr(cf['_read_ahead']) \
         + " keep-wavs" * cf['_keep_wavs'] \
         + " id=" + jack_freedb.freedb_id(jack_ripstuff.all_tracks) \
         + (" len=%02i:%02i" % (global_total / jack_globals.CDDA_BLOCKS_PER_SECOND \
@@ -99,9 +99,9 @@ def sig_handler(sig, frame):
 
     if cf['_wait_on_quit']:
         if sig:
-            raw_input("press ENTER\n")
+            input("press ENTER\n")
         else:
-            raw_input("press ENTER to exit\n")
+            input("press ENTER to exit\n")
 
     if sig:
         jack_term.enable(all = 0)

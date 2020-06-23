@@ -23,19 +23,19 @@ import jack_version
 from jack_config import cf
 
 def indent(pre, msg):
-    print pre,
+    print(pre, end=' ')
 
     msg = string.split(msg)
     p = len(pre)
     y = p
     for i in msg:
         if len(i) + y > 78:
-            print
-            print " " * p,
+            print()
+            print(" " * p, end=' ')
             y = p
-        print i,
+        print(i, end=' ')
         y = y + len(i) + 1
-    print
+    print()
 
 def ewprint(pre, msg):
     pre = " *" + pre + "*"

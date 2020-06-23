@@ -33,7 +33,7 @@ from jack_globals import *
 
 def all_paths(p):
     "return all path leading to and including p"
-    if type(p) == types.StringType:
+    if type(p) == bytes:
         p = split_dirname(p)
     all = []
     x = ""
@@ -44,13 +44,13 @@ def all_paths(p):
 
 def check_path(p1, p2):
     "check if p1 and p2 are equal or sub/supersets"
-    if type(p1) == types.StringType:
+    if type(p1) == bytes:
         p1 = split_dirname(p1)
-    if type(p2) == types.StringType:
+    if type(p2) == bytes:
         p2 = split_dirname(p2)
     for i in p1, p2:
-        if type(i) != types.ListType:
-            error("invalid type for check_path" + `i`)
+        if type(i) != list:
+            error("invalid type for check_path" + repr(i))
     if len(p1) > len(p2):   # make sure p1 is shorter or as long as p2
         p1, p2 = p2, p1
     ok = 1
@@ -62,15 +62,15 @@ def check_path(p1, p2):
 def rename_path(old, new):
     "this is complicated."
     cwd = os.getcwd()
-    print cwd
+    print(cwd)
     cwds = split_dirname(cwd)
-    if type(old) == types.StringType:
+    if type(old) == bytes:
         old = split_dirname(old)
-    if type(new) == types.StringType:
+    if type(new) == bytes:
         new = split_dirname(new)
     for i in old, new, cwds:
-        if type(i) != types.ListType:
-            error("invalid type for rename_path: " + `i`)
+        if type(i) != list:
+            error("invalid type for rename_path: " + repr(i))
 
     # weed out empty dirs (which are technically illegal on freedb but exist)
     tmp = []
@@ -118,7 +118,7 @@ def cmp_toc(x, y):
     elif x == y: return 0
     elif x < y: return -1
 
-NUM, LEN, START, COPY, PRE, CH, RIP, RATE, NAME = range(9)
+NUM, LEN, START, COPY, PRE, CH, RIP, RATE, NAME = list(range(9))
 def cmp_toc_cd(x, y, what=(NUM, LEN, START)):
     "compare the relevant parts of two TOCs"
     if len(x) == len(y):
@@ -134,7 +134,7 @@ def filesize(name):
     return os.stat(name)[stat.ST_SIZE]
 
 def yes(what):
-    if what.has_key('save') and what['save'] == 0:
+    if 'save' in what and what['save'] == 0:
         return ""
 
     if what['type'] == 'toggle':
@@ -142,7 +142,7 @@ def yes(what):
             s = "yes"
         else:
             s = "no"
-    elif what['type'] == types.StringType:
+    elif what['type'] == bytes:
         s = "'%s'" % what['val']
     else:
         s = str(what['val'])
@@ -150,7 +150,7 @@ def yes(what):
     s = " [%s]" % s
     if what['history'][-1][0] == "global_rc":
         s = s + "*"
-    if what.has_key('doc'):
+    if 'doc' in what:
         s = s + " +"
     return s
 
@@ -158,7 +158,7 @@ def safe_float(number, message):
     try:
         return float(number)
     except ValueError:
-        print message
+        print(message)
         sys.exit(1)
 
 def unusable_charmap(x):
@@ -170,7 +170,7 @@ def mkdirname(names, template):
     "generate mkdir-able directory name(s)"
     year = genretxt = None
     if cf['_id3_year'] > 0:
-        year = `cf['_id3_year']`
+        year = repr(cf['_id3_year'])
     if cf['_id3_genre'] != -1:
         genretxt = id3genres[cf['_id3_genre']]
     replacelist = {"a": names[0][0].encode(cf['_charset'], "replace"),
@@ -219,9 +219,9 @@ def in_path(file):
 
 def ex_edit(file):
     editor = "/usr/bin/sensible-editor"
-    if os.environ.has_key("EDITOR"):
+    if "EDITOR" in os.environ:
         editor = os.environ['EDITOR']
-    print "invoking your editor,", editor, "..."
+    print("invoking your editor,", editor, "...")
     os.system(string.split(editor)[0] + " " + file)
 
 def has_track(l, num):

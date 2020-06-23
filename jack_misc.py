@@ -37,25 +37,25 @@ def multi_replace(s, rules, where, filter = id, warn = 0):
     # currently all from must be like %x (a percent sign follow by single char).
     pattern = [x[0] for x in s[s.find("%"):].split("%") if x]
     for p in pattern:
-        if not rules.has_key(p):
+        if p not in rules:
             warn and do_warn("Unknown pattern %%%c is used in %s." % (p, where))
         else:
             if not rules[p]:
                 warn and do_warn("%%%c is not set but used in %s." % (p, where))
             else:
-                s = s.replace("%%%c" % p, filter(rules[p]))
+                s = s.replace("%%%c" % p, list(filter(rules[p])))
     return s
 
 def safe_int(number, message):
     try:
         return int(number)
     except ValueError:
-        print message
+        print(message)
         sys.exit(1)
 
 class dict2(dict):
     def rupdate(self, d2, where):
-        for i in d2.keys():
+        for i in list(d2.keys()):
             if self.__contains__(i):
                 new = self.__getitem__(i)
                 if new['val'] != d2[i]['val']:
@@ -63,13 +63,13 @@ class dict2(dict):
                     new['history'].append([where, new['val']])
                     dict.__setitem__(self, i, new)
     def __getitem__(self, y):
-        if type(y) == types.StringType and y and y[0] == "_":
+        if type(y) == bytes and y and y[0] == "_":
             return dict.__getitem__(self, y[1:])['val']
         else:
             return dict.__getitem__(self, y)
 
     def __setitem__(self, y, x):
-        if type(y) == types.StringType and y and y[0] == "_":
+        if type(y) == bytes and y and y[0] == "_":
             self[y[1:]]['val'] = x
             #return dict.__setitem__(self, y[1:])['val']
         else:

@@ -560,14 +560,14 @@ def init():
     jack_plugins.import_helpers()
 
     # compile exec strings
-    for h in helpers.keys():
-        for i in helpers[h].keys():
+    for h in list(helpers.keys()):
+        for i in list(helpers[h].keys()):
             if i[-4:] == "_fkt":
                 helpers[h][i] = compile(helpers[h][i], '<string>', 'exec')
 
     # compile filters
-    for h in helpers.keys():
-        if helpers[h].has_key('filters'):
+    for h in list(helpers.keys()):
+        if 'filters' in helpers[h]:
             newf = []
             for i in helpers[h]['filters']:
                 newf.append([re.compile(i[0]), i[1]])

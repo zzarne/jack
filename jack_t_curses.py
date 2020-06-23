@@ -41,7 +41,7 @@ except ImportError:
         def resizeterm(y, x):
             pass
     except ImportError:
-        print "curses module not found or too old, please install it (see README)"
+        print("curses module not found or too old, please install it (see README)")
 
 
 # screen objects

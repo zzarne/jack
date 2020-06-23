@@ -59,16 +59,16 @@ class CDTime:
         self.__dict__[name] = value
         if name == 'string' or name == 'any':
             new_val = self.__dict__[name]
-            if type(new_val) == types.StringType and len(new_val) >=2:
+            if type(new_val) == bytes and len(new_val) >=2:
                 if new_val[0] == new_val[-1]:
                     if new_val[0] in ('"', "'"):
                         new_val = new_val[1:-1]
             try:
                 blocks = string.atoi(new_val)
             except:
-                if type(new_val) == types.StringType:
+                if type(new_val) == bytes:
                     blocks = strtoblocks(new_val)
-                elif type(new_val) == types.IntType:
+                elif type(new_val) == int:
                     blocks = new_val
                 else:
                     raise ValueError

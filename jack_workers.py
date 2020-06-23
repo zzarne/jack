@@ -75,7 +75,7 @@ def start_new_ripper(track, ripper):
     cmd = string.split(helper['cmd'])
     args = []
     for i in cmd:
-        if i == "%n": args.append(`track[NUM]`)
+        if i == "%n": args.append(repr(track[NUM]))
         elif i == "%o": args.append(track[NAME].decode(cf['_charset'], "replace") + ".wav")
         elif i == "%d": args.append(cf['_cd_device'])
         else: args.append(i)
@@ -96,9 +96,9 @@ def start_new_encoder(track, encoder):
     args = []
     for i in cmd:
         if i == "%r":
-            args.append(`track[RATE] * helper['bitrate_factor']`)
+            args.append(repr(track[RATE] * helper['bitrate_factor']))
         elif i == "%q":
-            if helper.has_key('inverse-quality') and helper['inverse-quality']:
+            if 'inverse-quality' in helper and helper['inverse-quality']:
                 quality = min(9, 10 - cf['_vbr_quality'])
             else:
                 quality = cf['_vbr_quality']
@@ -123,7 +123,7 @@ def start_new_encoder(track, encoder):
                     else:
                         args.append("")
                 elif i == "%n":
-                    args.append(`track[NUM]`)
+                    args.append(repr(track[NUM]))
                 elif i == "%l":
                     if jack_tag.track_names:
                         args.append(jack_tag.track_names[0][1])
@@ -137,7 +137,7 @@ def start_new_encoder(track, encoder):
                     else: args.append('Unknown')
                 elif i == "%y":
                     if cf['_id3_year'] > 0:
-                        args.append(`cf['_id3_year']`)
+                        args.append(repr(cf['_id3_year']))
                     else:
                         args.append('0')
                 else:
@@ -162,7 +162,7 @@ def start_new_otf(track, ripper, encoder):
     data['enc']['fd'], enc_err = os.pipe()
     args = []
     for i in string.split(helpers[ripper]['otf-cmd']):
-        if i == "%n": args.append(`track[NUM]`)
+        if i == "%n": args.append(repr(track[NUM]))
         elif i == "%d": args.append(cf['_cd_device'])
         else: args.append(i)
     data['rip']['start_time'] = time.time()
@@ -192,9 +192,9 @@ def start_new_otf(track, ripper, encoder):
     args = []
     for i in cmd:
         if i == "%r":
-            args.append(`track[RATE] * helpers[cf['_encoder']]['bitrate_factor']`)
+            args.append(repr(track[RATE] * helpers[cf['_encoder']]['bitrate_factor']))
         elif i == "%q":
-            if helper.has_key('inverse-quality') and helper['inverse-quality']:
+            if 'inverse-quality' in helper and helper['inverse-quality']:
                 quality = min(9, 10 - cf['_vbr_quality'])
             else:
                 quality = cf['_vbr_quality']
@@ -252,7 +252,7 @@ def ripread(track, offset = 0):
 
 # FIXME: all this offset stuff has to go, track 0 support has to come.
 
-        print ":fAE: waiting for status report..."
+        print(":fAE: waiting for status report...")
         sys.stdout.flush()
         hdr = sndhdr.whathdr(cf['_image_file'])
         my_swap_byteorder = cf['_swap_byteorder']
@@ -334,7 +334,7 @@ def ripread(track, offset = 0):
                     buf.byteswap()
                 wav.writeframesraw(buf.tostring())
                 if i % 1000 == 0:
-                    print ":fAE: Block " + `i` + "/" + `track[LEN]` + (" (%2i%%)" % (i * 100 / track[LEN]))
+                    print(":fAE: Block " + repr(i) + "/" + repr(track[LEN]) + (" (%2i%%)" % (i * 100 / track[LEN])))
                     sys.stdout.flush()
             wav.close()
             f.close()
@@ -342,13 +342,13 @@ def ripread(track, offset = 0):
             stop_time = time.time()
             read_speed = track[LEN] / CDDA_BLOCKS_PER_SECOND / ( stop_time - start_time )
             if read_speed < 100:
-                print "[%2.0fx]" % read_speed,
+                print("[%2.0fx]" % read_speed, end=' ')
             else:
-                print "[99x]",
+                print("[99x]", end=' ')
             if hdr[0] in ('bin', 'wav'):
-                print "[      - read from image -     ]"
+                print("[      - read from image -     ]")
             else:
-                print "[cdr-WARNING, check byteorder !]"
+                print("[cdr-WARNING, check byteorder !]")
             sys.stdout.flush()
             posix._exit(0)
     else: # we are not the child

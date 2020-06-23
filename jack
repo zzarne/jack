@@ -68,7 +68,7 @@ import locale
 locale.setlocale(locale.LC_ALL, "")
 
 # say hello...
-print "This is", jack_version.prog_name, jack_version.prog_version, jack_version.prog_copyright, jack_version.prog_devemail
+print("This is", jack_version.prog_name, jack_version.prog_version, jack_version.prog_copyright, jack_version.prog_devemail)
 
 ### interpret options
 global_cf = jack_rc.load(cf, cf['global_rc']['val'])
@@ -83,9 +83,9 @@ cf.rupdate(argv_cf, "argv")
 if help:
     jack_argv.show_usage(cf, longhelp=help-1)
     sys.exit(0)
-debug("global_cf: " + `global_cf`)
-debug("user_cf: " + `user_cf`)
-debug("argv_cf: " + `argv_cf`)
+debug("global_cf: " + repr(global_cf))
+debug("user_cf: " + repr(user_cf))
+debug("argv_cf: " + repr(argv_cf))
 
 jack_checkopts.check_rc(cf, global_cf, user_cf, argv_cf)
 jack_checkopts.consistency_check(cf)
@@ -238,8 +238,8 @@ if (wavs_todo or mp3s_todo):
         global_error = jack_main_loop.main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset)
     except SystemExit:
         jack_term.disable()
-        print jack_display.options_string
-        print "--- Last status: ---------------------------------------------------------------"
+        print(jack_display.options_string)
+        print("--- Last status: ---------------------------------------------------------------")
         jack_status.print_status(form = 'short')
         sys.exit(0)
     except:
@@ -265,8 +265,8 @@ if cf['_query_when_ready'] or cf['_read_freedb_file'] or cf['_query_on_start']:
 
 if jack_term.term_type == "curses":
     if jack_display.options_string:
-        print jack_display.options_string
-    print "The final status was:"
+        print(jack_display.options_string)
+    print("The final status was:")
     jack_status.print_status(form = 'short')
 
 if global_error:
@@ -277,10 +277,10 @@ if global_error:
 jack_tag.tag(freedb_rename)
 
 if jack_functions.progress_changed:
-    jack_functions.progress("all", "done", unicode(time.strftime("%b %2d %H:%M:%S", time.localtime(time.time())), locale.getpreferredencoding(), "replace"))
+    jack_functions.progress("all", "done", str(time.strftime("%b %2d %H:%M:%S", time.localtime(time.time())), locale.getpreferredencoding(), "replace"))
 
 if cf['_remove_files']:
-    print "cleaning up in", os.getcwd()
+    print("cleaning up in", os.getcwd())
     for i in [cf['_progress_file'], cf['_toc_file'], cf['_def_toc'], cf['_freedb_form_file'], cf['_freedb_form_file'] + ".bak"]:
         if os.path.exists(i):
             os.remove(i)
