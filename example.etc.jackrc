@@ -12,12 +12,12 @@
 #base_dir:~/jack
 
 # The default ripper. You can choose from 'cdparanoia'(default), 'cdda2wav',
-# 'tosha' or 'dagrab' (The last two ones are not avaiable in Debian).
+# 'tosha' or 'dagrab' (The last two are not packaged in Debian).
 #ripper:cdparanoia 
 
 # The default encoder. You can choose from 'oggenc'(default), 'xing', 
-# 'mppenc', 'lame', 'l3enc', 'gogo', 'mp3enc' or 'flac' (only oggenc is 
-# avaiable in Debian).
+# 'mppenc', 'lame', 'l3enc', 'gogo', 'mp3enc' or 'flac' (only oggenc, flac,
+# lame and mppenc are available in Debian).
 #encoder:oggenc
 
 # The VBR-quality of the encoded OGGs. -1 is lowest, 10 is highest.
