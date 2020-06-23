@@ -340,19 +340,25 @@ def update_progress(status, todo):
     "update progress file at user's request (operation mode)"
 
     if cf['_upd_progress']:
+        # users may still have a valid jack.freedb file lying around
+        if not jack_freedb.names_available:
+            err, jack_tag.track_names, jack_tag.locale_names, freedb_rename, revision = jack_freedb.interpret_db_file(jack_ripstuff.all_tracks, todo, cf['_freedb_form_file'], verb = 0, dirs = 1)
+
         for i in todo:
             num = i[NUM]
             if not status[num]['dae']:
-                if os.path.exists(i[NAME] + ".wav"):
+                filename = jack_functions.check_file(num, i, ".wav")
+                if filename:
                     status[num]['dae'] = "  *   [          simulated           ]"
                     jack_functions.progress(num, "dae", status[num]['dae'])
             if not status[num]['enc']:
-                if os.path.exists(i[NAME] + ext):
+                filename = jack_functions.check_file(num, i, ext)
+                if filename:
                     if ext.upper() == ".MP3":
-                        x = jack_mp3.mp3format(i[NAME] + ext)
+                        x = jack_mp3.mp3format(filename + ext)
                         temp_rate = x['bitrate']
                     elif ext.upper() == ".OGG" and ogg:
-                        x = ogg.vorbis.VorbisFile(i[NAME] + ext)
+                        x = ogg.vorbis.VorbisFile(filename + ext)
                         temp_rate = int(x.raw_total(0) * 8 / x.time_total(0) / 1000 + 0.5)
                     else:
                         error("don't know how to handle %s files." % ext)
