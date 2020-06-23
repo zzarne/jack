@@ -331,7 +331,34 @@ unusable chars are replaced by the corresponding list item (default "%").
 which program to use for extracting the audio data (default "cdparanoia").
 .TP
 .B \-\-save
-save options to \fI~/.jack3rc\fP file and exit.
+save options to \fI~/.jack3rc\fP file and exit. The following options are
+.BR NOT
+saved:
+.BR \-\-todo ,
+.BR \-\-check-toc ,
+.BR \-\-undo-rename ,
+.BR \-\-dont-work ,
+.BR \-\-update-freedb ,
+.BR \-\-tracks ,
+.BR \-\-query-now ,
+.BR \-\-query ,
+.BR \-\-various ,
+.BR \-\-various-swap ,
+.BR \-\-extt-is-artist ,
+.BR \-\-extt-is-title ,
+.BR \-\-extt-is-comment ,
+.BR \-\-submit ,
+.BR \-\-mail-submit ,
+.BR \-\-rename ,
+.BR \-\-id3-genre ,
+.BR \-\-id3-year ,
+.BR \-\-from-tocfile ,
+.BR \-\-from-image ,
+.BR \-\-toc-file ,
+.BR \-\-upd-progress ,
+.BR \-\-multi-mode ,
+.BR \-\-claim-dir ,
+.BR \-\-save.
 .TP
 .B \-\-scan-dirs int
 Scan this many
