@@ -481,7 +481,7 @@ jack \-Q \-\-rename-fmt "%n-%t" \-\-unusable-chars A I \; \-\-replacement-chars 
 .RE
 will query the FreeDB server, rip and encode all tracks of the CD and save
 the files in a format which will contain the track number and the title.
-All occurances of the letters
+All occurrences of the letters
 .B A
 and
 .B I
