@@ -164,7 +164,8 @@ simply want to stress your system, you can have Jack encode
 several files at once (default 1).
 .TP
 .B \-x, \-\-exec
-run predefined command when finished.
+run predefined command when finished. The command is defined by "exec_rip_done"
+configuration variable.
 .TP
 .B \-\-extt-is-artist
 the artist is contained in the EXTT fields. The EXTT fields are lines in the
