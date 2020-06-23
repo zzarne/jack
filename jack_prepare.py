@@ -182,7 +182,7 @@ def check_toc():
         print("This is the inserted CD:")
         pprint.pprint(cd_toc)
         print()
-        print("And This is what we expect:")
+        print("And this is what we expect:")
         pprint.pprint(file_toc)
         print()
         if cmp(cd_toc, file_toc) == 0:

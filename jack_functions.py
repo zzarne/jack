@@ -165,7 +165,7 @@ def guesstoc(names):
             if not x:
                 error("this is not WAV-format: " + i)
             if x != ('wav', 44100, 2, -1, 16):
-                error("unsupportet format " + repr(x) +  " in " + i)
+                error("unsupported format " + repr(x) +  " in " + i)
             blocks = jack_utils.filesize(i)
             blocks = blocks - 44    # substract WAV header
             extra_bytes = blocks % CDDA_BLOCKSIZE

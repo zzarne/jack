@@ -1,4 +1,4 @@
-### jack_targets.py: supportet target formats for
+### jack_targets.py: supported target formats for
 ### jack - extract audio from a CD and encode it using 3rd party software
 ### Copyright (C) 2002  Arne Zellentin <zarne@users.sf.net>
 
