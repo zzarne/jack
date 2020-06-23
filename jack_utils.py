@@ -31,7 +31,7 @@ from jack_globals import *
 
 def all_paths(p):
     "return all path leading to and including p"
-    if type(p) == bytes:
+    if type(p) == str:
         p = split_dirname(p)
     all = []
     x = ""
@@ -42,9 +42,9 @@ def all_paths(p):
 
 def check_path(p1, p2):
     "check if p1 and p2 are equal or sub/supersets"
-    if type(p1) == bytes:
+    if type(p1) == str:
         p1 = split_dirname(p1)
-    if type(p2) == bytes:
+    if type(p2) == str:
         p2 = split_dirname(p2)
     for i in p1, p2:
         if type(i) != list:
@@ -62,9 +62,9 @@ def rename_path(old, new):
     cwd = os.getcwd()
     print(cwd)
     cwds = split_dirname(cwd)
-    if type(old) == bytes:
+    if type(old) == str:
         old = split_dirname(old)
-    if type(new) == bytes:
+    if type(new) == str:
         new = split_dirname(new)
     for i in old, new, cwds:
         if type(i) != list:
@@ -140,7 +140,7 @@ def yes(what):
             s = "yes"
         else:
             s = "no"
-    elif what['type'] == bytes:
+    elif what['type'] == str:
         s = "'%s'" % what['val']
     else:
         s = str(what['val'])

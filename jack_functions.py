@@ -442,7 +442,7 @@ def progress(track, what="error", data="error", data2 = None):
 
     if type(track) == int:
         first = "%02i" % track
-    elif type(track) == bytes:
+    elif type(track) == str:
         first = track
     else:
         error("illegal progress entry:" + repr(track) + " (" + repr(type(track)) + ")")

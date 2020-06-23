@@ -62,13 +62,13 @@ class dict2(dict):
                     new['history'].append([where, new['val']])
                     dict.__setitem__(self, i, new)
     def __getitem__(self, y):
-        if type(y) == bytes and y and y[0] == "_":
+        if type(y) == str and y and y[0] == "_":
             return dict.__getitem__(self, y[1:])['val']
         else:
             return dict.__getitem__(self, y)
 
     def __setitem__(self, y, x):
-        if type(y) == bytes and y and y[0] == "_":
+        if type(y) == str and y and y[0] == "_":
             self[y[1:]]['val'] = x
             #return dict.__setitem__(self, y[1:])['val']
         else:

@@ -156,7 +156,7 @@ def write_yes(x):
 def convert(cf):
     rc = []
     for i in list(cf.keys()):
-        if cf[i]['type'] == bytes:
+        if cf[i]['type'] == str:
             rc.append([i, cf[i]['val'], None])
         elif cf[i]['type'] == float:
             rc.append([i, repr(cf[i]['val']), None])

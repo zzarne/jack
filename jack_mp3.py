@@ -61,33 +61,33 @@ def get_l4 (s):
 def decode_xing():
     global F, f, xing
     # defaults:
-    frames = bytes = scale = toc = None
+    frames = size = scale = toc = None
     where = f.tell()
     try:
         if 1:
             if DEBUG: print("Xing at", where)
-            # 32-bit fields; "Xing", flags, frames, bytes, 100 toc
+            # 32-bit fields; "Xing", flags, frames, size, 100 toc
             flags           = get_l4(f.read(4))
             if flags & FRAMES_FLAG:
                 frames      = get_l4(f.read(4))
             if flags & BYTES_FLAG:
-                bytes       = get_l4(f.read(4))
+                size        = get_l4(f.read(4))
             if flags & TOC_FLAG:
                 toc = [ord(x) for x in f.read(100)]
                 for j in range(len(toc)):
-                    toc[j] = int(toc[j] / 256.0 * bytes)
+                    toc[j] = int(toc[j] / 256.0 * size)
             if flags & VBR_SCALE_FLAG:
                 scale       = get_l4(f.read(4))
 
             if DEBUG>2:
                 print("Xing: frames=%i" % frames)
-                print("Xing: bytes=%i" % bytes)
+                print("Xing: bytes=%i" % size)
                 print("Xing: toc=", toc)
                 print("Xing: scale=%i" % scale)
 
             xing = {}
             if frames: xing['x_frames'] = frames
-            if bytes: xing['x_bytes'] = bytes
+            if size: xing['x_bytes'] = size
             if toc: xing['x_toc'] = toc
             if scale: xing['x_scale'] = scale
             xing['x_header_at'] = where - 4
@@ -304,7 +304,7 @@ def mp3format(file, warn = 1, max_skip = 100000, offset = 0):
     if DEBUG: print("examining", file, "warnings=%i" % warnings, "offset=%i" % start_offset, "max_skip=%i" % max_skip)
 
     # XXX we're using StringIO because it's faster - transitionally.
-    if type(file) == bytes:
+    if type(file) == str:
         f = open(file, "r")
     elif hasattr(file, 'seek'):
         f = file
@@ -360,7 +360,7 @@ class MP3:
     
         self.file = None
         self.name = name
-        if type(file) == bytes:
+        if type(file) == str:
             self.file = open(file, "rb")
             self.name = file
         elif hasattr(file, 'seek'):

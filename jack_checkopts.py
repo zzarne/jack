@@ -140,7 +140,7 @@ def consistency_check(cf):
         while len(u) > len(r):
             if type(r) == list:
                 r.append(r[-1])
-            elif type(r) == bytes:
+            elif type(r) == str:
                 r = r + r[-1]
             else:
                 error("unsupported type: " + repr(type(cf['replacement_chars']['val'][-1])))

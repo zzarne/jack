@@ -109,7 +109,7 @@ def parse_option(cf, argv, i, option, alt_arg, origin="argv"):
         else:
             return None, "Option `%s' needs exactly one argument" % option
 
-    if ty == bytes:
+    if ty == str:
         i, data = get_next(argv, i, alt_arg)
         if data != None:
             return i, data
