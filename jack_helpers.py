@@ -129,7 +129,7 @@ if s.find("%") >= 0:       # status reporting starts here
 elif s.find("Frame:") >= 0:    # older versions, like 3.13
     y = s.split("/")
     y0 = y[0].split("[")[-1]
-    y1 = y[1]s.split("]")[0]
+    y1 = y[1].split("]")[0]
     percent = float(y0) / float(y1) * 100.0
 else:
     percent = 0
@@ -497,7 +497,7 @@ while l:
         'status_fkt': r"""
 x = i['buf'].split('\r')[-2]
 if x.find('total:') != -1:
-    new_status = i['buf'].split('\r')[-2]).strip()
+    new_status = i['buf'].split('\r')[-2].strip()
 else:
     new_status = "waiting..."
 """,
@@ -531,7 +531,7 @@ if not stat.S_ISBLK(os.stat(cf['_cd_device'])[stat.ST_MODE]):
 try:
     device = cdrom.open(cf['_cd_device'])
     (first, last) = cdrom.toc_header(device)
-except cdrom.error, m:
+except (cdrom.error, m):
     error("Access of CD device %s resulted in error: %s" % (cf['_cd_device'], m[1]))
 
 toc = []
