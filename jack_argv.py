@@ -25,14 +25,14 @@ import jack_generic
 from jack_globals import *
 from jack_misc import safe_int
 
-def show_usage(cf, long=0):
+def show_usage(cf, longhelp=0):
     l = []
     for i in cf.keys():
-        if not long and not cf[i].has_key('help'):
+        if not longhelp and not cf[i].has_key('help'):
             continue
         s = ""
         if cf[i].has_key('usage'):
-            if not long and cf[i].has_key('vbr_only') and cf[i]['vbr_only'] != cf['_vbr']:
+            if not longhelp and cf[i].has_key('vbr_only') and cf[i]['vbr_only'] != cf['_vbr']:
                 continue
             if cf[i].has_key('long'):
                 s = "  --%s" % cf[i]['long']
@@ -52,7 +52,7 @@ def show_usage(cf, long=0):
     for i in l:
         jack_generic.indent(i[0] + " " * (max_len - len(i[0])), i[1])
 
-    if long: 
+    if longhelp:
         print """
 While Jack is running, press q or Q to quit,
     p or P to disable ripping (you need the CD drive)

@@ -81,7 +81,7 @@ help, argv_cf = jack_argv.parse_argv(cf, sys.argv)
 jack_checkopts.checkopts(cf, argv_cf)
 cf.rupdate(argv_cf, "argv")
 if help:
-    jack_argv.show_usage(cf, long=help-1)
+    jack_argv.show_usage(cf, longhelp=help-1)
     sys.exit(0)
 debug("global_cf: " + `global_cf`)
 debug("user_cf: " + `user_cf`)
