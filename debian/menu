@@ -1,0 +1,2 @@
+?package(jack):needs="text" section="Applications/Sound" \
+  title="jack" command="/usr/bin/jack -Q -D --wait"

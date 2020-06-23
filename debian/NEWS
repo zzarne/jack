@@ -1,0 +1,119 @@
+jack (3.1.1-14) unstable; urgency=low
+
+  As of this version, base_dir is no longer set in /etc/jackrc.  The
+  reason for this is that there is no standard location for sound or
+  media files and users may be surprised to find their files in ~/jack
+  (the previous default of base_dir).  jack will now by default put
+  the files in the current working directory.  You're welcome to set
+  base_dir in ~/.jack3rc (or /etc/jackrc) if you have a more appropriate
+  location.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Wed, 11 Jan 2006 13:51:32 +0000
+
+jack (3.0.0-1) experimental; urgency=low
+
+  The configuration has changed fundamentally with jack-3.0.0.
+  There is now a system-wide configuration file /etc/jackrc and
+  the user configuration files have been renamed to ~/.jack3rc.
+  Further, jack now has a simple scheme to set options permanently,
+  by adding --save to the command-line. This is the preferred way
+  to set options, as the syntax of the jackrc file has changed.
+  See the commented out options in /etc/jackrc for examples of
+  useful options and how to set them.
+
+ -- Michael Banck <mbanck@debian.org>  Sat, 28 Feb 2004 21:30:43 +0000
+
+jack (2.99.9-6) unstable; urgency=low
+
+  jack now features a '--cddb-id' option, which lets you specify a
+  freedb CDDB id, even though jack calculates a different one. You
+  need to specify an ID3 genre via '-G/--id3-genre' for the freedb
+  lookup, too. Note that this option has not been applied or even
+  accepted upstream yet and is suspect to change in a later version.
+
+ -- Michael Banck <mbanck@debian.org>  Sun, 31 Aug 2003 00:52:11 +0200
+
+jack (2.99.9-2) unstable; urgency=low
+
+  Alban Browaeys has pointed out that invalid OGG Vorbis tags are produced
+  under certain circumstances.  While the OGG Vorbis specification requires
+  that the field contents is encoded in UTF-8, jack up to 2.99.9-1 wrote
+  an ASCII string to the field.  This has been fixed in 2.99.9-2.
+  Fortunately, you do not have to re-encode your OGG files.  Rather, you
+  can use jack's -R (rename) feature to simply update the OGG Vorbis tags.
+  A script is supplied which takes care of this automatically.  Simply change
+  to the directory you keep your OGG files in, and run the script.  For
+  example, if your OGG files are in /media/ogg, you have to do:
+
+    $ cd /media/ogg
+    $ /usr/share/doc/jack/fix-vorbis-tags.pl
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sun, 22 Dec 2002 21:53:22 +0100
+
+jack (2.99.9-1) unstable; urgency=low
+
+  Jack now features an undocumented option to turn off
+  cdparanoia's --abort-on-skip option. The option's name is
+  --I-swear-I'll-never-give-these-files-to-anyone,-including-hot-babes-TM
+  Only use this option (if at all) when you already know that a CD will
+  not get ripped OK, as this means that unsuccesful rips will be
+  unnoticed. You have been warned and will continue on your own risk.
+
+ -- Michael Banck <mbanck@debian.org>  Tue,  3 Sep 2002 02:26:19 +0200
+
+jack (2.99.8-2) unstable; urgency=low
+
+  It is now preferred to specify the vbr_quality rather than a
+  bitrate. You can do this by adding vbr_quality = $QUALITY to
+  your ~/.jackrc, $QUALITY being an integer from 0 (worst
+  quality, smallest files) to 10 (best quality, biggest files)
+
+  Average bitrates for oggenc will be around 70-100 for 0 up to
+  300-500 kbit/s for 10. vbr_quality = 5 (the default if you don't
+  specify the switch in your ~/.jackrc) will be around 150-170
+  kbit/s. Please let me know if you get completely different bit-
+  rates so I can tune the default. Note that lame and gogo do
+  support this switch, too, but at least lame will have a much
+  slimmer bandwidth for the bitrate (from 100-200 kbit/s) than
+  oggenc.
+
+  If you want to keep using the bitrate (I've been told that the
+  quality would be inferior at the same filesize), you can switch
+  the comments in /usr/bin/jack, line 425/426, or add a new helper
+  section like helpers['oggenc-local'] = {'type':"encoder"[...]"""}
+  to your ~/.jackrc(see end of auto-generated ~/.jackrc for an example)
+
+ -- Michael Banck <mbanck@debian.org>  Fri, 24 May 2002 20:40:07 +0200
+
+jack (2.99.7-4) unstable; urgency=low
+
+  base_dir is now set to 'environ['HOME'] + "/jack"' (i.e. ~/jack)
+  when a new .jackrc is created. This is in preparation for a jack
+  menu item, so that jack does not dump the OGGs in the directory
+  you started X from. If you upgrade, nothing should change ATM.
+
+ -- Michael Banck <mbanck@gmx.net>  Sat, 23 Feb 2002 13:16:34 +0100
+
+jack (2.99.7-1) unstable; urgency=low
+
+  Jack-2.99.7 had a new .jackrc layout, you'll have to move your
+  old .jackrc elsewhere and tune the newly generated one.
+
+  If jack fails reading the TOC(table of contents) for your
+  CD-drive, you can try adding
+    toc_prog = "cdda2wav"
+  or
+    toc_prog = "cdparanoia"
+  or simply
+    toc_prog = ripper
+  manually in your .jackrc.
+
+  But beware, using this is deprecated and should be a last resort.
+  In particular, you will lose the ability to rip CDs with data tracks,
+  as jack no longer will be able to compare the TOCs!
+
+  Please add to bug-nr. #118731 if you experience problems with
+  your CD-drive.
+
+ -- Michael Banck <mbanck@gmx.net>  Mon, 08 Oct 2001 18:02:20 +0000
+

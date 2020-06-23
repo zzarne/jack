@@ -1,0 +1,1145 @@
+jack (3.1.1+cvs20050801-31) unstable; urgency=medium
+
+  * Replace obsolete url by package name when Mutagen is not installed.
+    (Closes: #680780)
+  * Fix documentation typos (Closes: #606960)
+  * Enhance -x switch documentation (Closes: #734718)
+  * Enhance --save switch documentation (Closes: #734712)
+
+ -- Francois Mazen <francois@mzf.fr>  Fri, 05 Oct 2018 21:54:10 +0200
+
+jack (3.1.1+cvs20050801-30) unstable; urgency=medium
+
+  * Set Francois Mazen as Uploader.
+  * Acknowledge NMUs.
+  * Remove obsolete cursesmodule python binding (Closes: #898075).
+  * Fix trailing whitespace in changelog.
+  * Update patches to quilt (3.0).
+  * Update debian/copyright to dep5 format.
+  * Clean debian/rules.
+
+ -- Francois Mazen <francois@mzf.fr>  Wed, 22 Aug 2018 22:24:35 +0200
+
+jack (3.1.1+cvs20050801-29.2) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Add patch from Gaetano Guerriero <x.guerriero@tin.it> to be compatible
+    with eyed3 0.7.x.  Closes: #844568
+  * Require python-eyed3 >= 0.7.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Wed, 04 Jan 2017 14:36:45 +0100
+
+jack (3.1.1+cvs20050801-29.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Build with dh-python instead of python-support.  Closes: #786042
+  * Update watch file.
+
+ -- Mattia Rizzolo <mattia@debian.org>  Sun, 13 Dec 2015 17:21:11 +0000
+
+jack (3.1.1+cvs20050801-29) unstable; urgency=low
+
+  * debian/control (Depends): Added lame as an alternative to vorbis-tools and
+    flac.
+
+ -- Michael Banck <mbanck@debian.org>  Fri, 30 Mar 2012 16:03:15 +0200
+
+jack (3.1.1+cvs20050801-28) unstable; urgency=low
+
+  * debian/control (Standards-Version): Bumped to 3.9.3.
+  * debian/rules (binary-predeb/jack): Remove README prior to package build,
+    it is outdated.
+
+ -- Michael Banck <mbanck@debian.org>  Thu, 29 Mar 2012 18:23:22 +0200
+
+jack (3.1.1+cvs20050801-27) unstable; urgency=low
+
+  * debian/control (Uploaders): Removed Martin Michlmayr.
+
+ -- Michael Banck <mbanck@debian.org>  Thu, 29 Mar 2012 17:37:19 +0200
+
+jack (3.1.1+cvs20050801-26) unstable; urgency=low
+
+  * debian/patches/99a_correct-category-list.patch: Make sure the correct
+    FreeDB categories are displayed when submitting a CD.  Thanks to
+    Cédric Boutillier for the patch; closes: #536165.
+  * debian/control (Depends): Add ${shlibs:Depends} (for glibc) and
+    ${misc:Depends} (for debhelper).
+  * debian/copyright: Update to reflect that the license is GPL 2 or
+    later rather than GPL 2 only.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Mon, 10 Aug 2009 19:18:27 -1000
+
+jack (3.1.1+cvs20050801-25) unstable; urgency=low
+
+  * debian/patches/64_catch_id3_error.patch: eyeD3 only accepts years
+    that have 4 digits.  Ignore year values that don't conform with
+    this; closes: #478784
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sun, 04 May 2008 16:44:47 +0200
+
+jack (3.1.1+cvs20050801-24) unstable; urgency=low
+
+  * debian/patches/63_date_unicode.patch: Deal with abbreviated months
+    that contain UTF-8 in certain locales; closes: #471843.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Fri, 21 Mar 2008 16:14:53 +0100
+
+jack (3.1.1+cvs20050801-23) unstable; urgency=medium
+
+  * debian/patches/61_pymem_del.patch: Fix a bug in the way
+    the memory API is used since this would lead to a segfault
+    with Python 2.5.  Thanks Barry deFreese and Thomas Viehmann
+    for the patch; closes: #468972.
+  * debian/patches/69_document_freedb_dir.patch: Document
+    freedb_dir since this option doesn't show up with --longhelp;
+    closes: #458384.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sun, 09 Mar 2008 11:17:14 +0100
+
+jack (3.1.1+cvs20050801-22) unstable; urgency=low
+
+  * debian/patches/87_use_existing_cddb_category.patch: Don't assume
+    that the CDDB category is set because it doesn't have to be when
+    -Q and --cont-failed-query is used.  Thanks, Stephan Balmer;
+    closes: #453724.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Thu, 27 Dec 2007 19:23:55 +0100
+
+jack (3.1.1+cvs20050801-21) unstable; urgency=low
+
+  * debian/patches/57_feedb_asciiletters.patch: Use ASCII letters only
+    when parsing Various Artist CDs rather than all letters that are
+    valid in a user's locale since jack doesn't deal with the latter
+    at the moment; closes: #452097.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Wed, 21 Nov 2007 20:35:23 +0100
+
+jack (3.1.1+cvs20050801-20) unstable; urgency=low
+
+  * debian/patches/76_remove_append_year.patch: Remove this patch since
+    upstream told me --append-year option is useful after all.  This is
+    at the moment the only option to add a year only when the year is
+    actually known.  Split other changes of this patch out into their
+    own patches.
+  * debian/patches/76_mkdirname_cleanup.patch: Clean up some code but
+    don't change any functionality.
+  * debian/patches/82_fix_append_year_doc.patch: --append-year is not
+    a boolean but accepts a string.
+  * debian/patches/86_mention_year_dir_template.patch: Document that
+    %y (year) can be used in dir_template.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sun, 11 Nov 2007 11:10:56 +0100
+
+jack (3.1.1+cvs20050801-19) unstable; urgency=low
+
+  * debian/patches/59_assume_ok_query.patch: Tag tracks when the FreeDB
+    query failed but we can parse the FreeDB file since the user might
+    have edited the file manually; closes: #441270.
+  * debian/patches/60_ask_edit_freedb_when_query_fails.patch: Ask users
+    whether they want to edit the FreeDB data when the query fails.
+
+  * debian/copyright: Add 2007 to the packaging copyright statement.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sat, 27 Oct 2007 22:57:49 +0200
+
+jack (3.1.1+cvs20050801-18) unstable; urgency=medium
+
+  * debian/patches/06_link_ncursew.patch: Update to make sure that
+    -I/usr/include/ncursesw will be passed to the compiler; closes:
+    #447479.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sun, 21 Oct 2007 15:08:50 +0200
+
+jack (3.1.1+cvs20050801-17) unstable; urgency=medium
+
+  * debian/control (Build-Depends): Use "libncursesw5-dev" rather
+    than libncurses5-dev.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sun, 21 Oct 2007 13:38:22 +0200
+
+jack (3.1.1+cvs20050801-16) unstable; urgency=medium
+
+  * Switch back to jack's curses module since jack with Python's
+    curses module will produce a lot of curses related exceptions
+    when you resize the terminal; closes: #441369.
+  * debian/patches/06_dont_build_curses_module.patch: Remove.
+  * debian/patches/07_dont_warn_jack_curses.patch: Remove.
+  * debian/control (Architecture): Change architecture to "any".
+
+  * debian/patches/06_link_ncursew.patch: Link against ncursesw rather
+    than ncurses so UTF-8 will work.
+
+  * debian/patches/92_fix_python2.6_warning.patch: Don't use "with"
+    since it will become a reserved keyword in Python 2.6.
+
+  * debian/menu: Update to the new menu hierarchy.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sat, 20 Oct 2007 12:46:21 +0200
+
+jack (3.1.1+cvs20050801-15) unstable; urgency=low
+
+  * debian/patches/78_setlocale.patch: Set the locale.  This is needed
+    so Unicode characters will be shown correctly (see the discussion
+    in #279000).  Thanks, Martin v. Löwis.
+  * debian/patches/06_dont_build_curses_module.patch: Don't build the
+    curses module that comes with jack.  We want to use the curses
+    module from Python because it supports UTF-8 properly.
+  * debian/control (Architecture): Change architecture to "all".
+  * debian/patches/07_dont_warn_jack_curses.patch: Don't warn when the
+    curses module from jack cannot be found.
+  * debian/patches/79_unicode_width.patch: Try to guess the real width
+    of a Unicode string as it's printed on the screen.  The solution
+    used is not ideal but better than what we had before.  Thanks,
+    Martin v. Löwis.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Wed, 29 Aug 2007 13:15:37 +0200
+
+jack (3.1.1+cvs20050801-14) unstable; urgency=low
+
+  * debian/patches/94_addstr_error.patch: patch from Anthony DeRobertis
+    to ignore another curses addstr error; closes: #401127.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Fri, 01 Dec 2006 13:30:48 +0100
+
+jack (3.1.1+cvs20050801-13) unstable; urgency=low
+
+  * debian/patches/99_addstr_error.patch: Add a workaround so no error is
+    produced when a UTF-8 filename cannot be displayed; closes: #387648.
+  * debian/control (Build-Depends): pump python-support requirement to
+    >= 0.3.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Tue, 24 Oct 2006 21:18:26 +0100
+
+jack (3.1.1+cvs20050801-12) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/42_cd_device_fallback.patch: Update to not abort
+    immediately when the default CD device doesn't exist because some
+    actions are still allowed (e.g. -R on an already ripped CD).
+
+  [ Pierre Habouzit ]
+  * Upgrade to the latest Python policy.
+  * debian/control (Build-Depends): Remove python and python-dev.
+  * debian/control (Build-Depends): Add python-all-dev and python-support.
+  * debian/control (Build-Depends): Pump versioned dependency on debhelper
+    and cdbs.
+  * debian/control (Standards-Version): Pump to 3.7.2.
+  * debian/control (Provides): New.
+  * debian/rules: Set DEB_PYTHON_SYSTEM.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Mon, 17 Jul 2006 09:02:10 +0200
+
+jack (3.1.1+cvs20050801-11) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/50_check_ripper_encoder.patch: Don't check whether the
+    ripper and encoder exist in $PATH if they have been specified by
+    plugins since we cannot assume a strict mapping from plugin name to
+    the name of the executable; closes: #367929.
+  * debian/patches/36_check_plugin.patch: Better error checking when
+    plugins are imported.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sat, 20 May 2006 14:31:35 +0200
+
+jack (3.1.1+cvs20050801-10) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/34_toc_invocation_fail.patch: Improve the error message
+    shown when the invocation of the TOC program fails; closes: #360465.
+  * debian/patches/35_fix_xtermset.patch: Resize the window to the correct
+    height when xtermset_enable is set.
+  * debian/patches/56_ctrl_c_termset.patch: Don't change the window size
+    on Ctrl-C when xtermset_enable is set; closes: #196429.
+  * debian/compat: Use debhelper 5.
+  * debian/control (Build-Depends): Likewise.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Tue, 16 May 2006 18:12:12 +0200
+
+jack (3.1.1+cvs20050801-9) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/copyright: Mention license and copyright of the Debian
+    packaging.
+  * debian/NEWS: fix typo in undocumented option.
+  * debian/patches/55_fix_sloppy.patch: Fix syntax error in an
+    undocumented option; closes: #362676.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sat, 15 Apr 2006 19:35:27 +0200
+
+jack (3.1.1+cvs20050801-8) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/51_error_not_block_device.patch: Print an error
+    rather than an ugly traceback when the device specified is not
+    a block device; closes: #360337.
+  * debian/patches/52_cdparanoia_toc.patch: Make cdparanoia TOC
+    parsing more robust; closes: #361164.
+  * debian/patches/53_no_tag_when_freedb_fails.patch: Don't try to tag
+    files when no FreeDB data is available; closes: #361290.
+  * debian/patches/54_check_cont_failed_query.patch: Don't automatically
+    initate a FreeDB query when cont_failed_query is set.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Fri, 07 Apr 2006 20:49:19 +0200
+
+jack (3.1.1+cvs20050801-7) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/32_man_minus.patch: Escape minus signs in the man page
+    properly.  Thanks for the report, Francesco Poli.
+  * debian/patches/45_fix_normalize_example.patch: Likewise.
+  * debian/patches/83_man_plugin.patch: Likewise.
+  * debian/patches/47_locale_check.patch: Check whether the locale is
+    known, otherwise jack will produce a traceback; closes: #360801.
+  * debian/patches/48_search_base_dir.patch: Search base_dir for
+    existing directories; closes: #360497.
+  * debian/patches/33_flac_mutagen.patch: Use mutagen instead of pyflac
+    since the latter is obsolete and has been removed from the archive.
+    Thanks, Joe Wreschnig; closes: #356771.
+  * debian/patches/44_guess_toc_ogg_flac.patch: Update to use mutagen.
+  * debian/patches/77_upd_progress_flac.patch: Likewise.
+  * debian/control (Depends): replace python-flac with python-mutagen.
+  * debian/patches/49_nicer_ripper_encoder.patch: Print a nicer message
+    when an unknown ripper or encoder is specified.
+  * debian/patches/50_check_ripper_encoder.patch: Check whether a command
+    passed via --ripper/--encoder actually exists.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Wed, 05 Apr 2006 00:24:14 +0200
+
+jack (3.1.1+cvs20050801-6) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/85_dir_template_yg.patch: Update patch to not fail
+    when creating the directory when no gengre is set.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Thu, 02 Mar 2006 18:39:22 +0000
+
+jack (3.1.1+cvs20050801-5) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/43_string_option.patch: Don't convert a string to
+    a string, thereby avoiding multiple quotation marks.
+  * debian/patches/44_guess_toc_ogg_flac.patch: Implement OGG and FLAC
+    support for --guess-toc.  SourceForge #1089407
+  * debian/patches/45_fix_normalize_example.patch: Fix the example in the
+    man page showing how to normalize WAV files with jack.  SourceForge
+    #1311567
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Mon, 27 Feb 2006 13:53:47 +0000
+
+jack (3.1.1+cvs20050801-4) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/40_enable_term.patch: After disabling curses within
+    the signal handler enable it again, otherwise further keyboard input
+    is ignored; closes: #352755.
+  * debian/patches/41_nicify_wait.patch: Display a better message in
+    the signal handler when --wait is on and when a signal was sent.
+  * debian/patches/42_cd_device_fallback.patch: When no CD default is
+    specified and the default one does not exist, look in /proc (Linux)
+    for possible CD devices; closes: #353551.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Tue, 21 Feb 2006 00:26:24 +0000
+
+jack (3.1.1+cvs20050801-3) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/77_upd_progress_flac.patch: Support FLAC files in
+    --update-progress; closes: #351459.
+  * debian/patches/38_remove_gen_device.patch: Remove (broken) generic
+    device support from jack since it's obsolete anyway; closes: #184244.
+  * debian/patches/39_main_loop_valueerror.patch: Make the main loop
+    (ripping, encoding) more robust against ctrl-c; closes: #352754.
+  * debian/patches/70_fix_upd_progress.patch: Improve patch and don't
+    fail if the OGG module is not installed (this can't happen in
+    Debian, but is still a bug in the patch).
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sun, 19 Feb 2006 02:14:57 +0000
+
+jack (3.1.1+cvs20050801-2) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/73_err_unknown_sub.patch: Fixed a bug related to
+    --append-year.
+  * debian/patches/74_multi_replace_cleanup.patch: Likewise.
+  * debian/patches/29_remove_freedb-de.patch: Remove the de.freedb.org
+    mirror since it no longer exists; closes: #351719.
+  * debian/patches/30_add_freedb_mirrors.patch: Update the list of
+    FreeDB mirrors.
+  * debian/patches/76_remove_append_year.patch: Remove --append-year
+    since the same can be achieved by sticking a %y in dir_template.
+  * debian/patches/85_dir_template_yg.patch: Make %y and %g actually
+    work in dir_template when the information can be found in FreeDB;
+    closes: #351574.
+  * debian/patches/31_real_bitrate_progress.patch: Put the real bitrate
+    in the progress file in case of VBR.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Tue, 07 Feb 2006 01:23:34 +0000
+
+jack (3.1.1+cvs20050801-1) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * Update to latest CVS (2005-08-01) since no new upstream release is
+    forthcoming.
+  * Changes that were made by upstream in contrast to what the Debian
+    package did:
+    + ID3 v1 tags are written by default again for MP3 files.
+    + The --edit-cddb option got renamed to --edit-freedb for consistency.
+  * Drop patches that got merged upstream:
+    + 40_man_page_format_strings.patch
+    + 41_man_page_minor_improvements.patch
+    + 42_man_page_renames.patch
+    + 56_cd_device_error.patch
+    + 52_add_rename_num.patch
+    + 36_tag_clarify_error.patch
+    + 60_utf8_support.patch
+    + 82_update_defaults.patch
+    + 50_help_inconsistency.patch
+    + 51_error_dir_rename.patch
+    + 55_freedb_email.patch
+    + 57_flac_parsing.patch
+    + 61_utf8_unicode_id3v1_fix.patch
+    + 72_flac_man_page.patch
+    + 64_flac_tagging.patch
+    + 76_submit_updated_freedb.patch
+    + 77_exec_environ.patch
+    + 85_fix_environ.patch
+    + 59_ogg_parsing.patch
+    + 78_ripper_parsing.patch
+    + 79_verbose_submit_error.patch
+  * Drop patches that are obsolete (e.g. because they've been solved in
+    a different way):
+    + 53_help_show_quality.patch
+    + 54_oggenc_fixed_bitrate.patch
+    + 71_no_id3v1.patch
+    + 65_fix_genre.patch
+  * Update patches so they still apply:
+    + 75_ignore_empty_freedb_info.patch
+    + 87_use_existing_cddb_category.patch
+  * debian/exec_vorbisgain: Added upstream, remove.
+  * debian/examples: Update path of exec_vorbisgain.
+
+  * debian/patches/97_man_mp3vsogg.patch: By default, OGGs are generated
+    now rather than MP3s so update the examples in the man page.  Thanks,
+    David Whitmarsh; closes: #348547.
+  * debian/examples.txt: Update accordingly.
+  * debian/patches/98_man_default_encoders.patch: Mention the default value
+    of the --encoders option in the man page.
+  * debian/patches/70_fix_upd_progress.patch: Fix the --upd-progress
+    function; closes: #351453.
+  * debian/patches/27_allow_year_genre_sa.patch: Allow %y and %g in
+    filenames of single-artist tracks; closes: #351465.
+  * debian/patches/71_freedb_filename_cleanup.patch: Clean up the code
+    generating filenames based on FreeDB information.
+  * debian/patches/72_upd_progress_renamed.patch: Allow --upd-progress
+    to work after filenames have been renamed; closes: #351460.
+  * debian/patches/73_err_unknown_sub.patch: Print a warning or error
+    when an unknown or empty filename substitution is found.
+  * debian/patches/69_fail_incomplete_dir_template.patch: Remove since
+    the previous patch offers a cleaner and more complete solution.
+  * debian/patches/74_multi_replace_cleanup.patch: Clean up the code
+    in jack_misc.multi_replace().
+  * debian/patches/75_fix_datatrack_rename.patch: Fix "jack -R -t x"
+    when x is a datatrack and the CD is not in the drive; closes:
+    #341889.
+  * debian/patches/26_t_artist_cleanup.patch: Clean up the code which
+    determines which artist name to use (single vs multi artist CDs).
+  * debian/patches/28_allow_edit_cddb.patch: Allow --edit-cddb to
+    continue to work for backwards compatibility.
+
+  * Update patches to make it easier to merge them into upstream:
+    + debian/patches/84_dyear_dgenre.patch: Merge 92_fix_year_0.patch.
+    + debian/patches/92_fix_year_0.patch: Drop patch.
+    + debian/patches/83_man_plugin.patch: Merge 94_clarify_man_plugin.patch.
+    + debian/patches/94_clarify_man_plugin.patch: Drop patch.
+    + debian/patches/73_flac_options.patch: Merge 86_flac_vbr.patch.
+    + debian/patches/86_flac_vbr.patch: Drop patch.
+    + debian/patches/62_dont_repeat_inexact.patch: Merge
+      63_nicify_inexact_warning.patch.
+    + debian/patches/63_nicify_inexact_warning.patch: Drop patch.
+    + debian/patches: Add a description to every patch.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sun, 05 Feb 2006 19:24:07 +0000
+
+jack (3.1.1-16) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/21_fallback_ripper.patch: Fallback to an installed
+    ripper when the default one is not available and the user has not
+    specified a particular one; closes: #347975.
+  * debian/patches/96_fix_cdda2wav_parsing.patch: Make cdda2wav parsing
+    more robust, in particular when errors occur.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Tue, 24 Jan 2006 00:54:09 +0000
+
+jack (3.1.1-15) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/19_man_duplicate_overwrite.patch: Don't list the
+    --overwrite option twice in the man page; closes: #347975.
+  * debian/patches/69_fail_incomplete_dir_template.patch: Print an
+    error when information needed to create the album directory (such
+    as genre or year) is not available; closes: #349368.
+  * debian/patches/20_fix_sub_paths_warning.patch: Fix the warning
+    shown when dir_template contains more levels than scan_dirs.
+  * debian/control (Standards-Version): Set to 3.6.2 (no change needed).
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Mon, 23 Jan 2006 14:55:36 +0000
+
+jack (3.1.1-14) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/jackrc: Don't set base_dir since this is confusing for
+    users; closes: #345337.
+  * debian/patches/18_warn_no_base_dir.patch: Add a warning if base_dir
+    is not set.
+  * debian/NEWS: Mention base_dir change.
+  * debian/patches/17_fix_ref_no_various.patch: Change references from
+    the removed --no-various option to --various=no; closes: #345367.
+  * debian/patches/95_fix_empty_input.patch: Don't fail when enter is
+    pressed at an input prompt; closes: #345614.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Wed, 11 Jan 2006 13:57:02 +0000
+
+jack (3.1.1-13) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/92_fix_year_0.patch: Don't put the year into the
+    file meta data if it is zero (0); closes: #341890.
+  * debian/patches/93_extd_parsing.patch: Make the parsing of year and
+    genre in EXTD less restrictive.  Now it will recognize the year even
+    if there is no genre and if there is space instead of newline between
+    year and EXTD; closes: #341891.
+  * debian/patches/94_clarify_man_plugin.patch: Clarify how to activate
+    plug-ins; closes: #341562.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sat, 03 Dec 2005 22:28:57 +0000
+
+jack (3.1.1-12) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/66_rename_unicode.patch: When renaming directories,
+    make sure both the old and the new dir are Unicode strings; also
+    make this more robust; see #338816 and #339879.
+  * debian/patches/67_progress_utf8_vs_filenames.patch: Even though
+    jack.progress is always UTF-8 encoded, use the local encoding for
+    filenames mentioned in jack.progress, otherwise jack thinks it has
+    to rip/encode files again which already exist; closes: #338816.
+  * debian/patches/68_support_high_char_renames.patch: Allow characters
+    >128 in unusable_chars and replacement_chars; closes: #339879.
+  * debian/patches/16_len_unusable_replacement.patch: Print a warning
+    if the number of elements of replacement_chars and unusable_chars
+    is different.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Thu, 01 Dec 2005 11:10:54 +0000
+
+jack (3.1.1-11) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/11_choose_bitrate_quality.patch: Use fixed bitrate
+    when a bitrate is given on the command line even when the config
+    defaults to variable bitrate; closes: #293334.
+  * debian/patches/10_vbr_default_man.patch: The default of --vbr
+    has been "yes" for a while.
+  * debian/patches/12_gogo_vbr-otf-cmd.patch: Fix gogo's vbr-otf-cmd
+    to use the quality variable rather than a hardcoded value.
+  * debian/patches/13_rc_hash.patch: Don't automatically assume that
+    a hash (#) in the configuration file is a comment since it can
+    also occur in the value of config variables; closes: #338621.
+  * debian/patches/91_fix_cdrdao_image.patch: Fix support for cdrdao
+    image files; closes: #338697.
+  * debian/patches/14_tocfile_abspath.patch: Print a better warning
+    when the cdrdao toc file cannot be found, and use the absolute
+    path so the file will be found if it exists; see #338697.
+  * debian/patches/15_imagefile_abspath.patch: If an image file is
+    specified without a toc file, print a warning that the TOC will
+    be obtained from the CD; also use the absolute path of the image
+    file since we're about to change cwd; thanks to Kristine Daniels
+    for the report, see #338697.
+  * debian/copyright: Update the address of the FSF.
+  * debian/fix-vorbis-tags.pl: Remove since the UTF-8 problems with OGG
+    Vorbis tags were fixed a long time ago (jack 2.99.9-2, 2002-12-31).
+  * debian/examples: Remove fix-vorbis-tags.pl.
+  * debian/rules (binary-predeb/jack): Likewise.
+  * debian/NEWS: Add all news entries from README.Debian.
+  * debian/README.Debian: Remove empty file.
+  * debian/patches-held: Remove obsolete patches.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sun, 13 Nov 2005 22:04:23 +0000
+
+jack (3.1.1-10) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/88_fix_argv_loop.patch: Fix an endless loop in
+    the parsing of certain command line arguments; closes: #336911.
+  * debian/patches/89_saner_argv_lists.patch: Make parsing of lists
+    given on the command line more intuitive; closes: #336343.
+  * debian/patches/42_man_page_renames.patch: Escape the backslash in
+    an example so it will get rendered properly.
+  * debian/patches/90_fix_df.patch: Fix the alternative (and usually
+    not used) code path of jack_functions.df(); closes: #324946.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Tue, 01 Nov 2005 21:25:55 +0000
+
+jack (3.1.1-9) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/87_use_existing_cddb_category.patch: When submitting
+    updated CDDB entries, use the existing CDDB category of the CD
+    instead of prompting the user for it; closes: #335299.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sun, 23 Oct 2005 09:47:48 +0100
+
+jack (3.1.1-8) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/86_flac_vbr.patch: Mark FLAC as VBR again, otherwise
+    size calculation is broken and rename wants to re-encode files;
+    closes: #328049.
+  * debian/control: Remove some trailing whitespace.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Mon, 26 Sep 2005 18:06:17 +0100
+
+jack (3.1.1-7) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/watch: Add a watch file.
+  * debian/patches/81_check_space.patch: Fix the code which checks whether
+    disk space has been freed outside of jack; closes: #200233.
+  * debian/patches/82_update_defaults.patch: Update defaults in --help
+    with commands passed via command line arguments; closes: #293339.
+  * debian/patches/83_man_plugin.patch: Describe the plug-in mechanism
+    in the man page; closes: #272622
+  * debian/examples: Ship the plug-in exampls files jack_plugin_cddb.py
+    and jack_plugin_lame.py.
+  * debian/patches/65_fix_genre.patch: Fix the --id3-genre option that
+    got broken in 60_utf8_support.patch.
+  * debian/patches/84_dyear_dgenre.patch: Add support for DYEAR and
+    DGENRE as defined in CDDB protocol level 5; closes: #277932.
+  * debian/patches/85_fix_environ.patch: Check whether any files have
+    been added to the playlist; to fix a problem in 77_exec_environ.patch.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Sun, 31 Jul 2005 00:37:30 +0100
+
+jack (3.1.1-6) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/59_ogg_parsing.patch: Make OGG parsing more robust;
+    closes: #224107.
+  * debian/patches/78_ripper_parsing.patch: Make the parsing of the
+    output of various rippers (most notably, cdparanoia and cdda2wav)
+    more robust; closes: #272619, #310478.
+  * debian/patches/79_verbose_submit_error.patch: When an invalid
+    FreeDB file is encountered before submission, print more verbous
+    diagnostic messages; closes: #172634.
+  * debian/patches/80_dest_exists_abs_path.patch: When a "destination
+    exists already" error is displayed, show the absolute path rather
+    than the one corresponding to the album name; closes: #293332.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Thu, 28 Jul 2005 23:42:25 +0100
+
+jack (3.1.1-5) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/61_utf8_unicode_id3v1_fix.patch: Improve the patch.
+    If id3v1 tagging fails and id3v2 tagging is not activated, print a
+    warning saying that id3v2 should be used.
+  * debian/patches/64_flac_tagging.patch: Tag FLAC files with FreeDB
+    metadata; closes: #320168.
+  * debian/control (Depends): Add python-flac as an alternative to
+    python-pyvorbis.
+  * debian/patches/76_submit_updated_freedb.patch: When jack is called
+    with -Q --edit-cddb and changes are made to the CDDB file, ask
+    the user if they want to submit the updated template; closes:
+    #161225.
+  * debian/patches/77_exec_environ.patch: Export some environment
+    variables that can be used by exec hooks; closes: #222784.
+  * debian/exec_vorbisgain: Add an example file for exec hooks.
+  * debian/examples: Add exec_vorbisgain.
+  * debian/rules (binary-predeb/jack): Add new rule to make example
+    files (exec_vorbisgain and fix-vorbis-tags.pl) executable.
+  * debian/rules (install/jack): Fix install rule so it is actually
+    run and the upstream changelog installed; thanks, Guillem Jover.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Thu, 28 Jul 2005 19:25:13 +0100
+
+jack (3.1.1-4) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/patches/70_msf_offset.patch: Don't assume that the first song
+    starts right after the MSF offset.  This fixes the FreeDB (CDDB)
+    ID calculation which was broken with some CDs; closes: #319901.
+    This patch indirectly also causes jack to use the tracksize
+    information from cdparanoia which is more accurate and therefore
+    won't lead to failures on tracks right before a data track; closes:
+    #319894.
+  * debian/patches/61_utf8_unicode_id3v1_fix.patch: Don't write ID3
+    version 1 tracks when strings contain Unicode; closes: #266052.
+  * debian/patches/71_no_id3v1.patch: Don't write ID3 version 1
+    tracks by default anymore, just version 2 tags; closes: #320080.
+  * debian/patches/72_flac_man_page.patch: Mention FLAC in the
+    man page as a supported encoder; thanks, Robert Millan; closes:
+    #319937.
+  * debian/patches/73_flac_options.patch: Update options passed
+    to the FLAC encoder; thanks, Robert Millan; closes: #319950.
+  * debian/patches/74_vbr_before_otf.patch: Check for the availability
+    of VBR before OTF so it's possible to fall back to fixed bitrate
+    OTF encoding; thanks, Robert Millan; closes: #320093.
+  * debian/patches/62_dont_repeat_inexact.patch: Don't print a
+    warning that the calculated ID and that from FreeDB don't match
+    when we had an inexact match; closes: #304744.
+  * debian/patches/63_nicify_inexact_warning.patch: Make the warning
+    about mismatches between the calculated and FreeDB IDs prettier;
+    thanks, Era Eriksson; closes: #320102.
+  * debian/patches/75_ignore_empty_freedb_info.patch: Print a warning
+    but not an error when the FreeDB file has missing track information
+    for a track which is not about to be ripped/tagged; closes: #292612.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Wed, 27 Jul 2005 13:26:30 +0100
+
+jack (3.1.1-3) unstable; urgency=low
+
+  [ Martin Michlmayr ]
+  * debian/control (Uploaders): Add myself.
+  * debian/patches/40_man_page_format_strings.patch: Explain the
+    format strings in the man page; closes: #293598.
+  * debian/patches/41_man_page_minor_improvements.patch: Minor
+    improvements to the man page; closes: #314966.
+  * debian/patches/42_man_page_renames.patch: Add some documentation
+    about --unusable-chars and --replacement-chars to the man
+    page; closes: #274358.
+  * debian/patches/50_help_inconsistency.patch: Fix inconsistency
+    with reporting true/false values; closes: #293340.
+  * debian/patches/51_error_dir_rename.patch: Print a proper error
+    message when a directory cannot be created or renamed (usually
+    because of characters in the name the file system doesn't
+    support); closes: #303273.
+  * debian/patches/52_add_rename_num.patch: Recognize the
+    --rename-num option again.  Patch by Y Giridhar Appaji Nag;
+    closes: #293623.
+  * debian/patches/53_help_show_quality.patch: Show quality instead
+    of bitrate in --help since the generation of bitrate files is
+    the default now; closes: #293335.
+  * debian/patches/54_oggenc_fixed_bitrate.patch: Support fixed
+    bitrate with the oggenc encoder; closes: #293336.
+  * debian/patches/55_freedb_email.patch: Support the $EMAIL
+    environment variable for FreeDB submissions; closes: #276937.
+  * debian/patches/56_cd_device_error.patch: Significantly improve
+    the error message given when the CD device doesn't exist,
+    cannot be accessed or has other problems; closes: #293329.
+  * debian/patches/57_flac_parsing.patch: Make FLAC status parsing
+    more robust and don't fail when the filename contains a percent
+    sign; closes: #312731.
+  * 58_progress_changed_error.patch: Don't fail when progress()
+    has never been called before; closes: #295207.
+  * 60_utf8_support.patch: Switch to FreeDB protocol 6 and support
+    UTF-8.  This support is based on an inital bug report and patch
+    from Peter Maydell and has been heavily modified and extended
+    by me.  MP3 support was added by Chris Vanden Berghe; closes:
+    #266052.
+  * debian/control (Depends): Use python-eyed3 instead of python-id3
+    and python-id3lib; closes: #306771.
+
+ -- Martin Michlmayr <tbm@cyrius.com>  Mon, 20 Jun 2005 17:31:41 +0100
+
+jack (3.1.1-2) unstable; urgency=low
+
+  * debian/control (Depends): Added flac as alternative to vorbis-tools.
+  * debian/jackrc: Update comment for encoder: to reflect flac's
+    existence in the Debian archive; closes: #292518.
+  * debian/patches/36_tag_clarify_error.patch: New patch by Y Giridhar
+    Appaji Nag; closes: #298837.
+  * debian/patches/37_expand_CBR_acronym.patch: New patch, change error
+    message wording to say `fixed bitrate', which is more clear than
+    `CBR'.  Reported by Martin Michlmayr (see #293336).
+  * debian/jackrc: Add version to silence startup warning.
+
+ -- Michael Banck <mbanck@debian.org>  Fri, 25 Mar 2005 23:48:01 +0100
+
+jack (3.1.1-1) unstable; urgency=low
+
+  * New upstream release.
+    + Fixes crashes in curses; closes: #272731.
+    + Fixes problems with various artists; closes: #171025.
+    + Documentation updates for misleading wording of --rename;
+      closes: #204610.
+    + Fixes mismatch between lame and jack regarding vbr_quality;
+      closes: #250322.
+    + Fixes python future warnings; closes: #257018.
+    + Evaluates unusable_chars only on values, not dir_template;
+      closes: #282337.
+    + Fixes error when printing more tracks than there are;
+      closes: #157379.
+    + Long tracks do not overwrite help box anymore; closes: #259517.
+    + Fixes crashes on small terminals; closes: #243300.
+  * 18_less_verbose_gen_device_warning.patch: Dropped, applied upstream.
+  * 24_setup.py.patch: Likewise.
+  * 28_avoid_empty_USER_LOGNAME.patch: Likewise.
+  * 31_wrong_char_in_status.patch: Likewise.
+  * 32_document_workdir_option_in_manpage.patch: Likewise.
+
+ -- Michael Banck <mbanck@debian.org>  Fri, 17 Dec 2004 12:48:22 +0100
+
+jack (3.1.0-2) unstable; urgency=low
+
+  * 14_remove_newline_in_unusable_chars.patch: Dropped, no longer
+    needed according to upstream.
+  * 16_cddb.py_erg.append.patch: Dropped, no longer needed according
+    to upstream.
+  * 22_specify_cddb_id.patch: Moved to patches-held for now, as it
+    appears to be non-working.
+  * 24_setup.py.patch: Updated from CVS.
+  * 26_raw_space.patch: Dropped, applied upstream.
+
+ -- Michael Banck <mbanck@debian.org>  Sun, 12 Dec 2004 13:11:39 +0100
+
+jack (3.1.0-1) unstable; urgency=medium
+
+  * New upstream release.
+    + Fixes --check-toc; closes: #276267.
+    + Includes --quality float patch; closes: #279400.
+  * Urgency medium as this is a major improvement over the last version
+    and should be in Sarge.
+  * 25_expand_base_dir.patch: Dropped, applied upstream.
+  * 26_raw_space.patch: Updated, removed second hunk which got applied
+    upstream.
+  * 27_disable_debug_mode.patch: Dropped, applied upstream.
+  * 29_freedb.py_cf_fix.patch: Dropped, applied upstream.
+  * 30_submit_fix.patch: Dropped, applied upstream.
+  * 34_manpage_update.patch: Dropped, applied upstream.
+
+ -- Michael Banck <mbanck@debian.org>  Wed,  1 Dec 2004 22:51:44 +0100
+
+jack (3.0.0-9) unstable; urgency=low
+
+  * 34_manpage_update.patch: Updated manpage, thanks to James van
+    Zandt; closes: #273562.
+
+ -- Michael Banck <mbanck@debian.org>  Sun,  3 Oct 2004 21:59:50 +0200
+
+jack (3.0.0-8) unstable; urgency=low
+
+  * 31_wrong_char_in_status: Use 'x' instead of '×' to avoid encoding
+    problems; closes: #253241.
+  * debian/control: Fix wrong use of 'it's' in long description;
+    closes: #268516.
+  * 11_jackrc_base_dir: Removed, as this default is set via /etc/jackrc
+    now. Also makes the comment in /etc/jackrc concerning this correct
+    again; closes: #257448.
+  * 32_document_workdir_option_in_manpage: Document -w/--workdir.
+  * debian/rules.old: Removed.
+  * debian/control (Build-Depends): Added python.
+  * 33_fix_ripping_status: Fix the off-by-one display of the cdparanoia
+    status.
+
+ -- Michael Banck <mbanck@debian.org>  Sun, 29 Aug 2004 01:25:54 +0200
+
+jack (3.0.0-7) experimental; urgency=low
+
+  * 30_submit_fix: Make --submit, --mail-submit (and --silent) work
+    again, taken from cvs.
+
+ -- Michael Banck <mbanck@debian.org>  Wed, 25 Aug 2004 03:33:19 +0200
+
+jack (3.0.0-6) experimental; urgency=low
+
+  * debian/menu: Properly quote entries.
+  * debian/install: Install doc/ChangeLog as /usr/share/doc/jack/changelog
+    instead of /usr/share/doc/jack/ChangeLog.
+
+ -- Michael Banck <mbanck@debian.org>  Fri, 28 May 2004 20:55:41 +0200
+
+jack (3.0.0-5) experimental; urgency=low
+
+  * debian/control (Depends): Really depend on python-id3 again
+    this time, d'oh.
+
+ -- Michael Banck <mbanck@debian.org>  Wed, 14 Apr 2004 23:59:11 +0200
+
+jack (3.0.0-4) experimental; urgency=low
+
+  * debian/jackrc: Added some comments for clarification.
+  * debian/control (Depends): Revert depending on python-id3 as well
+    for now; closes: #243298.
+
+ -- Michael Banck <mbanck@debian.org>  Sun, 11 Apr 2004 01:38:33 +0200
+
+jack (3.0.0-3) experimental; urgency=low
+
+  * debian/control (Depends): Switch from python-id3 to python-id3lib.
+
+ -- Michael Banck <mbanck@debian.org>  Sat, 10 Apr 2004 22:51:37 +0200
+
+jack (3.0.0-2) experimental; urgency=low
+
+  * 29_freedb.py_cf_fix: Fix a forgotten cf[], by Stephan Helma.
+
+ -- Michael Banck <mbanck@debian.org>  Sun, 28 Mar 2004 13:08:59 +0200
+
+jack (3.0.0-1) experimental; urgency=low
+
+  * 26_raw_space: Fix NameError with raw_space when trying to reorder
+    tracks on low diskspace (taken from cvs, slightly adopted).
+  * debian/fix-vorbis-tags.pl: Applied patch by Colin Watson/Martin
+    Michlmayr to properly handle files containing single quotes.
+  * Adapted old Debian patches to new upstream source and reincluded them,
+    by Jonas Smedegaard:
+    + 05_she_bang
+    + 11_jackrc_base_dir
+    + 14_remove_newline_in_unusable_chars
+    + 16_cddb.py_erg.append
+    + 18_less_verbose_gen_device_warning
+    + 22_specify_cddb_id
+  * 27_disable_debug_mode: Disable debug mode, by Jonas Smedegaard.
+  * 28_avoid_empty_USER_LOGNAME: Avoid empty USER and LOGNAME (whyever
+    they appear), by Jonas Smedegaard.
+  * debian/jackrc: Comment out query_on_start again, as it proved to
+    produce problems with conflicting command-line options.
+  * debian/NEWS: Added explanation for modified configuration file
+    handling.
+
+ -- Michael Banck <mbanck@debian.org>  Mon,  1 Mar 2004 18:14:14 +0100
+
+jack (3.0.0-pre2) unreleased; urgency=low
+
+  * 25_expand_base_dir: Let '~' be expanded in base_dir (taken from
+    cvs).
+  * debian/jackrc: New file, installed as master /etc/jackrc. This lets
+    one configure most every option side-wide; closes: #205149.
+    Deviations from default so far:
+    - query_on_start by default
+    - base_dir set to '~/jack' instead of current working directory
+
+ -- Michael Banck <mbanck@debian.org>  Sun, 14 Dec 2003 23:29:25 +0100
+
+jack (3.0.0-pre1) unreleased; urgency=low
+
+  * The "And another one, and another one" release.
+  * New upstream release; closes: #225200.
+  * Repackaged with cdbs.
+  * debian/control (Build-Depends): dbs dropped, cdbs added.
+  * (Standards-Version): Bumped to 3.6.1.0
+
+ -- Michael Banck <mbanck@debian.org>  Sat,  1 Nov 2003 14:40:10 +0100
+
+jack (2.99.9-6) unstable; urgency=low
+
+  * The "Who's upstream now, huh?" release
+  * 21_fix_cdparanoia_output_patch: cdparanoia's smiley indicating
+    the ripping status got truncated by one character
+  * 22_specify_cddb_id_patch: add support for specifying a CDDB id
+    for freedb query; closes: #161226
+  * NEWS.Debian: new file
+  * debian/control(Decription): mention MP3s in paranthesis only
+  * debian/copyright: change maintainer's email address
+  * 23_declare_encoding_patch: set encoding to iso-8859-1 to silence
+    warning; closes: #209169
+  * Make /usr/share/doc/jack/fix-vorbis-tags.pl executable
+
+ -- Michael Banck <mbanck@debian.org>  Sat, 13 Sep 2003 14:27:43 +0200
+
+jack (2.99.9-5) unstable; urgency=low
+
+  * debian/control(Build-Depends): 4.1.65 is not enough, Build-Depend
+    on debhelper (>= 4.1.67); closes: #207306
+
+ -- Michael Banck <mbanck@debian.org>  Tue, 26 Aug 2003 12:49:21 +0200
+
+jack (2.99.9-4) unstable; urgency=low
+
+  * debian/control(Build-Depends): tighten debhelper to (>= 4.1.65),
+    because of dh_python and ${python:Depends}
+
+ -- Michael Banck <mbanck@debian.org>  Fri, 22 Aug 2003 01:36:24 +0200
+
+jack (2.99.9-3) unstable; urgency=low
+
+  * Added a copyright and license notice from Martin Michlmayr to
+    fix-vorbis-tags.pl
+  * 17_authenticated_http-proxy_support_patch: Use urllib2 for
+    freedb-queries, urllib does not support authenticated http-proxies
+  * 12_utf8_ogg_tagging_patch: Updated from CVS; closes: #199244
+  * 18_less_verbose_gen_device_warning_patch: Made the warning about
+    a non-readable generic device only one line; closes: #195319
+  * 19_catch_rename_too_long_fix: catch a system traceback when the
+    title of a file to be renamed is too long; closes: #201597
+  * 20_slash_unusable_char_by_default_patch: make "/" an unusable
+    character for filenames by default, thanks to Adam Kessel;
+    closes: #203721
+  * debian/control(Build-Depends): switch to python-dev (>= 2.3);
+    closes: #205216
+  * debian/rules(binary): added dh_python
+  * debian/control(Depends): use ${python:Depends} instead of hardcoded
+    version dependencies
+
+ -- Michael Banck <mbanck@debian.org>  Wed, 20 Aug 2003 03:34:39 +0200
+
+jack (2.99.9-2) unstable; urgency=low
+
+  * 12_utf8_ogg_tagging_patch: properly encode ogg tag-strings in
+    utf8, thanks to Martin Michlmayr; closes: #172738
+    - added fix-vorbis-tags.pl to documentation, see README.Debian
+  * 13_query_socket_error_handling_patch: cleaned up freedb_query()
+  * 14_remove_newline_in_unusable_chars_patch; closes: #168489
+  * 15_extd_tags_fix, thanks to Matthew Mueller; closes: #163162
+  * 16_cddb.py_erg.append_fix: changed erg line to conform to
+    standard CDDB; closes: #160990
+
+ -- Michael Banck <mbanck@debian.org>  Tue, 31 Dec 2002 15:21:18 +0100
+
+jack (2.99.9-1) unstable; urgency=low
+
+  * New upstream release, includes undocumented option for
+    sloppy ripping; closes: #158671
+  * Documented this option with a big warning in README.Debian
+  * Patches applied upstream:
+    - 00_ogg_tagging_DATE_fix
+    - 01_ogg_upd_progress_fix_from_cvs
+    - 02_vbr_quality_patch
+    - 03_uppercase_docum_from_cvs
+  * Switched to python-2.2; closes: #159180
+  * 06_adjust_for_quality_-1_patch; closes: #157331
+  * 07_continue_various_if_blank_artist; closes: #158175
+  * 08_y_Y_input_accept_fix: accept both "y" and "Y" when
+    asking questions, thanks to Gordon Tyler
+  * 09_ignore_python_version_patch: ignore the hardcoded
+    python version in  ~/.jackrc
+  * 11_jackrc_base_dir_patch: changed base_dir back to
+    environ['HOME'] + "/jack". This obviously got lost during
+    the upgrade to 2.99.8
+  * Clarified in README.Debian that using toc_prog=ripper is a bad
+    thing and will not work for CDs with data-tracks; closes: #157378
+  * Removed emacs-variables from debian/changelog
+  * Bumped Standards-Version to 3.5.6.1
+
+ -- Michael Banck <mbanck@debian.org>  Tue,  3 Sep 2002 03:00:47 +0200
+
+jack (2.99.8-4) unstable; urgency=low
+
+  * 05_she_bang_patch switched from #!/usr/bin/env python to
+    #!/usr/bin/python (see: #148415)
+
+ -- Michael Banck <mbanck@debian.org>  Tue, 25 Jun 2002 01:24:29 +0200
+
+jack (2.99.8-3) unstable; urgency=low
+
+  * 04_freedb_submit_fix by Michal Politowski; closes: #150699
+
+ -- Michael Banck <mbanck@debian.org>  Sun, 23 Jun 2002 19:41:12 +0200
+
+jack (2.99.8-2) unstable; urgency=low
+
+  * 03_uppercase_docum_from_cvs (closes: #140903)
+  * 02_vbr_quality_patch (closes: #135719, #147962)
+    see README.Debian for details on how to use vbr_quality
+
+ -- Michael Banck <mbanck@debian.org>  Fri, 24 May 2002 20:54:35 +0200
+
+jack (2.99.8-1) unstable; urgency=low
+
+  * The 'doogie rules'-Release
+  * New upstream release, repackaged with dbs (Build-Depends)
+    (closes: #139232, #132985)
+  * Use the uptodate manpage from the upstream source rather than
+    the one I wrote for Debian
+  * 00_ogg_tagging_DATE_fix (closes: #144996)
+  * 01_ogg_upd_progress_fix_from_cvs (closes: #141781)
+  * Changed Maintainer address
+
+ -- Michael Banck <mbanck@gmx.net>  Sun, 19 May 2002 00:38:48 +0200
+
+jack (2.99.7-7) unstable; urgency=high
+
+  * Fixed ogg-tagging with respect to GENRE and YEAR. As ogg-
+    tagging is performed by default when selecting jack from the
+    debian menu, this bug might break the package for quite a lot
+    of people, therefore urgency=high to still get it into
+    woody (closes: #144717)
+
+ -- Michael Banck <mbanck@gmx.net>  Sat, 27 Apr 2002 14:55:30 +0200
+
+jack (2.99.7-6) unstable; urgency=low
+
+  * Activated the menu-entry, which was already supposed to be
+    included in 2.99.7-4
+  * Changed upstream's email-adress in copyright
+
+ -- Michael Banck <mbanck@gmx.net>  Sun, 21 Apr 2002 23:06:59 +0200
+
+jack (2.99.7-5) unstable; urgency=low
+
+  * The 'at long last, thanks to Omnic'-Release
+  * jack now Depends upon python-pyvorbis (>> 0.5)
+  * This means that tagging .ogg-files is now fully supported, no
+    matter when you're doing freedb-lookups
+
+ -- Michael Banck <mbanck@gmx.net>  Sun,  7 Apr 2002 14:38:27 +0200
+
+jack (2.99.7-4) unstable; urgency=low
+
+  * Applied patch for .ogg-tagging, unusable right now as it Depends
+    upon python-pyvorbis (>= 0.5), which is not packaged yet.
+  * Unset LC_* and LANG so that helper apps don't change the parsed
+    output unexpectedly; (closes: #128642)
+  * Applied patch from Martin Michlmayr (got applied upstream, too),
+    concerning display of Various-Artists CDs (closes: #132962)
+  * Changed 'MP3' to 'OGG' in long description
+  * Changed base_dir to '~/jack' and searchdirs to 'base_dir, .' for
+    new installations.
+
+ -- Michael Banck <mbanck@gmx.net>  Sat, 23 Feb 2002 13:16:34 +0100
+
+jack (2.99.7-3) unstable; urgency=low
+
+  * Applied current CVS concerning base_dir stuff, so that
+    jack can be called from the Debian Menu
+  * No menu entry yet, because you cannot specify your favourite
+    directory yet.
+  * Corrected spelling mistake in debian/control (closes: #124769)
+  * Fixed tagging of Various-Artists CDs with OGG (closes: #129677)
+  * Fixed FreeDB mail submitting (closes: #129247)
+  * Uses full path (/usr/sbin/sendmail) for FreeDB-Email submission
+
+ -- Michael Banck <mbanck@gmx.net>  Fri, 18 Jan 2002 22:04:21 +0100
+
+jack (2.99.7-2) unstable; urgency=low
+
+  * Changed description slightly
+  * Applied patches from Martin Michlmayr (closes: #118733)
+  * Revived capability to use cdparanoia to read a disc's TOC if
+    python-cddb fails (see #118731). This has to be enabled in the
+    user's .jackrc, see README.Debian
+  * Changed debian/rules to call /usr/bin/python2.1 instead of just
+    python as /usr/bin/python isn't around (This and the previous
+    upload 2.99.7-1: closes: #118727)
+  * Purged menu entry until jack can set a base dir from where to
+    start working
+
+ -- Michael Banck <mbanck@gmx.net>  Fri,  9 Nov 2001 00:56:34 +0100
+
+jack (2.99.7-1) unstable; urgency=low
+
+  * New upstream release
+  * Changed control file to comply with Python Policy, ver 0.3.6
+  * Included a menu entry
+
+ -- Michael Banck <mbanck@gmx.net>  Wed,  7 Nov 2001 20:29:46 +0100
+
+jack (2.99.6-2) unstable; urgency=low
+
+  * Moved all dh_* stuff to binary-arch; jack includes
+    jack_cursesmodule.so which didn't exist when I first packaged
+    it
+
+ -- Michael Banck <mbanck@gmx.net>  Mon, 15 Oct 2001 08:34:45 +0000
+
+jack (2.99.6-1) unstable; urgency=low
+
+  * Initial Release; closes: #115061
+  * Wrote a manpage
+  * Included http://www.home.unix-ag.org/arne/jack/ChangeLog
+    as upstream changelog
+  * Added http://www.home.unix-ag.org/arne/jack/examples.html
+    (converted to text) to documentation
+
+ -- Michael Banck <mbanck@gmx.net>  Wed, 10 Oct 2001 23:00:49 +0000

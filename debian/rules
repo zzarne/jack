@@ -1,0 +1,10 @@
+#!/usr/bin/make -f
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@ --with python2
+
+override_dh_fixperms:
+	dh_fixperms
+	chmod +x debian/jack/usr/share/doc/jack/examples/exec_vorbisgain

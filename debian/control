@@ -1,0 +1,35 @@
+Source: jack
+Section: sound
+Priority: optional
+Maintainer: Michael Banck <mbanck@debian.org>
+Uploaders: Francois Mazen <francois@mzf.fr>
+Build-Depends: debhelper (>= 11), python-all-dev (>= 2.3.5-11), libncursesw5-dev, dh-python
+Standards-Version: 4.2.1
+Homepage: http://www.home.unix-ag.org/arne/jack/
+
+Package: jack
+Architecture: any
+Depends: ${python:Depends}, ${shlibs:Depends}, ${misc:Depends}, python-cddb, python-eyed3 (>= 0.7), python-pyvorbis (>= 0.5) | python-mutagen, cdparanoia | cdda2wav, vorbis-tools | flac | lame, sensible-utils
+Description: Rip and encode CDs with one command
+ Jack has been developed with one main goal: making OGGs (or MP3s)
+ without having to worry. There is nearly no way that an incomplete rip
+ goes unnoticed, e.g. jack compares WAV and OGG file sizes when
+ continuing from a previous run. Jack also checks your HD space before
+ doing anything (even keeps some MB free).
+ .
+ Jack is different from other such tools in a number of ways:
+  - it supports different rippers and encoders
+  - it is very configurable
+  - it doesn't need X
+  - it can "rip" virtual CD images like the ones created by cdrdao
+  - when using cdparanoia, cdparanoia's status information is displayed
+    and archived for all tracks, so you can see if something went wrong
+  - it uses sophisticated disk space management, i.e. it schedules its
+    ripping/encoding processes depending on available space.
+  - freedb query, file renaming and id3/ogg-tagging
+  - it can resume work after it has been interrupted. If all tracks have
+    been ripped, it doesn't even need the CD anymore, even if you want
+    to do a freedb query.
+  - it can do a freedb query based on OGGs alone, like if you don't
+    remember from which CD those OGGs came from.
+  - freedb submissions

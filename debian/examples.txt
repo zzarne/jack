@@ -1,0 +1,61 @@
+    * Insert a CD, fire up jack:
+      $ jack
+      Now watch it work. It's fun for a while. After having finished, you have
+      the follwing files on your HD: track_01.ogg track_02.ogg, ...,
+      track_nn.ogg plusjack.toc, jack.freedb, jack.progress. The last three are
+      used to store the state jack is in so it can resume work when
+      interrupted.
+    * Jack will create a directory called jack-xxxxxxxx for you, there it
+      stores all the file for the CD whose id is xxxxxxxx. After a freedb query
+      this directory is renamed to something human readable, like "Artist -
+      Title".
+    * When jack is interrupted, call it again using the same commandline as
+      before to resume work, in this case:
+      $ jack
+    * The WAV files have been deleted. If you want jack to keep them, try
+      $ jack -k
+    * Now let's try a freedb query:
+      $ jack -q
+      when succesful the files are now renamed to something more readable and
+      have been ID3 tagged accordingly. jack.freedb contains the queried freedb
+      entry, the original file has been backed up to jack.freedb.bak.
+    * The query failed? Ok, contribute! edit the freedb template:
+      $ vi jack.freedb
+      Note: the DTITLE should be set to
+      Artist / Name Of Album
+      or
+      Various Artist / Name Of Compilation
+      when adding a compilation, use
+      Artist - Title Of Track
+      for the track titles. Do not delete any lines from the template. Do not
+      change the numbers. Yes the TTITLEs start at 0 and end one track too
+      early. Read the freedb documentation.
+    * now activate the entries:
+      $ jack -R
+      now the files have been renamed and tagged. Check the names two or three
+      times. Typo made? No problem, you can alway undo the file renaming with
+       $ jack -u
+      Note that the ID3 tags are not undone. Fix the freedb file and again, use
+      $ jack -R
+      to activate your changes. When you are sure the freedb file is suitable
+      for submission, submit it (via e-mail (option -m) or via HTTP POST
+      (option --submit). When using the former, sendmail must be installed and
+      working on your machine! If you're on a dial-up, you can use the -
+      m option to queue submits, provided sendmail is set up accordingly):
+      $ jack -m
+      or
+      $jack --submit
+Those were the basics. Now some more advanced examples:
+    * All in one: query, rip, encode, cleanup:
+      $ jack -Q --remove
+    * query any time while working:
+      $ jack
+      and, from another shell:
+      $ jack -d -Q
+    * query for unknown OGGs:
+      $ jack -q -g track_*.ogg
+    * rip from image, first, create the image:
+      $ cdrdao read-cd --datafile data.cdr data.toc
+      then make OGGs from the image:
+      $ jack -f data.toc
+more to follow.

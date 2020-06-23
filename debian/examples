@@ -1,0 +1,3 @@
+contrib/exec_vorbisgain
+jack_plugin_cddb.py
+jack_plugin_lame.py

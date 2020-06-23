@@ -1,0 +1,5 @@
+version=3
+
+opts=dversionmangle=s/\+cvs\S*$// \
+http://www.home.unix-ag.org/arne/jack/download.html \
+    (?:|.*/)jack[_\-](\d\S*)\.(?:tar\.xz|txz|tar\.bz2|tbz2|tar\.gz|tgz)
