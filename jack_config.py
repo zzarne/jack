@@ -109,7 +109,7 @@ cf = jack_misc.dict2({
         },
     'freedb_server': {
         'type': types.StringType,
-        'val': "freedb",
+        'val': "gnudb",
         'doc': "your freedb server, see freedb_servers",
         'usage': "use which freedb server",
         'long': 'server',
