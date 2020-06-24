@@ -302,12 +302,14 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
                         if exited_proc['type'] == "image_reader":
                             jack_status.dae_stat_upd(num, jack_status.get_2_line(exited_proc['buf']))
                         else:
+                            loc = { 'final_status': None, 'exited_proc': exited_proc, 'speed': speed }
                             if exited_proc['otf'] and 'otf-final_status_fkt' in jack_helpers.helpers[exited_proc['prog']]:
-                                exec((jack_helpers.helpers[exited_proc['prog']]['otf-final_status_fkt']), globals(), locals())
+                                exec((jack_helpers.helpers[exited_proc['prog']]['otf-final_status_fkt']), globals(), loc)
                             else:
                                 last_status = None   # (only used in cdparanoia)
-                                exec((jack_helpers.helpers[exited_proc['prog']]['final_status_fkt']), globals(), locals())
-                            jack_status.dae_stat_upd(num, final_status)
+                                exec((jack_helpers.helpers[exited_proc['prog']]['final_status_fkt']), globals(), loc)
+
+                            jack_status.dae_stat_upd(num, loc['final_status'])
                         if jack_status.enc_cache[num]:
                             jack_status.enc_stat_upd(num, jack_status.enc_cache[num])
                             jack_status.enc_cache[num] = ""
@@ -365,10 +367,12 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
             for i in jack_children.children:
                 if i['type'] == "ripper":
                     if len(i['buf']) == jack_helpers.helpers[i['prog']]['status_blocksize']:
+                        loc = { 'new_status': None, 'i': i }
                         if i['otf'] and 'otf-status_fkt' in jack_helpers.helpers[i['prog']]:
-                            exec((jack_helpers.helpers[i['prog']]['otf-status_fkt']), globals(), locals())
+                            exec((jack_helpers.helpers[i['prog']]['otf-status_fkt']), globals(), loc)
                         else:
-                            exec((jack_helpers.helpers[i['prog']]['status_fkt']), globals(), locals())
+                            exec((jack_helpers.helpers[i['prog']]['status_fkt']), globals(), loc)
+                        new_status = loc['new_status']
                         if new_status:
                             try:
                                 jack_status.dae_stat_upd(i['track'][NUM], ":DAE: " + new_status)
@@ -377,13 +381,13 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
         
                 elif i['type'] == "encoder":
                     if len(i['buf']) == jack_helpers.helpers[i['prog']]['status_blocksize']:
-                        tmp_d = {'i': i.copy(), 'percent': 0}
+                        loc = {'i': i, 'percent': 0}
                         try:
-                            exec((jack_helpers.helpers[i['prog']]['percent_fkt']), globals(), tmp_d)
+                            exec((jack_helpers.helpers[i['prog']]['percent_fkt']), globals(), loc)
                         except:
-                            tmp_d['percent'] = 0
                             debug("error in percent_fkt of %s." % repr(i))
-                        i['percent'] = tmp_d['percent']
+                        i['percent'] = loc['percent']
+
                         if i['percent'] > 0:
                             i['elapsed'] = time.time() - i['start_time']
                             speed = ((i['track'][LEN] / float(CDDA_BLOCKS_PER_SECOND)) * ( i['percent'] / 100 )) / i['elapsed']
