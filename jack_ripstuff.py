@@ -34,7 +34,7 @@ max_name_len = None                 # max len of printable_names[]
 
 raw_space = None                    # free diskspace
 
-# There's currently no good way in Python to obtain the real width a string
+# TODO: There's currently no good way in Python to obtain the real width a string
 # will take up on the screen since it may e.g. depend on how the terminal
 # displays wide characters.  This function is a first attempt to at least
 # get an approximate idea of the width of a string (assuming that wide
