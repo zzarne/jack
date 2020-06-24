@@ -75,7 +75,7 @@ def start_new_ripper(track, ripper):
     args = []
     for i in cmd:
         if i == "%n": args.append(repr(track[NUM]))
-        elif i == "%o": args.append(track[NAME].decode(cf['_charset'], "replace") + ".wav")
+        elif i == "%o": args.append(track[NAME] + ".wav")
         elif i == "%d": args.append(cf['_cd_device'])
         else: args.append(i)
     data = start_new_process(args)
@@ -103,9 +103,9 @@ def start_new_encoder(track, encoder):
                 quality = cf['_vbr_quality']
             args.append("%.3f" % quality)
         elif i == "%i":
-            args.append(track[NAME].decode(cf['_charset'], "replace") + ".wav")
+            args.append(track[NAME] + ".wav")
         elif i == "%o":
-            args.append(track[NAME].decode(cf['_charset'], "replace") + jack_targets.targets[jack_helpers.helpers[cf['_encoder']]['target']]['file_extension'])
+            args.append(track[NAME] + jack_targets.targets[jack_helpers.helpers[cf['_encoder']]['target']]['file_extension'])
         else:
             if jack_targets.targets[helper['target']]['can_pretag']:
                 if i == "%t":
@@ -199,7 +199,7 @@ def start_new_otf(track, ripper, encoder):
                 quality = cf['_vbr_quality']
             args.append("%.3f" % quality)
         elif i == "%o":
-            args.append(track[NAME].decode(cf['_charset'], "replace") + jack_targets.targets[jack_helpers.helpers[cf['_encoder']]['target']]['file_extension'])
+            args.append(track[NAME] + jack_targets.targets[jack_helpers.helpers[cf['_encoder']]['target']]['file_extension'])
         elif i == "%d":
             args.append(cf['_cd_device'])
         else:
