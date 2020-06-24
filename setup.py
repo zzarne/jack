@@ -20,7 +20,8 @@ setup( # Distribution meta-data
     'jack_main_loop', 'jack_misc', 'jack_mp3', 'jack_playorder',
     'jack_plugins', 'jack_prepare', 'jack_progress', 'jack_rc',
     'jack_ripstuff', 'jack_status', 'jack_t_curses', 'jack_t_dumb', 'jack_tag',
-    'jack_targets', 'jack_term', 'jack_utils', 'jack_version', 'jack_workers']
+    'jack_targets', 'jack_term', 'jack_utils', 'jack_version', 'jack_workers',
+    'CDDB', 'DiscID', 'cdrom' ]
 )
 
 print("If you have installed the modules, copy jack to some place in your $PATH,")
