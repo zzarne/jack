@@ -20,6 +20,7 @@ import pprint
 import os, sys
 import difflib, shutil
 
+import jack_display
 import jack_playorder
 import jack_functions
 import jack_progress
@@ -419,7 +420,7 @@ def read_progress(status, todo):
                 if status[i]['names'][-1] == names[0]:
                     status[i]['names'].append(names[1])
             if type(i) == int:
-                tracknum[i][NAME] = str(status[i]['names'][-1], "utf-8", "replace").encode(cf['_charset'], "replace")
+                tracknum[i][NAME] =status[i]['names'][-1]
         del status[i]['ren']
 
     # status info for the whole CD is treated separately

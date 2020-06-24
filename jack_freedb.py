@@ -21,7 +21,6 @@ import string
 import sys
 import os
 import locale
-import codecs
 import tempfile
 import shutil
 import re
@@ -58,10 +57,7 @@ def interpret_db_file(all_tracks, todo, freedb_form_file, verb, dirs = 0, warn =
     "read freedb file and rename dir(s)"
     global names_available, dir_created
     freedb_rename = 0
-    if warn == None:
-        err, track_names, locale_names, cd_id, revision = freedb_names(freedb_id(all_tracks), all_tracks, todo, freedb_form_file, verb = verb)
-    else:
-        err, track_names, locale_names, cd_id, revision = freedb_names(freedb_id(all_tracks), all_tracks, todo, freedb_form_file, verb = verb, warn = warn)
+    err, track_names, locale_names, cd_id, revision = freedb_names(freedb_id(all_tracks), all_tracks, todo, freedb_form_file, verb = verb, warn = warn)
     if (not err) and dirs:
         freedb_rename = 1
 
@@ -84,8 +80,7 @@ def interpret_db_file(all_tracks, todo, freedb_form_file, verb, dirs = 0, warn =
             if jack_utils.check_path(dirs_created, old_dirs) and not jack_utils.check_path(dirs_created, new_dirs):
                 jack_utils.rename_path(dirs_created, new_dirs)
                 print("Info: cwd now", os.getcwd())
-                jack_functions.progress("all", 'ren', str(dir_created + "-->" + new_dir, cf['_charset'], "replace"))
-
+                jack_functions.progress("all", 'ren', (dir_created + "-->" + new_dir).encode(cf['_charset'], "replace"))
     if not err:
         cd = track_names[0]
         year = genretxt = None
@@ -93,8 +88,11 @@ def interpret_db_file(all_tracks, todo, freedb_form_file, verb, dirs = 0, warn =
             year = repr(cd[2])
         if len(cd) > 3:
             genretxt = id3genres[cd[3]]
-        filenames.append('') # FIXME: possibly put the dir here, but in no
-        # case remove this since people access filenames with i[NUM] which starts at 1
+
+        # FIXME: may put the dir here, but in no case remove this since
+        # people access filenames with i[NUM] which starts at 1
+        filenames.append('')
+
         num = 1
         for i in track_names[1:]:
             replacelist = {"n": cf['_rename_num'] % num, "l": cd[1], "t": i[1],
@@ -108,11 +106,10 @@ def interpret_db_file(all_tracks, todo, freedb_form_file, verb, dirs = 0, warn =
             exec("newname = newname" + cf['_char_filter'])
             for char_i in range(len(cf['_unusable_chars'])):
                 try:
-                    a = str(cf['_unusable_chars'][char_i], locale.getpreferredencoding(), "replace")
-                    b = str(cf['_replacement_chars'][char_i], locale.getpreferredencoding(), "replace")
+                    a = cf['_unusable_chars'][char_i]
+                    b = cf['_replacement_chars'][char_i]
                 except UnicodeDecodeError:
-                    warning("Cannot substitute unusable character %d."
-% (char_i+1))
+                    warning("Cannot substitute unusable character %d." % (char_i + 1))
                 else:
                     newname = newname.replace(a, b)
             filenames.append(newname)
@@ -138,8 +135,8 @@ def local_freedb(cd_id, freedb_dir, outfile = "/tmp/testfilefreedb"):
         for m in os.listdir(musicdir):
             if m == cd_id:
                 idfile = os.path.join(musicdir, cd_id)
-                inf = open (idfile, "r")
-                outf = open (outfile, "w")
+                inf = open(idfile, "r")
+                outf = open(outfile, "w")
                 buf = inf.readline()
                 while buf:
                     buf = buf.replace("\n", "")    # we need trailing spaces
@@ -270,7 +267,7 @@ def freedb_query(cd_id, tracks, file):
             return err
     else:
         f = urllib.request.urlopen(url)
-    buf = f.readline()
+    buf = f.readline().decode()
     if buf and buf[0:1] == "2":
         if buf[0:3] in ("210", "211"): # Found inexact or multiple exact matches, list follows
             if buf[0:3] == "211":
@@ -282,14 +279,14 @@ def freedb_query(cd_id, tracks, file):
             while 1:
                 buf = f.readline()
                 try:
-                    buf = str(buf, "utf-8")
+                    buf = buf.decode("utf-8")
                 except UnicodeDecodeError:
-                    buf = str(buf, "latin-1")
+                    buf = buf.decode("latin-1")
                 if not buf:
                     break
                 buf = buf.rstrip()
                 if buf != ".":
-                    print("%2i" % num + ".) " + buf.encode(locale.getpreferredencoding(), "replace"))
+                    print("%2i" % num + ".) " + buf)
                     matches.append(buf)
                     num = num + 1
             x = -1
@@ -332,17 +329,17 @@ def freedb_query(cd_id, tracks, file):
         cmd = "cmd=cddb read " + freedb_cat + " " + cd_id
         url = "http://" + freedb_servers[cf['_freedb_server']]['host'] + "/~cddb/cddb.cgi?" + urllib.parse.quote_plus(cmd + "&" + hello + "&proto=6", "=&")
         f = urllib.request.urlopen(url)
-        buf = f.readline()
+        buf = f.readline().decode()
         if buf and buf[0:3] == "210": # entry follows
             if os.path.exists(file):
                 os.rename(file, file + ".bak")
             of = open(file, "w")
-            buf = f.readline()
+            buf = f.readline().decode()
             while buf:
                 buf = buf.rstrip()
                 if buf != ".":
                     of.write(buf + "\n")
-                buf = f.readline()
+                buf = f.readline().decode()
             of.close()
             jack_functions.progress("all", "freedb_cat", freedb_cat)
             jack_progress.status_all['freedb_cat'] = freedb_cat
@@ -366,15 +363,15 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
     err = 0
     tracks_on_cd = tracks[-1][NUM]
     freedb = {}
-    f = open(name, "r") # first the freedb info is read in...
+    f = open(name, "rb") # first the freedb info is read in...
     while 1:
         line = f.readline()
         if not line:
             break
         try:
-            line = str(line, "utf-8")
+            line = line.decode("utf-8")
         except UnicodeDecodeError:
-            line = str(line, "latin-1")
+            line = line.decode("latin-1")
         line = line.replace("\n", "")  # cannot use rstrip, we need trailing
                                         # spaces
         line = line.replace("\r", "")  # I consider "\r"s as bugs in db info
@@ -693,7 +690,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
                     i[j] = i[j][1:-1]
                 while i[j][0] == '"' and i[j][1:].find('"') != -1:
                     i[j] = i[j][1:].replace('"', '', 1)
-            x = i[j].encode(locale.getpreferredencoding(), "replace")
+            x = i[j]
             t.append(x)
         locale_names.append(t)
     return err, names, locale_names, read_id, revision
@@ -732,7 +729,7 @@ def do_freedb_submit(file, cd_id, cat = None):
         print("Info: querying categories...")
         url = "http://" + freedb_servers[cf['_freedb_server']]['host'] + "/~cddb/cddb.cgi?" + urllib.parse.quote_plus("cmd=cddb lscat" + "&" + hello + "&proto=6", "=&")
         f = urllib.request.urlopen(url)
-        buf = f.readline()
+        buf = f.readline().decode()
         if buf[0:3] == "500":
             print("Info: LSCAT failed, using builtin categories...")
             cat = choose_cat()
@@ -740,7 +737,7 @@ def do_freedb_submit(file, cd_id, cat = None):
         elif buf[0:3] == "210":
             cat = []
             while 1:
-                buf = f.readline()
+                buf = f.readline().decode()
                 if not buf:
                     break
                 buf = buf.rstrip()
@@ -804,10 +801,10 @@ def do_freedb_submit(file, cd_id, cat = None):
     h.endheaders()
     # The user just wrote the file with a text editor so we assume that it
     # is in their locale.
-    f = codecs.open(file, "r", locale.getpreferredencoding())
+    f = io.open(file, "rb")
     try:
-        text = f.read()
-    except UnicodeDecodeError:
+        text = f.read().decode()
+    except:
         print("The freedb file does not match your current locale. Please convert it")
         print("to " + locale.getpreferredencoding() + " manually.")
         sys.exit(1)
@@ -822,7 +819,7 @@ def do_freedb_submit(file, cd_id, cat = None):
         if err != 200:
             error("proxy: " + repr(err) + " " + msg + f.read())
         else:
-            buf = f.readline()
+            buf = f.readline().decode()
             err, msg = buf[0:3], buf[4:]
             
     # lets see if it worked:

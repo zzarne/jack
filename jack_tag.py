@@ -169,37 +169,32 @@ def tag(freedb_rename):
                     oggi.write_to(mp3name)
             if freedb_rename:
                 newname = jack_freedb.filenames[i[NUM]]
-                try:
-                    i[NAME] = str(i[NAME], "utf-8")
-                except UnicodeDecodeError:
-                    i[NAME] = str(i[NAME], "latin-1")
                 if i[NAME] != newname:
-                    p_newname = newname.encode(locale.getpreferredencoding(), "replace")
-                    u_newname = newname
-                    newname = newname.encode(cf['_charset'], "replace")
-                    p_mp3name = i[NAME].encode(locale.getpreferredencoding(), "replace") + ext
-                    p_wavname = i[NAME].encode(locale.getpreferredencoding(), "replace") + ".wav"
+                    p_cprname = newname + ext
+                    p_uncname = newname + ".wav"
+                    f_cprname = p_cprname.encode(cf['_charset'], "replace")
+                    f_uncname = p_uncname.encode(cf['_charset'], "replace")
                     ok = 1
-                    if os.path.exists(newname + ext):
+                    if os.path.exists(f_cprname):
                         ok = 0
-                        print('NOT renaming "' + p_mp3name + '" to "' + p_newname + ext + '" because dest. exists.')
+                        print('NOT renaming "' + mp3name + '" to "' + repr(f_cprname) + '" because dest. exists.')
                         if cf['_keep_wavs']:
-                            print('NOT renaming "' + p_wavname + '" to "' + p_newname + ".wav" + '" because dest. exists.')
-                    elif cf['_keep_wavs'] and os.path.exists(newname + ".wav"):
+                            print('NOT renaming "' + wavname + '" to "' + repr(f_uncname) + '" because dest. exists.')
+                    elif cf['_keep_wavs'] and os.path.exists(f_uncname):
                         ok = 0
-                        print('NOT renaming "' + p_wavname + '" to "' + p_newname + ".wav" + '" because dest. exists.')
-                        print('NOT renaming "' + p_mp3name + '" to "' + p_newname + ext + '" because WAV dest. exists.')
+                        print('NOT renaming "' + mp3name + '" to "' + repr(f_uncname) + '" because dest. exists.')
+                        print('NOT renaming "' + wavname + '" to "' + repr(f_cprname) + '" because WAV dest. exists.')
                     if ok:
                         if not cf['_only_dae']:
                             try:
-                                os.rename(mp3name, newname + ext)
+                                os.rename(mp3name, f_cprname)
                             except OSError:
                                 error('Cannot rename "%s" to "%s" (Filename is too long or has unusable characters)' % (p_mp3name, p_newname + ext))
-                            jack_m3u.add(newname + ext)
+                            jack_m3u.add(p_cprname)
                         if cf['_keep_wavs']:
-                            os.rename(wavname, newname + ".wav")
-                            jack_m3u.add_wav(newname + ".wav")
-                        jack_functions.progress(i[NUM], "ren", "%s-->%s" % (i[NAME], u_newname))
+                            os.rename(wavname, f_uncname)
+                            jack_m3u.add_wav(p_uncname)
+                        jack_functions.progress(i[NUM], "ren", "%s-->%s" % (i[NAME], newname))
                     elif cf['_silent_mode']:
                         jack_functions.progress(i[NUM], "err", "while renaming track")
         print()

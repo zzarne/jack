@@ -42,7 +42,9 @@ def multi_replace(s, rules, where, filter = id, warn = 0):
             if not rules[p]:
                 warn and do_warn("%%%c is not set but used in %s." % (p, where))
             else:
-                s = s.replace("%%%c" % p, list(filter(rules[p])))
+                fr = "%%%c" % p
+                to = filter(rules[p])
+                s = s.replace(fr, to)
     return s
 
 def safe_int(number, message):

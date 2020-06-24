@@ -171,8 +171,8 @@ def mkdirname(names, template):
         year = repr(cf['_id3_year'])
     if cf['_id3_genre'] != -1:
         genretxt = id3genres[cf['_id3_genre']]
-    replacelist = {"a": names[0][0].encode(cf['_charset'], "replace"),
-                   "l": names[0][1].encode(cf['_charset'], "replace"),
+    replacelist = {"a": names[0][0],
+                   "l": names[0][1],
                    "y": year, "g": genretxt}
     # Process substitution patterns from dir_template
     subst = template.split(os.path.sep)
