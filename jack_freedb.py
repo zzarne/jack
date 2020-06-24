@@ -217,7 +217,7 @@ def freedb_sum(n):
     ret = 0
     while n > 0:
         ret = ret + (n % 10)
-        n = n / 10
+        n = n // 10
     return ret
 
 def freedb_id(tracks, warn=0):
@@ -234,8 +234,8 @@ def freedb_id(tracks, warn=0):
 
     n = t = 0
     for i in tracks:
-        n = n + freedb_sum((i[START] + MSF_OFFSET) / CDDA_BLOCKS_PER_SECOND)
-    t = (tracks[-1][START] + tracks[-1][LEN]) / CDDA_BLOCKS_PER_SECOND - tracks[0][START] / CDDA_BLOCKS_PER_SECOND
+        n = n + freedb_sum((i[START] + MSF_OFFSET) // CDDA_BLOCKS_PER_SECOND)
+    t = (tracks[-1][START] + tracks[-1][LEN]) // CDDA_BLOCKS_PER_SECOND - tracks[0][START] // CDDA_BLOCKS_PER_SECOND
 
     return "%08x" % ((n % 0xff << int(24)) | (t << 8) | (len(tracks)))
 
@@ -256,7 +256,7 @@ def freedb_template(tracks, names = "", revision = 0):
     f.write("# xmcd CD database file\n#\n# Track frame offsets:\n")
     for i in tracks:
         f.write("#       " + repr(i[START] + MSF_OFFSET) + "\n")
-    f.write("#\n# Disc length: " + repr((MSF_OFFSET + tracks[-1][START] + tracks[-1][LEN]) / CDDA_BLOCKS_PER_SECOND))
+    f.write("#\n# Disc length: " + repr((MSF_OFFSET + tracks[-1][START] + tracks[-1][LEN]) // CDDA_BLOCKS_PER_SECOND))
     f.write(" seconds\n#\n# Revision: %i\n" % revision)
     f.write("# Submitted via: " + prog_name + " " + prog_version + "\n#\n")
     f.write("DISCID=" + freedb_id(tracks) + "\n")
@@ -317,7 +317,7 @@ def freedb_query(cd_id, tracks, file):
     qs = "cmd=cddb query " + cd_id + " " + repr(len(tracks)) + " " # query string
     for i in tracks:
         qs = qs + repr(i[START] + MSF_OFFSET) + " "
-    qs = qs + repr((MSF_OFFSET + tracks[-1][START] + tracks[-1][LEN]) / CDDA_BLOCKS_PER_SECOND)
+    qs = qs + repr((MSF_OFFSET + tracks[-1][START] + tracks[-1][LEN]) // CDDA_BLOCKS_PER_SECOND)
     hello = "hello=" + cf['_username'] + " " + cf['_hostname'] + " " + freedb_servers[cf['_freedb_server']]['id']
     qs = urllib.parse.quote_plus(qs + "&" + hello + "&proto=6", "=&")
     url = "http://" + freedb_servers[cf['_freedb_server']]['host'] + "/~cddb/cddb.cgi?" + qs

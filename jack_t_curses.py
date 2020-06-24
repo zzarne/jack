@@ -182,7 +182,7 @@ def sig_winch_handler(sig, frame):
 
         stdscr.refresh()
 
-        usage_win_y, usage_win_x = jack_term.size_y - usage_win_height - 1, (jack_term.size_x - usage_win_width) / 2
+        usage_win_y, usage_win_x = jack_term.size_y - usage_win_height - 1, (jack_term.size_x - usage_win_width) // 2
         if usage_win_y > extra_lines and usage_win_x > 0 and jack_term.size_y > extra_lines + 2 + usage_win_height and jack_term.size_x > usage_win_width:
             del usage_win
             usage_win = newwin(usage_win_height, usage_win_width, usage_win_y, usage_win_x)

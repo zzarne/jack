@@ -80,7 +80,7 @@ if len(s) >= 4:
     s = s[-2]
     if s.find("%") >= 0:
         y = s.split(" ", 3)
-        percent = float(y[0]) / (i['track'][LEN] * CDDA_BLOCKSIZE / 2) * 100.0
+        percent = float(y[0]) / (i['track'][LEN] * CDDA_BLOCKSIZE // 2) * 100.0
     else:
         percent = 0
 """,
