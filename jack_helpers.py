@@ -119,20 +119,22 @@ else:
         'bitrate_factor': 1,
         'status_start': "%",
         'percent_fkt': r"""
-s = i['buf'].split('\r')
-if len(s) >= 2: s=s[-2]
-if len(s) == 1: s=s[0]
-if s.find("%") >= 0:       # status reporting starts here
-    y = s.split("/")
-    y1 = y[1].split("(")[0]
-    percent = float(y[0]) / float(y1) * 100.0
-elif s.find("Frame:") >= 0:    # older versions, like 3.13
-    y = s.split("/")
-    y0 = y[0].split("[")[-1]
-    y1 = y[1].split("]")[0]
-    percent = float(y0) / float(y1) * 100.0
-else:
-    percent = 0
+#"   1500/9274   (16%)|    0:00/    0:04|    0:00/    0:04|   55.176x|    0:03 "
+s = i['buf'].replace('\n', '\r').split('\r')
+if len(s) >= 2:
+    s = s[-2]
+elif len(s) == 1:
+    s = s[0]
+if not s.find('ETA') >= 0:
+    if s.find("%") >= 0:       # status reporting starts here
+        y = s.split("/")
+        y1 = y[1].split("(")[0]
+        percent = float(y[0]) / float(y1) * 100.0
+    elif s.find("Frame:") >= 0:    # older versions, like 3.13
+        y = s.split("/")
+        y0 = y[0].split("[")[-1]
+        y1 = y[1].split("]")[0]
+        percent = float(y0) / float(y1) * 100.0
 """,
     },
 
