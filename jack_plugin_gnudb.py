@@ -3,7 +3,7 @@
 plugin_freedb_servers = {
     'plugin_gnudb': {
         'host': "gnudb.gnudb.org",
-        'id': prog_name + " " + prog_version,
+        'id': "jack 3.1.1+",
         'mail': "gnudb-submit@gnudb.org",
         'my_mail': "default"
     },
