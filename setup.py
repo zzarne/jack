@@ -2,35 +2,29 @@
 
 """Setup script for the jack module distribution."""
 
-from setuptools import setup
+from setuptools import setup, find_packages
+import jack.version
 
-setup( # Distribution meta-data
-    name = "jack",
-    version = "3.1.1",
-    description = "A frontend for several cd-rippers and mp3 encoders",
-    author = "Arne Zellentin",
-    author_email = "zarne@users.sf.net",
-    url = "https://github.com/zzarne/jack",
+PACKAGES = find_packages(exclude=["lifedemo", "tests", "tests.*"])
+
+REQUIRES = [
+    'eyeD3',
+]
+
+setup(
+    name         = jack.version.name,
+    version      = jack.version.version,
+    description  = "A frontend for several cd-rippers and mp3 encoders",
+    author       = jack.version.author,
+    author_email = jack.version.email,
+    url          = jack.version.url,
 
     python_requires='>3',
+    install_requires=REQUIRES,
+    packages=PACKAGES,
 
-    # Description of the modules and packages in the distribution
-    py_modules = [
-        'jack_CDTime', 'jack_TOC', 'jack_TOCentry', 'jack_argv',
-        'jack_checkopts', 'jack_children', 'jack_config', 'jack_constants',
-        'jack_display', 'jack_encstuff', 'jack_freedb', 'jack_functions',
-        'jack_generic', 'jack_globals', 'jack_helpers', 'jack_init',
-        'jack_m3u', 'jack_main_loop', 'jack_misc', 'jack_mp3',
-        'jack_playorder', 'jack_plugins', 'jack_prepare', 'jack_progress',
-        'jack_rc', 'jack_ripstuff', 'jack_status', 'jack_t_curses',
-        'jack_t_dumb', 'jack_tag', 'jack_targets', 'jack_term', 'jack_utils',
-        'jack_version', 'jack_workers', 'CDDB', 'DiscID', 'cdrom',
-    ],
-
-    install_requires=[
-        'eyed3',
-    ]
+    # include_package_data=True,
+    # zip_safe=False,
+    # test_suite="tests",
+    entry_points={ "console_scripts": ["jack = jack.__main__:main"] },
 )
-
-print("If you have installed the modules, copy jack to some place in your $PATH,")
-print("like /usr/local/bin/.")
