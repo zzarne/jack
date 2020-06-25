@@ -178,7 +178,7 @@ def guesstoc(names):
                 f.truncate()
                 f.close()
                 blocks = blocks - extra_bytes
-            blocks = blocks / CDDA_BLOCKSIZE
+            blocks = blocks // CDDA_BLOCKSIZE
             erg.append([num, blocks, start, 0, 0, 2, 1, cf['_bitrate'], i_name])
             progr.append([num, "dae", "  =p  [  s  i  m  u  l  a  t  e  d   ]"])
         elif i_ext == ".OGG":
@@ -199,7 +199,7 @@ def guesstoc(names):
                 f = flac.FLAC(i)
                 size = os.path.getsize(i)
                 if f.info and size:
-                    blocks = int(float(f.info.total_samples)/f.info.sample_rate * CDDA_BLOCKS_PER_SECOND + 0.5)
+                    blocks = int(float(f.info.total_samples) / f.info.sample_rate * CDDA_BLOCKS_PER_SECOND + 0.5)
                     bitrate = int(size * 8 * f.info.sample_rate / f.info.total_samples / 1000)
                 else:
                     blocks = bitrate = 0
@@ -232,9 +232,9 @@ B_MM, B_SS, B_FF = 0, 1, 2
 def blockstomsf(blocks):
     from jack_globals import CDDA_BLOCKS_PER_SECOND
     "convert blocks to mm, ss, ff"
-    mm = blocks / 60 / CDDA_BLOCKS_PER_SECOND
+    mm = blocks // 60 // CDDA_BLOCKS_PER_SECOND
     blocks = blocks - mm * 60 * CDDA_BLOCKS_PER_SECOND
-    ss = blocks / CDDA_BLOCKS_PER_SECOND
+    ss = blocks // CDDA_BLOCKS_PER_SECOND
     ff = blocks % CDDA_BLOCKS_PER_SECOND
     return mm, ss, ff, blocks
 
@@ -413,7 +413,7 @@ def tracksize(list, dont_dae = [], blocksize = 1024):
     encoded_size = wavsize = cdrsize = 0
     for track in list:
         blocks = blocks + track[LEN]
-        encoded_size = encoded_size + track[LEN] / CDDA_BLOCKS_PER_SECOND * track[RATE] * 1000 / 8
+        encoded_size = encoded_size + track[LEN] // CDDA_BLOCKS_PER_SECOND * track[RATE] * 1000 // 8
         # files can be a bit shorter, if someone knows a better way of guessing
         # filesizes, please let me know.
         count_thiswav = 1

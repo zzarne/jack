@@ -392,7 +392,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
                             i['elapsed'] = time.time() - i['start_time']
                             speed = ((i['track'][LEN] / float(CDDA_BLOCKS_PER_SECOND)) * ( i['percent'] / 100 )) / i['elapsed']
                             eta = (100 - i['percent']) * i['elapsed'] / i['percent']
-                            eta_ms = "%02i:%02i" % (eta / 60, eta % 60)
+                            eta_ms = "%02i:%02i" % (eta // 60, eta % 60)
                             jack_status.enc_stat_upd(i['track'][NUM], '%2i%% done, ETA:%6s, %sx' % (i['percent'], eta_ms, jack_functions.pprint_speed(speed)))
                             #jack_term.tmod.dae_stat_upd(i['track'][NUM], None, i['percent'])
         
@@ -441,7 +441,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
                 percent = 0
             if percent > 0 and elapsed > 40:
                 eta = ((1 - percent) * elapsed / percent)
-                eta_hms = " ETA=%i:%02i:%02i" % (eta / 3600, (eta % 3600) / 60, eta % 60)
+                eta_hms = " ETA=%i:%02i:%02i" % (eta // 3600, (eta % 3600) // 60, eta % 60)
             else:
                 eta_hms = ""
 

@@ -226,8 +226,8 @@ def extend_frameinfo(x):
         print("What is the spf for %s?" % x['version_name'], "(%s)" % x['version_num'])
 
     # calculate BPF
-    x['bpf'] = (x['bitrate'] * bpf_fact[x['lay']]) / x['sfreq']
-    x['framesize'] = (x['bitrate'] * bpf_fact[x['lay']]) / x['sfreq']  + x['padding']
+    x['bpf'] = (x['bitrate'] * bpf_fact[x['lay']]) // x['sfreq']
+    x['framesize'] = (x['bitrate'] * bpf_fact[x['lay']]) // x['sfreq']  + x['padding']
     #stereo = (mode == MPG_MD_MONO) ? 1 : 2;
     return x
 

@@ -333,13 +333,13 @@ def ripread(track, offset = 0):
                     buf.byteswap()
                 wav.writeframesraw(buf.tostring())
                 if i % 1000 == 0:
-                    print(":fAE: Block " + repr(i) + "/" + repr(track[LEN]) + (" (%2i%%)" % (i * 100 / track[LEN])))
+                    print(":fAE: Block " + repr(i) + "/" + repr(track[LEN]) + (" (%2i%%)" % (i * 100 // track[LEN])))
                     sys.stdout.flush()
             wav.close()
             f.close()
 
             stop_time = time.time()
-            read_speed = track[LEN] / CDDA_BLOCKS_PER_SECOND / ( stop_time - start_time )
+            read_speed = track[LEN] // CDDA_BLOCKS_PER_SECOND // ( stop_time - start_time )
             if read_speed < 100:
                 print("[%2.0fx]" % read_speed, end=' ')
             else:

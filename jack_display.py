@@ -119,10 +119,10 @@ def center_line(s, fill = " ", fill_sep = " ", fill_r = "", width = 80):
         if not fill_r:
             fill_r = fill
         length = len(fill)
-        left = free / 2
-        right = free / 2 + (free % 2)
-        left_c = fill * (left / length) + fill_sep * (left % length)
-        right_c = fill_sep * (right % length) + fill_r * (right / length)
+        left = free // 2
+        right = free // 2 + (free % 2)
+        left_c = fill * (left // length) + fill_sep * (left % length)
+        right_c = fill_sep * (right % length) + fill_r * (right // length)
         return left_c + s + right_c
     else:
         return s

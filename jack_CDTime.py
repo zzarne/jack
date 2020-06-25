@@ -28,9 +28,9 @@ def strtoblocks(s):
 
 def blockstomsf(blocks):
     "convert blocks to mm, ss, ff"
-    mm = blocks / 60 / CDDA_BLOCKS_PER_SECOND
+    mm = blocks // 60 // CDDA_BLOCKS_PER_SECOND
     blocks = blocks - mm * 60 * CDDA_BLOCKS_PER_SECOND
-    ss = blocks / CDDA_BLOCKS_PER_SECOND
+    ss = blocks // CDDA_BLOCKS_PER_SECOND
     ff = blocks % CDDA_BLOCKS_PER_SECOND
     return mm, ss, ff, blocks
 
@@ -77,11 +77,11 @@ class CDTime:
             self.ff == self.blocks
         elif name == 'ff':
             if self.ff >= CDDA_BLOCKS_PER_SECOND:
-                self.ss = self.ss + self.ff / CDDA_BLOCKS_PER_SECOND
+                self.ss = self.ss + self.ff // CDDA_BLOCKS_PER_SECOND
                 self.__dict__['ff'] = self.ff % CDDA_BLOCKS_PER_SECOND
         elif name == 'ss':
             if self.ss >= 60:
-                self.mm = self.mm + self.ss / 60
+                self.mm = self.mm + self.ss // 60
                 self.__dict__['ss'] = self.ss % 60
         self.__dict__['string'] = msftostr((self.mm, self.ss, self.ff,))
         self.__dict__['blocks'] = strtoblocks(self.string)
