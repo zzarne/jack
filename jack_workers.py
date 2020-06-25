@@ -284,7 +284,7 @@ def ripread(track, offset = 0):
             else:
                 debug("unsupported image file " + cf['_image_file'])
                 posix._exit(4)
-        
+
         expected_filesize = jack_functions.tracksize(jack_ripstuff.all_tracks)[CDR] + CDDA_BLOCKSIZE * offset
 #
 ## WAVE header is 44 Bytes for normal PCM files...
@@ -306,11 +306,11 @@ def ripread(track, offset = 0):
             posix._exit(3)
 
         else:
-            f = open(cf['_image_file'], 'r')
+            f = open(cf['_image_file'], 'rb')
 #
 ## set up output wav file:
 #
-            wav = wave.open(track[NAME] + ".wav", 'w')
+            wav = wave.open(track[NAME] + ".wav", 'wb')
             wav.setnchannels(2)
             wav.setsampwidth(2)
             wav.setframerate(44100)
