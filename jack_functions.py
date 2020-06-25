@@ -238,10 +238,6 @@ def blockstomsf(blocks):
     ff = blocks % CDDA_BLOCKS_PER_SECOND
     return mm, ss, ff, blocks
 
-def starts_with(s, x):
-    "checks whether s starts with a given string x"
-    return s[0:len(x)] == x
-
 ## #XXX the following will be used if all references to it have been updated.
 ## meanwhile the wrapper below is used.
 
@@ -289,7 +285,7 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
 ## everytime we encounter "TRACK" we increment num and append the actual
 ## track to the toc.
         
-        if starts_with(line, "TRACK "):
+        if line.startswith("TRACK "):
             num = num + 1
             new_track = jack_TOCentry.TOCentry()
             new_track.number = num
@@ -329,7 +325,7 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
 
 ## example: FILE "data.wav" 08:54:22 04:45:53
 
-        elif starts_with(line, "FILE "):
+        elif line.startswith("FILE "):
             filename = line[line.find("\"") + 1:line.rfind("\"")]
             offsets = line[line.rfind("\"") + 1:].strip()
             start, length = offsets.split()[:2]
@@ -346,7 +342,7 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
 ## actual track and subtracted from its length. This is done automagically
 ## by setting the pregap attribute.
 
-        elif starts_with(line, "START "):
+        elif line.startswith("START "):
             actual_track.pregap = jack_CDTime.CDTime(line.split()[1]).blocks
 
     f.close()

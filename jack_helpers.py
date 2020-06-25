@@ -394,11 +394,11 @@ while 1:
         break
     l = l.strip()
     # new cdda2wav
-    if starts_with(l, "Table of Contents: total tracks"):
+    if l.startswith("Table of Contents: total tracks"):
         new_toc1 = 1
         continue
 
-    if starts_with(l, "Table of Contents: starting sectors"):
+    if l.startswith("Table of Contents: starting sectors"):
         new_toc2 = 1
         new_toc1 = 0
         new_c2w = 1

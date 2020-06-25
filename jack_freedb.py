@@ -375,10 +375,10 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
         line = line.replace("\n", "")  # cannot use rstrip, we need trailing
                                         # spaces
         line = line.replace("\r", "")  # I consider "\r"s as bugs in db info
-        if jack_functions.starts_with(line, "# Revision:"):
+        if line.startswith("# Revision:"):
             revision = int(line[11:])
         for i in ["DISCID", "DTITLE", "DYEAR", "DGENRE", "TTITLE", "EXTD", "EXTT", "PLAYORDER"]:
-            if jack_functions.starts_with(line, i):
+            if line.startswith(i):
                 buf = line
                 if buf.find("=") != -1:
                     buf = buf.split("=", 1)
