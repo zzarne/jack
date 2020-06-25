@@ -61,7 +61,7 @@ def init(arg_type="auto", arg_xtermset = 0):
     global size_x, size_y
     global orig_size_x, orig_size_y
     size_x, size_y = None, None
-    
+
     if initialized:
         return
 

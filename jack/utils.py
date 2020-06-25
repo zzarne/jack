@@ -163,7 +163,7 @@ def unusable_charmap(x):
     for i in range(len(cf['_unusable_chars'])):
         x = x.replace(cf['_unusable_chars'][i], cf['_replacement_chars'][i])
     return x
-    
+
 def mkdirname(names, template):
     "generate mkdir-able directory name(s)"
     year = genretxt = None

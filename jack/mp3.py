@@ -357,7 +357,7 @@ def mp3format(file, warn = 1, max_skip = 100000, offset = 0):
 
 class MP3:
     def __init__(self, file, name=None):
-    
+
         self.file = None
         self.name = name
         if type(file) == str:

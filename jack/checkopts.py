@@ -39,7 +39,7 @@ def checkopts(cf, cf2):
 
     if 'space_from_argv' in cf2:
         cf.rupdate({'space_set_from_argv': {'val': 1}}, "check")
-    
+
     if 'only_dae' in cf2 and cf2['only_dae']['val']:
         cf.rupdate({'encoders': {'val': 0}}, "check")
 

@@ -29,7 +29,7 @@ import struct
 CDROMREADTOCHDR =       0x5305
 CDDB_READ_TOC_HEADER_FLAG = CDROMREADTOCHDR
 
-# #define CDROMREADTOCENTRY       0x5306 /* Read TOC entry 
+# #define CDROMREADTOCENTRY       0x5306 /* Read TOC entry
 #                                            (struct cdrom_tocentry) */
 CDROMREADTOCENTRY =     0x5306
 CDDB_READ_TOC_ENTRY_FLAG = CDROMREADTOCENTRY
@@ -62,7 +62,7 @@ cdrom_tocentry = "BBB BBBBBBBB B"
 # }; // pack: BBB|l
 
 # /* Address in MSF format */
-# struct cdrom_msf0               
+# struct cdrom_msf0
 # {
         # __u8    minute;
         # __u8    second;
@@ -73,7 +73,7 @@ def toc_header(f):
     cdrom_fd = f.fileno()
 
     # struct CDDB_TOC_HEADER_STRUCT hdr -> cdrom_tochdr
-    # struct cdrom_tochdr     
+    # struct cdrom_tochdr
     # {
             # __u8    cdth_trk0;      /* start track */
             # __u8    cdth_trk1;      /* end track */

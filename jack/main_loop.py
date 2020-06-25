@@ -58,7 +58,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
     rot_cycle = len(rotate)
     rot_ball_cycle = len(rotate_ball)
     rot_count = 0
-    global_done = 0 
+    global_done = 0
     first_encoder = 1
     ext = jack.targets.targets[jack.helpers.helpers[cf['_encoder']]['target']]['file_extension']
     global_blocks = jack.functions.tracksize(wavs_todo)[BLOCKS] + jack.functions.tracksize(mp3s_todo)[BLOCKS]
@@ -378,7 +378,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
                                 jack.status.dae_stat_upd(i['track'][NUM], ":DAE: " + new_status)
                             except:
                                 debug("error in dae_stat_upd")
-        
+
                 elif i['type'] == "encoder":
                     if len(i['buf']) == jack.helpers.helpers[i['prog']]['status_blocksize']:
                         loc = {'i': i, 'percent': 0}
@@ -395,14 +395,14 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
                             eta_ms = "%02i:%02i" % (eta // 60, eta % 60)
                             jack.status.enc_stat_upd(i['track'][NUM], '%2i%% done, ETA:%6s, %sx' % (i['percent'], eta_ms, jack.functions.pprint_speed(speed)))
                             #jack.term.tmod.dae_stat_upd(i['track'][NUM], None, i['percent'])
-        
+
                 elif i['type'] == "image_reader":
                     line = jack.status.get_2_line(i['buf'], default="").strip()
                     if line:
                         jack.status.dae_stat_upd(i['track'][NUM], line)
                         if line.startswith("Error"):
                             global_error = global_error + 1
-        
+
                 else:
                     error("unknown subprocess type \"" + i['type'] + "\".")
 
@@ -432,7 +432,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
                 blocked = 0
 
             total_done = global_done
-            for i in jack.children.children: 
+            for i in jack.children.children:
                 total_done = total_done + (i['percent'] / 100) * i['track'][LEN]
             elapsed = time.time() - global_start
             if global_blocks > 0:
@@ -480,7 +480,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
                 + eta_hms \
                 + " errors: " + repr(global_error) \
                 + jack.display.smile + print_flags
-            
+
             jack.term.tmod.update(jack.display.special_line, jack.display.bottom_line)
 
     return global_error

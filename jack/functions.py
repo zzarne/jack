@@ -151,7 +151,7 @@ def guesstoc(names):
         i_ext = i_ext.upper()
         # erg: NUM, LEN, START, COPY, PRE, CH, RIP, RATE, NAME
         if i_ext == ".MP3":
-            x = jack.mp3.mp3format(i) 
+            x = jack.mp3.mp3format(i)
             if not x:
                 error("could not get MP3 info for file \"%x\"" % i)
             blocks = int(x['length'] * CDDA_BLOCKS_PER_SECOND + 0.5)
@@ -284,7 +284,7 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
 
 ## everytime we encounter "TRACK" we increment num and append the actual
 ## track to the toc.
-        
+
         if line.startswith("TRACK "):
             num = num + 1
             new_track = jack.TOCentry.TOCentry()

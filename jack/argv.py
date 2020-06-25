@@ -45,7 +45,7 @@ def show_usage(cf, longhelp=0):
     max_len = 0
     for i in l:
         max_len = max(max_len, len(i[0]))
-    
+
     l.sort()
     print("usage: jack [option]...")
     for i in l:
@@ -150,7 +150,7 @@ def parse_option(cf, argv, i, option, alt_arg, origin="argv"):
             return None, "option `%s' takes a non-empty list (which may be terminated by \";\")" % option
     # default
     return None, "unknown argument type for option `%s'." % option
-            
+
 def parse_argv(cf, argv):
     argv_cf = {}
     allargs = {}

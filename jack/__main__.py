@@ -245,7 +245,7 @@ def main():
         except:
             jack.term.disable()
             warning("abnormal exit")
-            traceback.print_exc()         
+            traceback.print_exc()
             sys.exit(1)
     # Set the files we have processed but this may still be overwritten by
     # jack.tag.tag() called below.

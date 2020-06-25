@@ -18,12 +18,16 @@
 
 import sys
 
-version   = "4.0.0"
 name      = "jack"
-rcversion = 31
+version   = "4.0.0"
+
 author    = "Arne Zellentin"
 copyright = "(C)2020 " + author
 email     = "zarne@users.sf.net"
 devemail  = "<%s>" % email
+
 url       = "https://github.com/zzarne/jack"
+
+rcversion = 31
+
 py_version = sys.version.split()[0]

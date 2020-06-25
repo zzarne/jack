@@ -292,7 +292,7 @@ def gen_todo():
             continuous = 0
         else:
             continuous = 1
-            
+
         for k in tlist:
             if continuous:
                 if k < 1 or k > len(audiotracks):
@@ -502,7 +502,7 @@ def query_on_start(todo):
     info("querying...")
     if jack.freedb.freedb_query(jack.freedb.freedb_id(jack.ripstuff.all_tracks), jack.ripstuff.all_tracks, cf['_freedb_form_file']):
         if cf['_cont_failed_query']:
-            
+
             x = input("\nfreedb search failed, continue? (y/N) ") + "x"
             if not x or x[0].upper() != "Y":
                 sys.exit(0)

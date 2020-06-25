@@ -301,13 +301,13 @@ def freedb_query(cd_id, tracks, file):
                 if not x:
                     print("ok, aborting.")
                     sys.exit()
- 
+
             buf = matches[x-1]
             buf = buf.split(" ", 2)
             freedb_cat = buf[0]
             cd_id = buf[1]
             err = 0
- 
+
         elif buf[0:3] == "200":
             buf = buf.split()
             freedb_cat = buf[1]
@@ -325,7 +325,7 @@ def freedb_query(cd_id, tracks, file):
                 return err
             else:
                 error(buf + f.read().decode() + " --don't know what to do, aborting query.")
- 
+
         cmd = "cmd=cddb read " + freedb_cat + " " + cd_id
         url = "http://" + freedb_servers[cf['_freedb_server']]['host'] + "/~cddb/cddb.cgi?" + urllib.parse.quote_plus(cmd + "&" + hello + "&proto=6", "=&")
         f = urllib.request.urlopen(url)
@@ -391,7 +391,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
                         else:
                             freedb[buf[0]] = buf[1]
                 continue
- 
+
     for i in tracks:    # check that info is there for all tracks
         if "TTITLE%i" % (i[NUM] - 1) not in freedb:   # -1 because freedb starts at 0
             if i[NUM] in [x[NUM] for x in todo]:
@@ -399,20 +399,20 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
             if verb:
                 warning("no freedb info for track %02i (\"TTITLE%i\")" % (i[NUM], i[NUM] - 1))
             freedb["TTITLE%i" % (i[NUM] - 1)] = "[not set]"
- 
+
     for i in list(freedb.keys()):# check that there is no extra info
         if i[0:6] == "TTITLE":
             if int(i[6:]) > tracks_on_cd - 1:
                 err = 2
                 if verb:
                     warning("extra freedb info for track %02i (\"%s\"), cd has only %02i tracks." % (int(i[6:]) + 1, i, tracks_on_cd))
- 
+
     if "DTITLE" not in freedb:
         err = 3
         if verb:
             warning("freedb entry doesn't contain disc title info (\"DTITLE\").")
         freedb['DTITLE'] = "[not set]"
- 
+
     if "DISCID" not in freedb:
         err = 4
         if verb:
@@ -442,7 +442,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
 
     if 'PLAYORDER' in freedb:
         jack.playorder.order = freedb('PLAYORDER')
- 
+
     dtitle = freedb['DTITLE']
     dtitle = dtitle.replace(" / ", "/")    # kill superflous slashes
     dtitle = dtitle.replace("/ ", "/")
@@ -505,13 +505,13 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
         if verb:
             warning("the disc's title must be set to \"artist / title\" (\"DTITLE\").")
         err = 6
- 
+
     if (names[0][0]).upper() in ("VARIOUS", "VARIOUS ARTISTS", "SAMPLER", "COMPILATION", "DIVERSE", "V.A.", "VA"):
         if not cf['_various'] and not ['argv', False] in cf['various']['history']:
             cf['_various'] = 1
- 
+
 # user says additional info is in the EXTT fields
- 
+
     if cf['_various'] and cf['_extt_is_artist']:
         for i in range(tracks_on_cd):
             if freedb['EXTT'+repr(i)]:
@@ -520,7 +520,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
                 err = 8
                 if verb:
                     warning("no EXTT info for track %02i." % i)
- 
+
     elif cf['_various'] and cf['_extt_is_title']:
         for i in range(tracks_on_cd):
             if freedb['EXTT'+repr(i)]:
@@ -529,45 +529,45 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
                 err = 8
                 if verb:
                     warning("no EXTT info for track %02i." % i)
- 
+
 # we'll try some magic to separate artist and title
- 
+
     elif cf['_various']:
         found = [[], [], [], [], [], []]
         # lenght=3   2   1 , 3   2   1 (secondary)
         ignore = string.ascii_letters + string.digits
         titles = []
         braces = [['"', '"'], ["'", "'"], ["(", ")"], ["[", "]"], ["{", "}"]]
- 
+
 # first generate a list of track titles
- 
+
         for i in range(tracks_on_cd):
             titles.append(freedb['TTITLE'+repr(i)])
- 
+
 # now try to find a string common to all titles with length 3...1
- 
+
         for i in (3,2,1):
             candidate_found = 0
             for j in range(len(titles[0])-(i-1)):
- 
+
 # choose a possible candidate
- 
+
                 candidate = titles[0][j:j+i]
                 illegal_letter = 0
                 for k in candidate:
                     if k in ignore:
- 
+
 # candidate must not have characters from ignore
- 
+
                         illegal_letter = 1
                         break
                 if illegal_letter:
                     continue
                 else:
                     candidate_found = 1
- 
+
 # if we have a candidate, check that it occurs in all titles
- 
+
                 if candidate_found:
                     all_matched = 1
                     append_as_secondary = 0
@@ -610,12 +610,12 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
                             found[6-i].append(candidate)
                         else:
                             found[3-i].append(candidate)
- 
+
 # if no candidate has been found, try one with less characters
- 
+
                 else:
                     continue
- 
+
         tmp = []
         eliminate = [" "]
         for i in found:
@@ -655,7 +655,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
                         if verb:
                             warning("brace" + repr(j) + " does not close exactly once.")
                         err = 9
-                        
+
                 if cf['_various_swap']:
                     buf = [buf[1], buf[0]]
                 names.append(buf)
@@ -667,7 +667,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
         for i in range(tracks_on_cd):
             buf = freedb['TTITLE'+repr(i)]
             names.append(["", buf])
- 
+
     # append the EXTT fields to the track names
     if cf['_extt_is_comment']:
         for i in range(len(names[1:])):
@@ -675,7 +675,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
                 names[i+1][1] = names[i+1][1] + " (%s)" % freedb['EXTT'+repr(i)]
             else:
                 print("Warning: track %i (starting at 0) has no EXTT entry." % i)
- 
+
     locale_names = []
     # clean up a bit and create names for the appropriate locale:
     # FIXME: this for loop doesn't actually change the variable names at all!
@@ -773,7 +773,7 @@ def do_freedb_submit(file, cd_id, cat = None):
         def splithost(url):
             import re
             _hostprog = re.compile('^//([^/]+)(.*)$')
-            match = _hostprog.match(url) 
+            match = _hostprog.match(url)
             if match: return match.group(1, 2)
             return None, url
 
@@ -821,7 +821,7 @@ def do_freedb_submit(file, cd_id, cat = None):
         else:
             buf = f.readline().decode()
             err, msg = buf[0:3], buf[4:]
-            
+
     # lets see if it worked:
     if err == 404:
         print("This server doesn't seem to support database submission via http.")
