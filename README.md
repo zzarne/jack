@@ -24,16 +24,13 @@ Jack is back! After a small 15 year hiatus, development has resumed.
 
 Many thanks to the [friendly Debian maintainers](https://github.com/zzarne/jack/blob/master/debian/copyright) who kept Jack alive all these years!
 
-## Freedb
+Support for Python versions before 3 has been dropped.
 
-Freedb servers are gone. For existing installations, [download this plugin](https://github.com/zzarne/jack/raw/master/jack_plugin_gnudb.py)
-to ~/.jack_plugins/ (create directory). Then run
-```bash
-jack --server plugin_gnudb --save
-```
 ## Goals
 
 Current development goals include:
-- Support Python 3 to allow it to be included in distributions which no longer support Python 2. See [this branch](https://github.com/zzarne/jack/tree/port-python3). Support for Python versions before 3 will be dropped.
-- Get the character encodings right. It's been a mess in old Python and Jack.
+- Test and complete support for Python 3
+- Get Jack back into distributions which no longer support Python 2
 - Get Jack into PyPI
+- Get the character encodings right. It's been a mess in old Python and Jack
+- Rework the helpers and plugins into separate Python modules
