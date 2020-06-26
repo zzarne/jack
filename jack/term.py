@@ -189,7 +189,6 @@ def enable(all = 1):
 
 def disable(all = 1):
     global enabled
-    import os
 
     if not enabled or not initialized:
         return

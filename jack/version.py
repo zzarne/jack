@@ -26,6 +26,8 @@ copyright = "(C)2020 " + author
 email     = "zarne@users.sf.net"
 devemail  = "<%s>" % email
 
+license   = "GPLv2"
+
 url       = "https://github.com/zzarne/jack"
 
 rcversion = 31

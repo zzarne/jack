@@ -1,4 +1,4 @@
-### jack.t_curses: dumb terminal functions for
+### jack.t_curses: curses terminal functions for
 ### jack - extract audio from a CD and encode it using 3rd party software
 ### Copyright (C) 1999-2004  Arne Zellentin <zarne@users.sf.net>
 
@@ -32,17 +32,8 @@ from jack.globals import *
 
 enabled = None
 
-try:
-    from jack.curses import endwin, resizeterm, A_REVERSE, newwin, newpad, initscr, noecho, cbreak, echo, nocbreak, error
-except ImportError:
-    warning("jack.curses module not found, trying normal curses...")
-    try:
-        from curses import endwin, A_REVERSE, newwin, newpad, initscr, noecho, cbreak, echo, nocbreak, error
-        def resizeterm(y, x):
-            pass
-    except ImportError:
-        print("curses module not found or too old, please install it (see README)")
-
+from curses import endwin, A_REVERSE, newwin, newpad, initscr, noecho, \
+                   cbreak, echo, nocbreak, error, resizeterm
 
 # screen objects
 stdscr = status_pad = usage_win = None
@@ -111,14 +102,14 @@ def enable():
 def disable():
     global enabled
     if enabled:
+        # re-install previous sighandler
+        #signal.signal(signal.SIGWINCH, jack.term.sig_winch_cache)
+        signal.signal(signal.SIGWINCH, signal.SIG_IGN)
         # Set everything back to normal
         stdscr.keypad(0)
         echo() ; nocbreak()
         # Terminate curses, back to normal screen
         endwin()
-        # re-install previous sighandler
-        #signal.signal(signal.SIGWINCH, jack.term.sig_winch_cache)
-        signal.signal(signal.SIGWINCH, signal.SIG_IGN)
         enabled = 0
 
 def sig_winch_handler(sig, frame):
@@ -178,7 +169,11 @@ def sig_winch_handler(sig, frame):
             stdscr.addstr(spec_pos, 0, jack.display.center_line(jack.display.special_line, fill = " ", width = jack.term.size_x)[:jack.term.size_x], A_REVERSE)
 
         if jack.display.bottom_line:
-            stdscr.addstr(jack.term.size_y - 1, 0, (jack.display.bottom_line + " " * (jack.term.size_x - len(jack.display.bottom_line) - 1 ))[:jack.term.size_x - 1], A_REVERSE)
+            c_bottom = jack.display.bottom_line
+            c_bottom += " " * (jack.term.size_x
+                               - len(jack.display.bottom_line) - 1 )
+            c_bottom = c_bottom[:jack.term.size_x - 1]
+            stdscr.addstr(jack.term.size_y - 1, 0, c_bottom, A_REVERSE)
 
         stdscr.refresh()
 
@@ -218,7 +213,11 @@ def move_pad(cmd):
             splash_reserve = 0
         else:
             splash_reserve = usage_win_height
+    else:
+        return False
+
     sig_winch_handler(None, None)
+    return True
 
 def disp_bottom_line(bottom_line):
     stdscr.addstr(jack.term.size_y - 1, 0, (bottom_line + " " * (jack.term.size_x - len(bottom_line)))[:jack.term.size_x - 1], A_REVERSE)

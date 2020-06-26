@@ -5,7 +5,7 @@
 from setuptools import setup, find_packages
 import jack.version
 
-PACKAGES = find_packages(exclude=["lifedemo", "tests", "tests.*"])
+PACKAGES = find_packages(exclude=find_packages(where="deprecated"))
 
 REQUIRES = [
     'eyeD3',
@@ -18,6 +18,8 @@ setup(
     author       = jack.version.author,
     author_email = jack.version.email,
     url          = jack.version.url,
+    license      = jack.version.license,
+    # platform     = "POSIX",
 
     python_requires='>3',
     install_requires=REQUIRES,
