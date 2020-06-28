@@ -22,7 +22,7 @@ Many thanks to the [friendly Debian maintainers](https://github.com/zzarne/jack/
 
 ## Freedb
 
-Freedb servers are gone. For existing installations, [download this plugin](https://github.com/zzarne/jack/raw/master/jack_plugin_gnudb.py)
+Freedb servers are gone. For using gnudb.org in existing installations, [download this plugin](https://github.com/zzarne/jack/raw/master/jack_plugin_gnudb.py)
 to ~/.jack_plugins/ (create directory). Then run
 ```bash
 jack --server plugin_gnudb --save
