@@ -1,3 +1,7 @@
+# Abandoned
+
+Do not use. Go [here](https://github.com/pimzand/jack) instead.
+
 # Jack - Rip and encode CDs with one command
 
 Jack has been developed with one main goal: making OGGs (or MP3s)
@@ -23,8 +27,6 @@ Jack is different from other such tools in a number of ways:
 Jack is back! After a small 15 year hiatus, development has resumed.
 
 Many thanks to the [friendly Debian maintainers](https://github.com/zzarne/jack/blob/master/debian/copyright) who kept Jack alive all these years!
-
-Support for Python versions before 3 has been dropped.
 
 ## Goals
 
