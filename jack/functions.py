@@ -51,7 +51,8 @@ def df(fs=".", blocksize=1024):
         statvfs_found = 0
 
     if statvfs_found:
-        (f_bsize, f_frsize, f_blocks, f_bfree, f_bavail, f_files, f_ffree, f_favail, f_flag, f_namemax) = statvfs(fs)
+        (f_bsize, f_frsize, f_blocks, f_bfree, f_bavail, f_files,
+         f_ffree, f_favail, f_flag, f_namemax) = statvfs(fs)
         return int(f_bavail) * int(f_bsize)
     else:
         # Not very portable
@@ -79,10 +80,10 @@ def pprint_i(num, fmt="%i%s", scale=2.0**10, max=4):
     for i in ("K", "M", "G", "T"):
         if abs(num) >= scale:
             c = i
-            num = num / scale
+            num = num // scale
             change = 1
     if change:
-        #num = num + 0.5
+        # num = num + 0.5
         if num > 999:
             return fmt % (num, c)
         elif num >= 100:
@@ -220,8 +221,8 @@ def guesstoc(names):
             progr.append([num, "ren", cf['_name'] % num + "-->" + str(i_name, cf['_charset'], "replace")])
         num = num + 1
         start = start + blocks
-    for i in progr:     # this is deferred so that it is only written if no
-        # files fail
+    for i in progr:
+        # this is deferred so that it is only written if no files fail
         progress(i)
     return erg
 

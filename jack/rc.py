@@ -56,13 +56,13 @@ def read(file):
                     quoted = []
                     for i in range(len(val)):
                         c = val[i]
-                        if c in ('"', "'") and (not i or val[i-1] != "\\"):
+                        if c in ('"', "'") and (not i or val[i - 1] != "\\"):
                             if quoted and quoted[-1] == c:
                                 quoted.pop()
                             else:
                                 quoted.append(c)
                         elif c == "#" and not quoted:
-                            val, com = val[:i].strip(), val[i+1:]
+                            val, com = val[:i].strip(), val[i + 1:]
                             print(com)
                             break
         read_rc.append([opt, val, com, lineno])

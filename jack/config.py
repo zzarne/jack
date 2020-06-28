@@ -37,7 +37,7 @@ except locale.Error as e:
 # config space with attributes
 
 cf = jack.misc.dict2({
-    ### prefs ###
+    # prefs ###
     'debug': {
         'type': 'toggle',
         'val': 0,
@@ -400,7 +400,7 @@ replacement_chars = ["ae", "oe", "ue", "Ae", "Oe", "Ue", "ss", ""]""",
         'val': 0,
         'doc': "don't be pedantic when parsing freedb data, e.g. the ambigous (various artists) TTITLE \"The Artist - Track a Title - Cool Remix\" is split at the first possible separator.",
     },
-    ### prefs0 ###
+    # prefs0 ###
     'force': {
         'type': 'toggle',
         'val': 0,
@@ -493,7 +493,7 @@ replacement_chars = ["ae", "oe", "ue", "Ae", "Oe", "Ue", "ss", ""]""",
         'val': "CDDB.py",
         'doc': "use which helper program to read cd's toc",
     },
-    ### prefs0 -- FREEDB stuff ###
+    # prefs0 -- FREEDB stuff ###
     'query_on_start': {
         'type': 'toggle',
         'val': 0,

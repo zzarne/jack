@@ -22,8 +22,8 @@ from jack.constants import *
 from jack.generic import debug, error, expand, info, warning
 from jack.init import eyed3
 
-#import jack.generic
-#error = jack.generic.error
+# import jack.generic
+# error = jack.generic.error
 
 dummy = """
 def error(x):

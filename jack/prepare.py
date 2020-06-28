@@ -62,7 +62,8 @@ def find_workdir():
                 jack.ripstuff.all_tracks = []
             else:
                 if cf['_image_toc_file']:
-                    # put the absolute path in the variable since we'll change cwd soon
+                    # put the absolute path in the variable since we'll change
+                    # cwd soon
                     cf['_image_toc_file'] = os.path.abspath(cf['_image_toc_file'])
                     jack.ripstuff.all_tracks, dummy, dummy = jack.functions.cdrdao_gettoc(cf['_image_toc_file'])
                 else:
@@ -282,7 +283,7 @@ def gen_todo():
         tlist.sort()
         k = 0
         while k < len(tlist) - 1:
-            if tlist[k] == tlist[k+1]:
+            if tlist[k] == tlist[k + 1]:
                 del tlist[k]
             else:
                 k = k + 1
@@ -304,14 +305,14 @@ def gen_todo():
         for k in tlist:
             if continuous:
                 if k < 1 or k > len(audiotracks):
-                    warning('This CD has audio tracks 1-%d.  Ignoring request for track %d.' % (len(audiotracks), k))
+                    warning('This CD has audio tracks 1-%d. Ignoring request for track %d.' % (len(audiotracks), k))
                     continue
             else:
                 if k < 1 or k > len(jack.ripstuff.all_tracks):
-                    warning('This CD has tracks 1-%d.  Ignoring request for track %d.' % (len(jack.ripstuff.all_tracks), k))
+                    warning('This CD has tracks 1-%d. Ignoring request for track %d.' % (len(jack.ripstuff.all_tracks), k))
                     continue
-            if jack.ripstuff.all_tracks[k-1][CH] == 2:
-                todo.append(jack.ripstuff.all_tracks[k-1])
+            if jack.ripstuff.all_tracks[k - 1][CH] == 2:
+                todo.append(jack.ripstuff.all_tracks[k - 1])
             else:
                 warning("can't handle non audio track %i" % k[NUM])
 
@@ -559,13 +560,11 @@ def query_on_start(todo):
                         freedb_submit(jack.progress.status_all.get('freedb_cat', None))
 
     if cf['_query_on_start']:
-        err, jack.tag.track_names, jack.tag.locale_names, freedb_rename, revision = jack.freedb.interpret_db_file(
-            jack.ripstuff.all_tracks, todo, cf['_freedb_form_file'], verb=cf['_query_on_start'], dirs=1)
+        err, jack.tag.track_names, jack.tag.locale_names, freedb_rename, revision = jack.freedb.interpret_db_file(jack.ripstuff.all_tracks, todo, cf['_freedb_form_file'], verb=cf['_query_on_start'], dirs=1)
         if err:
             error("query on start failed to give a good freedb file, aborting.")
     else:
-        err, jack.tag.track_names, jack.tag.locale_names, freedb_rename, revision = jack.freedb.interpret_db_file(
-            jack.ripstuff.all_tracks, todo, cf['_freedb_form_file'], verb=cf['_query_on_start'], warn=cf['_query_on_start'])
+        err, jack.tag.track_names, jack.tag.locale_names, freedb_rename, revision = jack.freedb.interpret_db_file(jack.ripstuff.all_tracks, todo, cf['_freedb_form_file'], verb=cf['_query_on_start'], warn=cf['_query_on_start'])
         # If the FreeDB query failed and the FreeDB data cannot be parsed,
         # don't tag the files.  However, if the FreeDB data can be parsed
         # even though the query failed assume that the query worked and

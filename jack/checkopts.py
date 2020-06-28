@@ -89,7 +89,8 @@ def consistency_check(cf):
     # check freedb server
     if 'freedb_server' in cf:
         if cf['freedb_server']['val'] not in jack.freedb.freedb_servers:
-            error("unknown server, choose one: " + repr(list(jack.freedb.freedb_servers.keys())))
+            error("unknown server, choose one: " +
+                    repr(list(jack.freedb.freedb_servers.keys())))
 
     # check dir_template and scan_dirs
     if len(cf['_dir_template'].split(os.path.sep)) > cf['_scan_dirs']:
@@ -232,7 +233,8 @@ def check_rc(cf, global_cf, user_cf, argv_cf):
     if 'base_dir' not in all_keys:
         warning("You have no standard location set, putting files into the current directory. Please consider setting base_dir in ~/.jack3rc.")
 
-    # Check if the default ripper is installed, and if not, look for another one
+    # Check if the default ripper is installed, and if not, look for another
+    # one
     if 'ripper' not in all_keys:
         default_ripper = cf["ripper"]["val"]
         if not jack.utils.in_path(default_ripper):
@@ -254,9 +256,9 @@ def check_rc(cf, global_cf, user_cf, argv_cf):
             if not jack.utils.in_path(helper):
                 error("Helper %s '%s' not found on your system." % (t, helper))
 
-    # If the default CD device doesn't exist, see whether we can find another one
-    if ('cd_device' not in all_keys and cf["rip_from_device"]["val"] and
-            not os.path.exists(cf["cd_device"]["val"])):
+    # If the default CD device doesn't exist, see whether we can find another
+    # one
+    if ('cd_device' not in all_keys and cf["rip_from_device"]["val"] and not os.path.exists(cf["cd_device"]["val"])):
         default = cf["cd_device"]["val"]
         devices = []
         # All CD devices can be found in /proc on Linux

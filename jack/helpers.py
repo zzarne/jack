@@ -34,7 +34,7 @@ helpers = {
         'target': "ogg",
         'can_tag': 1,
         'vbr-cmd': "oggenc -o %o -t %t -a %a -N %n -l %l -G %g -d %y -q %q %i",
-        'cmd':     "oggenc -o %o -t %t -a %a -N %n -l %l -G %g -d %y -b %r %i",
+        'cmd': "oggenc -o %o -t %t -a %a -N %n -l %l -G %g -d %y -b %r %i",
         'tags': {
             'ogg': {
                 'track': "-t %s",
@@ -551,9 +551,9 @@ for i in range(first, last + 1):
 
 helpers['lame-user'] = helpers['lame'].copy()
 helpers['lame-user'].update({'cmd': "lame --preset cbr %r --strictly-enforce-ISO %i %o",
-                             'vbr-cmd': "lame -V %q --vbr-new --nohist --strictly-enforce-ISO %i %o",
-                             'otf-cmd': "lame --preset cbr %r --strictly-enforce-ISO - %o",
-                             'vbr-otf-cmd': "lame -V %q --vbr-new --nohist --strictly-enforce-ISO - %o", })
+                        'vbr-cmd': "lame -V %q --vbr-new --nohist --strictly-enforce-ISO %i %o",
+                        'otf-cmd': "lame --preset cbr %r --strictly-enforce-ISO - %o",
+                        'vbr-otf-cmd': "lame -V %q --vbr-new --nohist --strictly-enforce-ISO - %o", })
 
 
 def init():

@@ -260,13 +260,13 @@ def ripread(track, offset=0):
     pid, master_fd = pty.fork()  # this could also be done with a pipe, anyone?
     if pid == CHILD:
         # debug:
-        #so=open("/tmp/stdout", "w")
-        #sys.stdout = so
-        #se=open("/tmp/stderr", "w+")
-        #sys.stderr = se
+        # so=open("/tmp/stdout", "w")
+        # sys.stdout = so
+        # se=open("/tmp/stderr", "w+")
+        # sys.stderr = se
         default_signals()
 
-# FIXME: all this offset stuff has to go, track 0 support has to come.
+        # FIXME: all this offset stuff has to go, track 0 support has to come.
 
         print(":fAE: waiting for status report...")
         sys.stdout.flush()
@@ -283,14 +283,14 @@ def ripread(track, offset=0):
         else:
             if cf['_image_file'].upper()[-4:] == ".CDR":
                 hdr = ('cdr', 44100, 2, -1, 16)  # Unknown header, assuming cdr
-#
-# assume old cdrdao which started at track 1, not at block 0
+
+                # assume old cdrdao which started at track 1, not at block 0
                 image_offset = -offset
 
             elif cf['_image_file'].upper()[-4:] == ".BIN":
                 hdr = ('bin', 44100, 2, -1, 16)  # Unknown header, assuming bin
-#
-# assume new cdrdao which starts at block 0, byteorder is reversed.
+
+                # assume new cdrdao which starts at block 0, byteorder is reversed.
                 my_swap_byteorder = not my_swap_byteorder
                 image_offset = 0
 
@@ -303,10 +303,9 @@ def ripread(track, offset=0):
                 posix._exit(4)
 
         expected_filesize = jack.functions.tracksize(jack.ripstuff.all_tracks)[CDR] + CDDA_BLOCKSIZE * offset
-#
-# WAVE header is 44 Bytes for normal PCM files...
-#
+
         if hdr[0] == 'wav':
+            # WAVE header is 44 Bytes for normal PCM files...
             expected_filesize = expected_filesize + 44
 
         if abs(jack.utils.filesize(cf['_image_file']) - expected_filesize) > CDDA_BLOCKSIZE:
@@ -324,25 +323,25 @@ def ripread(track, offset=0):
 
         else:
             f = open(cf['_image_file'], 'rb')
-#
-# set up output wav file:
-#
+
+            # set up output wav file:
+
             wav = wave.open(track[NAME] + ".wav", 'wb')
             wav.setnchannels(2)
             wav.setsampwidth(2)
             wav.setframerate(44100)
             wav.setnframes(0)
             wav.setcomptype('NONE', 'not compressed')
-#
-# calculate (and seek to) position in image file
-#
+
+            # calculate (and seek to) position in image file
+
             track_start = (track[START] + image_offset) * CDDA_BLOCKSIZE
             if hdr[0] == 'wav':
                 track_start = track_start + 44
             f.seek(track_start)
-#
-# copy / convert the stuff
-#
+
+            # copy / convert the stuff
+
             for i in range(0, track[LEN]):
                 buf = array.array("h")
                 buf.fromfile(f, 1176)  # CDDA_BLOCKSIZE / 2
@@ -367,7 +366,8 @@ def ripread(track, offset=0):
                 print("[cdr-WARNING, check byteorder !]")
             sys.stdout.flush()
             posix._exit(0)
-    else:  # we are not the child
+    else:
+        # we are not the child
         data['start_time'] = start_time
         data['pid'] = pid
         data['fd'] = master_fd

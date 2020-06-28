@@ -41,17 +41,17 @@ class TOC:
                 self.data[i].image_name = entry.image_name
             self.in_need_of_image_name = []
 
-# if the entry has a pregap this needs to be added to the previous track and
-# substracted from the current one
-
         if entry.pregap:
+            # if the entry has a pregap this needs to be added to the previous track and
+            # substracted from the current one
+
             self.data[-1].length = self.data[-1].length + entry.pregap
             self.end_pos = self.end_pos + entry.pregap
         self.data.append(entry)
 
         self.end_pos = self.end_pos + entry.length
 
-# update image_file
+        # update image_file
 
         self.same_image()
 

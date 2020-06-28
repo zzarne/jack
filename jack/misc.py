@@ -27,7 +27,7 @@ def id(x):
 
 
 def multi_replace(s, rules, where, filter=id, warn=0):
-    "like str.replace but take list (('from0', 'to0'), ('from1', 'to1'))..."
+    "like string.replace but take list (('from0', 'to0'), ('from1', 'to1'))..."
 
     if warn == 2:
         do_warn = jack.globals.error
@@ -35,7 +35,8 @@ def multi_replace(s, rules, where, filter=id, warn=0):
         do_warn = jack.globals.warning
 
     # get a list of characters we need to replace (i.e. the x from %x)
-    # currently all from must be like %x (a percent sign follow by single char).
+    # currently all from must be like %x (a percent sign follow by single
+    # char).
     pattern = [x[0] for x in s[s.find("%"):].split("%") if x]
     for p in pattern:
         if p not in rules:

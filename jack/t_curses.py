@@ -16,8 +16,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-from curses import endwin, A_REVERSE, newwin, newpad, initscr, noecho, \
-    cbreak, echo, nocbreak, error, resizeterm
+from curses import endwin, A_REVERSE, newwin, newpad, initscr, noecho
+from curses import cbreak, echo, nocbreak, error, resizeterm
 import termios
 import sys
 import signal
@@ -106,7 +106,7 @@ def disable():
     global enabled
     if enabled:
         # re-install previous sighandler
-        #signal.signal(signal.SIGWINCH, jack.term.sig_winch_cache)
+        # signal.signal(signal.SIGWINCH, jack.term.sig_winch_cache)
         signal.signal(signal.SIGWINCH, signal.SIG_IGN)
         # Set everything back to normal
         stdscr.keypad(0)
@@ -201,7 +201,6 @@ def sig_winch_handler(sig, frame):
         if pad_start_y < pad_end_y:
             status_pad.refresh(pad_y, pad_x, pad_start_y, pad_start_x, pad_end_y, pad_end_x)
     signal.signal(signal.SIGWINCH, sig_winch_handler)
-#/ end of sig_winch_handler(sig, frame) /#
 
 
 def move_pad(cmd):
@@ -259,7 +258,7 @@ def enc_stat_upd(num, string):
 
 
 def dae_stat_upd(num, string, reverse=-1):
-    track = jack.ripstuff.all_tracks[num-1]
+    track = jack.ripstuff.all_tracks[num - 1]
     if reverse >= 0:
         split_point = int(6.5 + reverse / 100.0 * 32)
         front = jack.ripstuff.printable_names[num] + ": " + jack.status.dae_status[num][:6]
