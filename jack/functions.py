@@ -25,10 +25,10 @@ import sys
 import os
 import locale
 
-import jack.TOCentry
-import jack.CDTime
+import jack.tocentry
+import jack.cdtime
 import jack.utils
-import jack.TOC
+import jack.toc
 import jack.mp3
 import jack.helpers
 import jack.freedb
@@ -256,7 +256,7 @@ def blockstomsf(blocks):
 
 def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
     "returns TOC object, needs name of toc-file to read"
-    toc = jack.TOC.TOC()
+    toc = jack.toc.TOC()
 
     if not os.path.exists(tocfile):
         error("Can't open TOC file '%s': file does not exist." % os.path.abspath(tocfile))
@@ -270,7 +270,7 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
 # a virtual track 0 is introduced which gets all of track 1s pregap.
 # it is removed later if it is too small to contain anything interesting.
 
-    actual_track = jack.TOCentry.TOCentry()
+    actual_track = jack.tocentry.TOCentry()
     actual_track.number = 0
     actual_track.type = "audio"
     actual_track.channels = 2
@@ -300,7 +300,7 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
 
         if line.startswith("TRACK "):
             num = num + 1
-            new_track = jack.TOCentry.TOCentry()
+            new_track = jack.tocentry.TOCentry()
             new_track.number = num
             if actual_track:
                 if actual_track.channels not in [1, 2, 4]:
@@ -345,7 +345,7 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
 
 # convert time string to blocks(int), update info.
 
-            actual_track.length = jack.CDTime.CDTime(length).blocks
+            actual_track.length = jack.cdtime.CDTime(length).blocks
             actual_track.image_name = os.path.join(tocpath, filename)
             actual_track.rip_name = cf['_name'] % num
 
@@ -356,7 +356,7 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
 # by setting the pregap attribute.
 
         elif line.startswith("START "):
-            actual_track.pregap = jack.CDTime.CDTime(line.split()[1]).blocks
+            actual_track.pregap = jack.cdtime.CDTime(line.split()[1]).blocks
 
     f.close()
     return toc
