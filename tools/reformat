@@ -1,0 +1,12 @@
+#!/bin/sh
+
+autopep8 \
+       	--in-place \
+	jack/argv.py
+
+autopep8 \
+	--max-line-length 200 \
+       	--in-place \
+        $( find . -name \*.py | grep -v '^\./deprecated/' )
+
+
