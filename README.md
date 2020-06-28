@@ -18,10 +18,6 @@ Jack is different from other such tools in a number of ways:
 - it can do a gnudb query based on OGGs alone, like if you don't remember from which CD those OGGs came from.
 - gnudb submissions
 
-## News
-
-Jack is back! After a small 15 year hiatus, development has resumed.
-
 Many thanks to the [friendly Debian maintainers](https://github.com/zzarne/jack/blob/master/debian/copyright) who kept Jack alive all these years!
 
 ## Freedb
@@ -31,9 +27,8 @@ to ~/.jack_plugins/ (create directory). Then run
 ```bash
 jack --server plugin_gnudb --save
 ```
-## Goals
+## Project status
 
-Current development goals include:
-- Support Python 3 to allow it to be included in distributions which no longer support Python 2. See [this branch](https://github.com/zzarne/jack/tree/port-python3). Support for Python versions before 3 will be dropped.
-- Get the character encodings right. It's been a mess in old Python and Jack.
-- Get Jack into PyPI
+This project will stay at Python 2 and will not get any new features.
+
+New features and Python 3 support can be found [here](https://github.com/pimzand/jack).
