@@ -1,21 +1,21 @@
 # -*- coding: iso-8859-15 -*-
-### jack.functions: functions for
-### jack - extract audio from a CD and encode it using 3rd party software
-### Copyright (C) 1999-2003  Arne Zellentin <zarne@users.sf.net>
+# jack.functions: functions for
+# jack - extract audio from a CD and encode it using 3rd party software
+# Copyright (C) 1999-2003  Arne Zellentin <zarne@users.sf.net>
 
-### This program is free software; you can redistribute it and/or modify
-### it under the terms of the GNU General Public License as published by
-### the Free Software Foundation; either version 2 of the License, or
-### (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-### GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-### You should have received a copy of the GNU General Public License
-### along with this program; if not, write to the Free Software
-### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import codecs
 import traceback
@@ -41,7 +41,8 @@ progress_changed = None
 
 progress_changed = 0
 
-def df(fs = ".", blocksize = 1024):
+
+def df(fs=".", blocksize=1024):
     "returns free space on a filesystem (in bytes)"
     try:
         from os import statvfs
@@ -63,13 +64,15 @@ def df(fs = ".", blocksize = 1024):
                 return int(s[i]) * int(blocksize)
         p.close()
 
+
 def get_sysload_linux_proc():
     "extract sysload from /proc/loadavg, linux only (?)"
     f = open("/proc/loadavg", "r")
     loadavg = float(f.readline().split()[0])
     return loadavg
 
-def pprint_i(num, fmt = "%i%s", scale = 2.0**10, max = 4):
+
+def pprint_i(num, fmt="%i%s", scale=2.0**10, max=4):
     "return a string describing an int in a more human-readable way"
     c = ""
     change = 0
@@ -88,6 +91,7 @@ def pprint_i(num, fmt = "%i%s", scale = 2.0**10, max = 4):
             return fmt.replace("%i", "%s") % (repr(num)[:4], c)
     else:
         return fmt % (num, c)
+
 
 def pprint_speed(s, len=4):
     if len >= 4:
@@ -112,6 +116,7 @@ def pprint_speed(s, len=4):
             return "999"
     else:
         return "X" * len
+
 
 def gettoc(toc_prog):
     "Returns track list"
@@ -140,6 +145,7 @@ def gettoc(toc_prog):
                hex number).""" % toc_prog)
         return erg
 
+
 def guesstoc(names):
     "Return track list based on guessed lengths"
     num = 1
@@ -163,7 +169,7 @@ def guesstoc(names):
             if not x:
                 error("this is not WAV-format: " + i)
             if x != ('wav', 44100, 2, -1, 16):
-                error("unsupported format " + repr(x) +  " in " + i)
+                error("unsupported format " + repr(x) + " in " + i)
             blocks = jack.utils.filesize(i)
             blocks = blocks - 44    # substract WAV header
             extra_bytes = blocks % CDDA_BLOCKSIZE
@@ -215,11 +221,13 @@ def guesstoc(names):
         num = num + 1
         start = start + blocks
     for i in progr:     # this is deferred so that it is only written if no
-                        # files fail
+        # files fail
         progress(i)
     return erg
 
-#XXX will be moved to jack.convert
+# XXX will be moved to jack.convert
+
+
 def timestrtoblocks(s):
     "convert mm:ss:ff to blocks"
     s = s.split(":")
@@ -228,7 +236,10 @@ def timestrtoblocks(s):
     blocks = blocks + int(s[0]) * 60 * CDDA_BLOCKS_PER_SECOND
     return blocks
 
+
 B_MM, B_SS, B_FF = 0, 1, 2
+
+
 def blockstomsf(blocks):
     from jack.globals import CDDA_BLOCKS_PER_SECOND
     "convert blocks to mm, ss, ff"
@@ -238,8 +249,9 @@ def blockstomsf(blocks):
     ff = blocks % CDDA_BLOCKS_PER_SECOND
     return mm, ss, ff, blocks
 
-## #XXX the following will be used if all references to it have been updated.
-## meanwhile the wrapper below is used.
+# XXX the following will be used if all references to it have been updated.
+# meanwhile the wrapper below is used.
+
 
 def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
     "returns TOC object, needs name of toc-file to read"
@@ -269,28 +281,28 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
     actual_track.image_name = ""
     actual_track.rip_name = cf['_name'] % 0
 
-## tocfile data is read in line by line.
+# tocfile data is read in line by line.
 
     num = 0
     while 1:
         line = f.readline()
         if not line:
-            if actual_track.channels not in [1,2,4]:
+            if actual_track.channels not in [1, 2, 4]:
                 debug("track %02d: unknown number of channels, assuming 2" % num)
                 actual_track.channels = 2
             toc.append(actual_track)
             break
         line = line.strip()
 
-## everytime we encounter "TRACK" we increment num and append the actual
-## track to the toc.
+# everytime we encounter "TRACK" we increment num and append the actual
+# track to the toc.
 
         if line.startswith("TRACK "):
             num = num + 1
             new_track = jack.TOCentry.TOCentry()
             new_track.number = num
             if actual_track:
-                if actual_track.channels not in [1,2,4]:
+                if actual_track.channels not in [1, 2, 4]:
                     debug("track %02d: unknown number of channels, assuming 2" % num)
                     actual_track.channels = 2
                 toc.append(actual_track)
@@ -301,14 +313,14 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
             if line == "TRACK AUDIO":
                 actual_track.type = "audio"
             else:
-                actual_track.type = "other" # we don't care
+                actual_track.type = "other"  # we don't care
                 actual_track.channels = 0
                 actual_track.rip = 0
                 actual_track.bitrate = 0
 
-## check the various track flags.
-## FOUR_CHANNEL_AUDIO is not supported.
-## we have to check for this before ripping. later. much later.
+# check the various track flags.
+# FOUR_CHANNEL_AUDIO is not supported.
+# we have to check for this before ripping. later. much later.
 
         elif line == "NO COPY":
             actual_track.copy = 0
@@ -323,24 +335,24 @@ def real_cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
         elif line == "FOUR_CHANNEL_AUDIO":
             actual_track.channels = 4
 
-## example: FILE "data.wav" 08:54:22 04:45:53
+# example: FILE "data.wav" 08:54:22 04:45:53
 
         elif line.startswith("FILE "):
             filename = line[line.find("\"") + 1:line.rfind("\"")]
             offsets = line[line.rfind("\"") + 1:].strip()
             start, length = offsets.split()[:2]
 
-## convert time string to blocks(int), update info.
+# convert time string to blocks(int), update info.
 
             actual_track.length = jack.CDTime.CDTime(length).blocks
             actual_track.image_name = os.path.join(tocpath, filename)
             actual_track.rip_name = cf['_name'] % num
 
-## example: START 00:01:53. This means the actual track starts 1:53s _after_
-## the start given by the FILE statement. This so-called pregap needs to be
-## added to the length of the previous track, added to the start of the
-## actual track and subtracted from its length. This is done automagically
-## by setting the pregap attribute.
+# example: START 00:01:53. This means the actual track starts 1:53s _after_
+# the start given by the FILE statement. This so-called pregap needs to be
+# added to the length of the previous track, added to the start of the
+# actual track and subtracted from its length. This is done automagically
+# by setting the pregap attribute.
 
         elif line.startswith("START "):
             actual_track.pregap = jack.CDTime.CDTime(line.split()[1]).blocks
@@ -359,10 +371,11 @@ def cdrdao_gettoc(tocfile):     # get toc from cdrdao-style toc-file
     return tracks[1:], use_filename, track1_pregap
 
 
-##XXX this will be moved to jack.convert
+# XXX this will be moved to jack.convert
 def msftostr(msf):
     "convert msf format to readable string"
     return "%02i" % msf[B_MM]+":"+"%02i" % msf[B_SS]+":"+"%02i" % msf[B_FF]
+
 
 def cdrdao_puttoc(tocfile, tracks, cd_id):     # put toc to cdrdao toc-file
     "writes toc-file from tracks"
@@ -397,11 +410,12 @@ def cdrdao_puttoc(tocfile, tracks, cd_id):     # put toc to cdrdao toc-file
             x = x + i[START]
         x = blockstomsf(x)
         f.write("%02i" % x[B_MM] + ":" + "%02i" % x[B_SS] + ":" + "%02i" % x[B_FF] + "\n")
-        if i[NUM]==1 and i[START] != 0:
+        if i[NUM] == 1 and i[START] != 0:
             f.write("START "+msftostr(blockstomsf(i[START]))+"\n")
         f.write("\n")
 
-def tracksize(list, dont_dae = [], blocksize = 1024):
+
+def tracksize(list, dont_dae=[], blocksize=1024):
     "Calculates all kind of sizes for a track or a list of tracks."
     if list and type(list[0]) == int:
         list = ((list, ))
@@ -420,12 +434,13 @@ def tracksize(list, dont_dae = [], blocksize = 1024):
         wavsize = wavsize + thiscdrsize + 44
         cdrsize = cdrsize + thiscdrsize
         now = encoded_size + thiscdrsize + 44
-        if now>peak:
+        if now > peak:
             at = track[NUM]
             peak = now
     return encoded_size, wavsize, encoded_size + wavsize, peak, at, cdrsize, blocks
 
-def progress(track, what="error", data="error", data2 = None):
+
+def progress(track, what="error", data="error", data2=None):
     "append a line to the progress file"
     global progress_changed
     if type(track) in (tuple, list):
@@ -443,16 +458,17 @@ def progress(track, what="error", data="error", data2 = None):
     else:
         error("illegal progress entry:" + repr(track) + " (" + repr(type(track)) + ")")
     progress_changed = 1
-    f = codecs.open (cf['_progress_file'], "a", "utf-8")
+    f = codecs.open(cf['_progress_file'], "a", "utf-8")
     f.write(first + cf['_progr_sep'] + what + cf['_progr_sep'] + data)
     if data2:
         f.write(cf['_progr_sep'] + data2)
     f.write("\n")
     f.close()
 
+
 def check_genre_txt(genre):
     if isinstance(genre, int):
-        if genre in range(0,256):
+        if genre in range(0, 256):
             return genre
         else:
             return None
@@ -462,7 +478,7 @@ def check_genre_txt(genre):
             info("available genres: " + str.join([x for x in eyeD3.genres if x != 'Unknown'], ", "))
             sys.exit(0)
         elif genre.upper() == "NONE":
-            return 255 # set genre to [unknown]
+            return 255  # set genre to [unknown]
         else:
             try:
                 genre = int(genre)
@@ -477,6 +493,7 @@ def check_genre_txt(genre):
     import jack.version
     error("illegal genre. Try '" + jack.version.name + " --id3-genre help' for a list.")
 
+
 def check_file(num, i, ext):
     "Check if a song exists, either with a generic name or with the FreeDB name"
     if os.path.exists(i[NAME] + ext):
@@ -486,4 +503,3 @@ def check_file(num, i, ext):
         if os.path.exists(s + ext):
             return s
     return None
-

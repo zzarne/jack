@@ -26,48 +26,49 @@ import struct
 
 # #define CDROMREADTOCHDR         0x5305 /* Read TOC header
 #                                          (struct cdrom_tochdr) */
-CDROMREADTOCHDR =       0x5305
+CDROMREADTOCHDR = 0x5305
 CDDB_READ_TOC_HEADER_FLAG = CDROMREADTOCHDR
 
 # #define CDROMREADTOCENTRY       0x5306 /* Read TOC entry
 #                                            (struct cdrom_tocentry) */
-CDROMREADTOCENTRY =     0x5306
+CDROMREADTOCENTRY = 0x5306
 CDDB_READ_TOC_ENTRY_FLAG = CDROMREADTOCENTRY
 
 # /* The leadout track is always 0xAA, regardless of # of tracks on disc */
 # #define CDROM_LEADOUT           0xAA
-CDROM_LEADOUT =         0xAA
+CDROM_LEADOUT = 0xAA
 CDDB_CDROM_LEADOUT = CDROM_LEADOUT
 
 # #define CDROM_MSF 0x02 /* "minute-second-frame": binary, not bcd here! */
-CDROM_MSF =               0x02
+CDROM_MSF = 0x02
 
 # /* This struct is used by the CDROMREADTOCENTRY ioctl */
 # struct cdrom_tocentry
 # {
-        # __u8    cdte_track;
-        # __u8    cdte_adr        :4; /* uses only 4 bits of the __u8 */
-        # __u8    cdte_ctrl       :4;
-        # __u8    cdte_format;
-        # union cdrom_addr cdte_addr;
-        # __u8    cdte_datamode;
+# __u8    cdte_track;
+# __u8    cdte_adr        :4; /* uses only 4 bits of the __u8 */
+# __u8    cdte_ctrl       :4;
+# __u8    cdte_format;
+# union cdrom_addr cdte_addr;
+# __u8    cdte_datamode;
 # }; // pack: BBB (BBB|l) B
 cdrom_tocentry = "BBB BBBBBBBB B"
 
 # /* Address in either MSF or logical format */
 # union cdrom_addr
 # {
-        # struct cdrom_msf0       msf;
-        # int                     lba;
+# struct cdrom_msf0       msf;
+# int                     lba;
 # }; // pack: BBB|l
 
 # /* Address in MSF format */
 # struct cdrom_msf0
 # {
-        # __u8    minute;
-        # __u8    second;
-        # __u8    frame;
+# __u8    minute;
+# __u8    second;
+# __u8    frame;
 # }; // BBB
+
 
 def toc_header(f):
     cdrom_fd = f.fileno()
@@ -75,8 +76,8 @@ def toc_header(f):
     # struct CDDB_TOC_HEADER_STRUCT hdr -> cdrom_tochdr
     # struct cdrom_tochdr
     # {
-            # __u8    cdth_trk0;      /* start track */
-            # __u8    cdth_trk1;      /* end track */
+    # __u8    cdth_trk0;      /* start track */
+    # __u8    cdth_trk1;      /* end track */
     # };
 
     hdr = bytearray(2)
@@ -84,6 +85,7 @@ def toc_header(f):
     fcntl.ioctl(cdrom_fd, CDDB_READ_TOC_HEADER_FLAG, hdr)
 
     return list(hdr)
+
 
 def toc_entry(f, track):
     cdrom_fd = f.fileno()
@@ -97,16 +99,18 @@ def toc_entry(f, track):
     #     entry.CDDB_FORMAT_FIELD = CDDB_MSF_FORMAT;
 
     entry = bytearray(struct.pack(cdrom_tocentry,
-            track, 0, CDROM_MSF,
-            0, 0, 0, 0, 0, 0, 0, 0,
-            0))
+                                  track, 0, CDROM_MSF,
+                                  0, 0, 0, 0, 0, 0, 0, 0,
+                                  0))
 
     fcntl.ioctl(cdrom_fd, CDDB_READ_TOC_ENTRY_FLAG, entry)
 
     return struct.unpack(cdrom_tocentry, entry)[4:7]
 
+
 def leadout(f):
     return toc_entry(f, CDDB_CDROM_LEADOUT)
+
 
 def open(cdrom_device, cdrom_open_flags=0):
     if not cdrom_open_flags == 0:

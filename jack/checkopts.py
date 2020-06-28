@@ -1,20 +1,20 @@
-### jack.checkopts: check the options for consistency, a module for
-### jack - extract audio from a CD and encode it using 3rd party software
-### Copyright (C) 1999-2004  Arne Zellentin <zarne@users.sf.net>
+# jack.checkopts: check the options for consistency, a module for
+# jack - extract audio from a CD and encode it using 3rd party software
+# Copyright (C) 1999-2004  Arne Zellentin <zarne@users.sf.net>
 
-### This program is free software; you can redistribute it and/or modify
-### it under the terms of the GNU General Public License as published by
-### the Free Software Foundation; either version 2 of the License, or
-### (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-### GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-### You should have received a copy of the GNU General Public License
-### along with this program; if not, write to the Free Software
-### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import signal
 import sys
@@ -30,12 +30,14 @@ import jack.freedb
 import jack.helpers
 
 # special option handling
+
+
 def checkopts(cf, cf2):
     if 'image_file' in cf2:
-        cf.rupdate({'rip_from_device': {'val': 0}, 'read_ahead':{'val': 1}}, "check")
+        cf.rupdate({'rip_from_device': {'val': 0}, 'read_ahead': {'val': 1}}, "check")
 
     if 'image_toc_file' in cf2:
-        cf.rupdate({'rip_from_device': {'val': 0}, 'read_ahead':{'val': 1}}, "check")
+        cf.rupdate({'rip_from_device': {'val': 0}, 'read_ahead': {'val': 1}}, "check")
 
     if 'space_from_argv' in cf2:
         cf.rupdate({'space_set_from_argv': {'val': 1}}, "check")
@@ -44,7 +46,7 @@ def checkopts(cf, cf2):
         cf.rupdate({'encoders': {'val': 0}}, "check")
 
     if 'query_when_ready' in cf2 and cf2['query_when_ready']['val']:
-        cf.rupdate({'read_freedb_file': {'val': 1}, 'set_id3tag':{'val': 1}}, "check")
+        cf.rupdate({'read_freedb_file': {'val': 1}, 'set_id3tag': {'val': 1}}, "check")
 
     if 'query_on_start' in cf2 and cf2['query_on_start']['val']:
         cf.rupdate({'set_id3tag': {'val': 1}}, "check")
@@ -53,7 +55,7 @@ def checkopts(cf, cf2):
         cf.rupdate({'rename_dir': {'val': 1}}, "check")
 
     if 'freedb_rename' in cf2 and cf2['freedb_rename']['val']:
-        cf.rupdate({'read_freedb_file': {'val': 1}, 'set_id3tag':{'val': 1}}, "check")
+        cf.rupdate({'read_freedb_file': {'val': 1}, 'set_id3tag': {'val': 1}}, "check")
 
     if 'edit_cddb' in cf2:
         warning("--edit-cddb is obsolete, please use --edit-freedb")
@@ -77,6 +79,7 @@ def checkopts(cf, cf2):
         if i not in cf:
             error("unknown config item `%s'" % i)
 
+
 def consistency_check(cf):
 
     # set plugins path and import freedb_server plugin
@@ -90,7 +93,8 @@ def consistency_check(cf):
 
     # check dir_template and scan_dirs
     if len(cf['_dir_template'].split(os.path.sep)) > cf['_scan_dirs']:
-        warning("dir-template consists of more sub-paths (%i) than scan-dirs (%i). Jack may not find the workdir next time it is run. (Auto-raised)" % (len(cf['_dir_template'].split(os.path.sep)), cf['_scan_dirs']))
+        warning("dir-template consists of more sub-paths (%i) than scan-dirs (%i). Jack may not find the workdir next time it is run. (Auto-raised)" %
+                (len(cf['_dir_template'].split(os.path.sep)), cf['_scan_dirs']))
         cf.rupdate({'scan_dirs': {'val': len(cf['_dir_template'].split(os.path.sep))}}, "check")
 
     # check for unsername
@@ -125,13 +129,13 @@ def consistency_check(cf):
         debug("mail is " + jack.freedb.freedb_servers[cf['freedb_server']['val']]['my_mail'] + ", was " + tmp_mail + " / " + tmp_mail2)
         del tmp_mail, tmp_mail2
 
-    #if cf.has_key('charset'):
+    # if cf.has_key('charset'):
     #    if not cf['char_filter']['val']:
     #        warning("charset has no effect without a char_filter")
     #                 this is not true, the ogg tag uses this.
 
     if len(cf['replacement_chars']['val']) == 0:
-        cf.rupdate({'replacement_chars': {'val': ["",]}}, "check")
+        cf.rupdate({'replacement_chars': {'val': ["", ]}}, "check")
 
     # stretch replacement_chars
     if len(cf['_unusable_chars']) > len(cf['_replacement_chars']):
@@ -219,6 +223,8 @@ def consistency_check(cf):
 # Checks concerning options specified by the user (in the global or user rc
 # files or the command line), i.e. options/values that are not the default
 # jack options from jack.config.
+
+
 def check_rc(cf, global_cf, user_cf, argv_cf):
 
     all_keys = list(global_cf.keys()) + list(user_cf.keys()) + list(argv_cf.keys())
@@ -250,7 +256,7 @@ def check_rc(cf, global_cf, user_cf, argv_cf):
 
     # If the default CD device doesn't exist, see whether we can find another one
     if ('cd_device' not in all_keys and cf["rip_from_device"]["val"] and
-        not os.path.exists(cf["cd_device"]["val"])):
+            not os.path.exists(cf["cd_device"]["val"])):
         default = cf["cd_device"]["val"]
         devices = []
         # All CD devices can be found in /proc on Linux
@@ -288,4 +294,3 @@ def check_rc(cf, global_cf, user_cf, argv_cf):
                     input = 0
             devices[0] = devices[input-1]
             cf.rupdate({'cd_device': {'val': devices[0]}}, "check")
-

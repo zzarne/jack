@@ -1,20 +1,20 @@
-### jack.workers: worker functions for
-### jack - extract audio from a CD and encode it using 3rd party software
-### Copyright (C) 1999-2004  Arne Zellentin <zarne@users.sf.net>
+# jack.workers: worker functions for
+# jack - extract audio from a CD and encode it using 3rd party software
+# Copyright (C) 1999-2004  Arne Zellentin <zarne@users.sf.net>
 
-### This program is free software; you can redistribute it and/or modify
-### it under the terms of the GNU General Public License as published by
-### the Free Software Foundation; either version 2 of the License, or
-### (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-### GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-### You should have received a copy of the GNU General Public License
-### along with this program; if not, write to the Free Software
-### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import sndhdr
 import signal
@@ -38,6 +38,7 @@ from jack.globals import *
 from jack.helpers import helpers
 from jack.init import F_SETFL, O_NONBLOCK
 
+
 def default_signals():
     signal.signal(signal.SIGTERM, signal.SIG_DFL)
     signal.signal(signal.SIGINT, signal.SIG_DFL)
@@ -45,7 +46,8 @@ def default_signals():
     signal.signal(signal.SIGHUP, signal.SIG_DFL)
     signal.signal(signal.SIGWINCH, signal.SIG_DFL)
 
-def start_new_process(args, nice_value = 0):
+
+def start_new_process(args, nice_value=0):
     "start a new process in a pty and renice it"
     data = {}
     data['start_time'] = time.time()
@@ -68,21 +70,27 @@ def start_new_process(args, nice_value = 0):
         data['elapsed'] = 0
         return data
 
+
 def start_new_ripper(track, ripper):
     "start a new DAE process"
     helper = helpers[cf['_ripper']]
     cmd = helper['cmd'].split()
     args = []
     for i in cmd:
-        if i == "%n": args.append(repr(track[NUM]))
-        elif i == "%o": args.append(track[NAME] + ".wav")
-        elif i == "%d": args.append(cf['_cd_device'])
-        else: args.append(i)
+        if i == "%n":
+            args.append(repr(track[NUM]))
+        elif i == "%o":
+            args.append(track[NAME] + ".wav")
+        elif i == "%d":
+            args.append(cf['_cd_device'])
+        else:
+            args.append(i)
     data = start_new_process(args)
     data['type'] = "ripper"
     data['prog'] = cf['_ripper']
     data['track'] = track
     return data
+
 
 def start_new_encoder(track, encoder):
     "start a new encoder process"
@@ -129,11 +137,15 @@ def start_new_encoder(track, encoder):
                     else:
                         args.append("")
                 elif i == "%G":
-                    if cf['_id3_genre'] >= 0: args.append(cf['_id3_genre'])
-                    else: args.append('255')
+                    if cf['_id3_genre'] >= 0:
+                        args.append(cf['_id3_genre'])
+                    else:
+                        args.append('255')
                 elif i == "%g":
-                    if cf['_id3_genre'] >= 0: args.append(jack.tag.genretxt)
-                    else: args.append('Unknown')
+                    if cf['_id3_genre'] >= 0:
+                        args.append(jack.tag.genretxt)
+                    else:
+                        args.append('Unknown')
                 elif i == "%y":
                     if cf['_id3_year'] > 0:
                         args.append(repr(cf['_id3_year']))
@@ -149,6 +161,7 @@ def start_new_encoder(track, encoder):
     data['track'] = track
     return data
 
+
 def start_new_otf(track, ripper, encoder):
     "start a new ripper/encoder pair for on-the-fly encoding"
     data = {}
@@ -161,9 +174,12 @@ def start_new_otf(track, ripper, encoder):
     data['enc']['fd'], enc_err = os.pipe()
     args = []
     for i in helpers[ripper]['otf-cmd'].split():
-        if i == "%n": args.append(repr(track[NUM]))
-        elif i == "%d": args.append(cf['_cd_device'])
-        else: args.append(i)
+        if i == "%n":
+            args.append(repr(track[NUM]))
+        elif i == "%d":
+            args.append(cf['_cd_device'])
+        else:
+            args.append(i)
     data['rip']['start_time'] = time.time()
     pid = os.fork()
     if pid == CHILD:
@@ -236,13 +252,14 @@ def start_new_otf(track, ripper, encoder):
     data['enc']['file'] = os.fdopen(data['enc']['fd'])
     return data
 
-def ripread(track, offset = 0):
+
+def ripread(track, offset=0):
     "rip one track from an image file."
     data = {}
     start_time = time.time()
-    pid, master_fd = pty.fork() # this could also be done with a pipe, anyone?
+    pid, master_fd = pty.fork()  # this could also be done with a pipe, anyone?
     if pid == CHILD:
-        #debug:
+        # debug:
         #so=open("/tmp/stdout", "w")
         #sys.stdout = so
         #se=open("/tmp/stderr", "w+")
@@ -258,27 +275,27 @@ def ripread(track, offset = 0):
         my_offset = offset
         if hdr:
 
-## I guess most people use cdparanoia 1- (instead of 0- if applicable)
-## for image creation, so for a wav file use:
+            # I guess most people use cdparanoia 1- (instead of 0- if applicable)
+            # for image creation, so for a wav file use:
 
             image_offset = -offset
 
         else:
             if cf['_image_file'].upper()[-4:] == ".CDR":
-                hdr = ('cdr', 44100, 2, -1, 16) # Unknown header, assuming cdr
+                hdr = ('cdr', 44100, 2, -1, 16)  # Unknown header, assuming cdr
 #
-## assume old cdrdao which started at track 1, not at block 0
+# assume old cdrdao which started at track 1, not at block 0
                 image_offset = -offset
 
             elif cf['_image_file'].upper()[-4:] == ".BIN":
-                hdr = ('bin', 44100, 2, -1, 16) # Unknown header, assuming bin
+                hdr = ('bin', 44100, 2, -1, 16)  # Unknown header, assuming bin
 #
-## assume new cdrdao which starts at block 0, byteorder is reversed.
+# assume new cdrdao which starts at block 0, byteorder is reversed.
                 my_swap_byteorder = not my_swap_byteorder
                 image_offset = 0
 
             elif cf['_image_file'].upper()[-4:] == ".RAW":
-                hdr = ('bin', 44100, 2, -1, 16) # Unknown header, assuming raw
+                hdr = ('bin', 44100, 2, -1, 16)  # Unknown header, assuming raw
                 image_offset = 0
 
             else:
@@ -287,7 +304,7 @@ def ripread(track, offset = 0):
 
         expected_filesize = jack.functions.tracksize(jack.ripstuff.all_tracks)[CDR] + CDDA_BLOCKSIZE * offset
 #
-## WAVE header is 44 Bytes for normal PCM files...
+# WAVE header is 44 Bytes for normal PCM files...
 #
         if hdr[0] == 'wav':
             expected_filesize = expected_filesize + 44
@@ -308,7 +325,7 @@ def ripread(track, offset = 0):
         else:
             f = open(cf['_image_file'], 'rb')
 #
-## set up output wav file:
+# set up output wav file:
 #
             wav = wave.open(track[NAME] + ".wav", 'wb')
             wav.setnchannels(2)
@@ -317,18 +334,18 @@ def ripread(track, offset = 0):
             wav.setnframes(0)
             wav.setcomptype('NONE', 'not compressed')
 #
-## calculate (and seek to) position in image file
+# calculate (and seek to) position in image file
 #
             track_start = (track[START] + image_offset) * CDDA_BLOCKSIZE
             if hdr[0] == 'wav':
                 track_start = track_start + 44
             f.seek(track_start)
 #
-## copy / convert the stuff
+# copy / convert the stuff
 #
             for i in range(0, track[LEN]):
                 buf = array.array("h")
-                buf.fromfile(f, 1176) # CDDA_BLOCKSIZE / 2
+                buf.fromfile(f, 1176)  # CDDA_BLOCKSIZE / 2
                 if not my_swap_byteorder:  # this is inverted as WAVE swabs them anyway.
                     buf.byteswap()
                 wav.writeframesraw(buf.tostring())
@@ -339,7 +356,7 @@ def ripread(track, offset = 0):
             f.close()
 
             stop_time = time.time()
-            read_speed = track[LEN] // CDDA_BLOCKS_PER_SECOND // ( stop_time - start_time )
+            read_speed = track[LEN] // CDDA_BLOCKS_PER_SECOND // (stop_time - start_time)
             if read_speed < 100:
                 print("[%2.0fx]" % read_speed, end=' ')
             else:
@@ -350,7 +367,7 @@ def ripread(track, offset = 0):
                 print("[cdr-WARNING, check byteorder !]")
             sys.stdout.flush()
             posix._exit(0)
-    else: # we are not the child
+    else:  # we are not the child
         data['start_time'] = start_time
         data['pid'] = pid
         data['fd'] = master_fd
@@ -364,4 +381,3 @@ def ripread(track, offset = 0):
         data['otf'] = 0
         data['elapsed'] = 0
     return data
-

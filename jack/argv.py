@@ -1,20 +1,20 @@
-### jack.argv - argv parser and help printing -- part of
-### jack - extract audio from a CD and MP3ify it using 3rd party software
-### Copyright (C) 2002-2004  Arne Zellentin <zarne@users.sf.net>
+# jack.argv - argv parser and help printing -- part of
+# jack - extract audio from a CD and MP3ify it using 3rd party software
+# Copyright (C) 2002-2004  Arne Zellentin <zarne@users.sf.net>
 
-### This program is free software; you can redistribute it and/or modify
-### it under the terms of the GNU General Public License as published by
-### the Free Software Foundation; either version 2 of the License, or
-### (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-### GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-### You should have received a copy of the GNU General Public License
-### along with this program; if not, write to the Free Software
-### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import sys
 
@@ -23,6 +23,7 @@ import jack.generic
 
 from jack.globals import *
 from jack.misc import safe_int
+
 
 def show_usage(cf, longhelp=0):
     l = []
@@ -62,7 +63,8 @@ While Jack is running, press q or Q to quit,
     else:
         print("These are the most common options. For a complete list, run jack --longhelp")
 
-def get_next(argv, i, extra_arg = None, allow_equal = 1):
+
+def get_next(argv, i, extra_arg=None, allow_equal=1):
     if extra_arg != None:
         return i, extra_arg
     elif allow_equal and argv[i].find("=") > 0:
@@ -74,8 +76,10 @@ def get_next(argv, i, extra_arg = None, allow_equal = 1):
         else:
             return i, None
 
+
 def istrue(x):
     return x.upper() in ["Y", "YES", "1", "TRUE"]
+
 
 def parse_option(cf, argv, i, option, alt_arg, origin="argv"):
     ty = cf[option]['type']
@@ -118,8 +122,10 @@ def parse_option(cf, argv, i, option, alt_arg, origin="argv"):
     if ty == list:
         l = []
         if origin == "argv":
-            valid_short_opts = [cf[key]['short'] for key in list(cf.keys()) if 'short' in cf[key]]
-            valid_long_opts = [cf[key]['long'] for key in list(cf.keys()) if 'long' in cf[key]]
+            valid_short_opts = [cf[key]['short']
+                                for key in list(cf.keys()) if 'short' in cf[key]]
+            valid_long_opts = [cf[key]['long']
+                               for key in list(cf.keys()) if 'long' in cf[key]]
             while 1:
                 i, data = get_next(argv, i, alt_arg, 0)
                 if data != None:
@@ -136,7 +142,7 @@ def parse_option(cf, argv, i, option, alt_arg, origin="argv"):
                         i -= 1
                         break
                     l.append(data)
-                    if alt_arg: # only one option in --opt=val form
+                    if alt_arg:  # only one option in --opt=val form
                         break
                 else:
                     break
@@ -151,6 +157,7 @@ def parse_option(cf, argv, i, option, alt_arg, origin="argv"):
     # default
     return None, "unknown argument type for option `%s'." % option
 
+
 def parse_argv(cf, argv):
     argv_cf = {}
     allargs = {}
@@ -161,14 +168,14 @@ def parse_argv(cf, argv):
                 print(cf[i])
                 sys.exit(1)
             else:
-               allargs[cf[i]['long']] = i
+                allargs[cf[i]['long']] = i
         if 'short' in cf[i]:
             if len(cf[i]['short']) != 1 or cf[i]['short'] in allargs:
                 print("Hey Arne, don't bullshit me!")
                 print(cf[i])
                 sys.exit(1)
             else:
-               allargs[cf[i]['short']] = i
+                allargs[cf[i]['short']] = i
     i = 1
     help = 0
     while i < len(argv):

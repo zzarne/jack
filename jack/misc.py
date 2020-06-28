@@ -1,30 +1,32 @@
-### jack.misc - misc stuff for
-### jack - extract audio from a CD and MP3ify it using 3rd party software
-### Copyright (C) 1999,2000  Arne Zellentin <zarne@users.sf.net>
+# jack.misc - misc stuff for
+# jack - extract audio from a CD and MP3ify it using 3rd party software
+# Copyright (C) 1999,2000  Arne Zellentin <zarne@users.sf.net>
 
-### This program is free software; you can redistribute it and/or modify
-### it under the terms of the GNU General Public License as published by
-### the Free Software Foundation; either version 2 of the License, or
-### (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-### GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-### You should have received a copy of the GNU General Public License
-### along with this program; if not, write to the Free Software
-### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import sys
 import os
 
 import jack.globals
 
+
 def id(x):
     return x
 
-def multi_replace(s, rules, where, filter = id, warn = 0):
+
+def multi_replace(s, rules, where, filter=id, warn=0):
     "like str.replace but take list (('from0', 'to0'), ('from1', 'to1'))..."
 
     if warn == 2:
@@ -47,12 +49,14 @@ def multi_replace(s, rules, where, filter = id, warn = 0):
                 s = s.replace(fr, to)
     return s
 
+
 def safe_int(number, message):
     try:
         return int(number)
     except ValueError:
         print(message)
         sys.exit(1)
+
 
 class dict2(dict):
     def rupdate(self, d2, where):
@@ -63,6 +67,7 @@ class dict2(dict):
                     new.update(d2[i])
                     new['history'].append([where, new['val']])
                     dict.__setitem__(self, i, new)
+
     def __getitem__(self, y):
         if type(y) == str and y and y[0] == "_":
             return dict.__getitem__(self, y[1:])['val']
@@ -72,9 +77,10 @@ class dict2(dict):
     def __setitem__(self, y, x):
         if type(y) == str and y and y[0] == "_":
             self[y[1:]]['val'] = x
-            #return dict.__setitem__(self, y[1:])['val']
+            # return dict.__setitem__(self, y[1:])['val']
         else:
             return dict.__setitem__(self, y, x)
+
 
 def loadavg():
     "extract sysload from /proc/loadavg, linux only (?)"

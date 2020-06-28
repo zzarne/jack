@@ -1,20 +1,20 @@
-### jack.utils: utility functions for
-### jack - extract audio from a CD and encode it using 3rd party software
-### Copyright (C) 1999-2002  Arne Zellentin <zarne@users.sf.net>
+# jack.utils: utility functions for
+# jack - extract audio from a CD and encode it using 3rd party software
+# Copyright (C) 1999-2002  Arne Zellentin <zarne@users.sf.net>
 
-### This program is free software; you can redistribute it and/or modify
-### it under the terms of the GNU General Public License as published by
-### the Free Software Foundation; either version 2 of the License, or
-### (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-### GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-### You should have received a copy of the GNU General Public License
-### along with this program; if not, write to the Free Software
-### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import sys
 import signal
@@ -29,6 +29,7 @@ import jack.config
 
 from jack.globals import *
 
+
 def all_paths(p):
     "return all path leading to and including p"
     if type(p) == str:
@@ -39,6 +40,7 @@ def all_paths(p):
         x = os.path.join(x, i)
         all.append(x)
     return all
+
 
 def check_path(p1, p2):
     "check if p1 and p2 are equal or sub/supersets"
@@ -56,6 +58,7 @@ def check_path(p1, p2):
         if p1[-i] != p2[-i]:
             ok = 0
     return ok
+
 
 def rename_path(old, new):
     "this is complicated."
@@ -99,7 +102,7 @@ def rename_path(old, new):
     except OSError:
         error('Cannot rename "%s" to "%s" (Filename is too long or has unusable characters)' % (cwd, last_of_new))
     os.chdir(last_of_new)
-                                               # now remove empty "orphan" dirs
+    # now remove empty "orphan" dirs
 
     old_dirs = all_paths(cwds)
     old_dirs.reverse()
@@ -109,14 +112,21 @@ def rename_path(old, new):
         except OSError:
             pass
 
+
 def cmp_toc(x, y):
     "compare two track's length"
     x, y = x[LEN], y[LEN]
-    if x > y: return 1
-    elif x == y: return 0
-    elif x < y: return -1
+    if x > y:
+        return 1
+    elif x == y:
+        return 0
+    elif x < y:
+        return -1
+
 
 NUM, LEN, START, COPY, PRE, CH, RIP, RATE, NAME = list(range(9))
+
+
 def cmp_toc_cd(x, y, what=(NUM, LEN, START)):
     "compare the relevant parts of two TOCs"
     if len(x) == len(y):
@@ -128,8 +138,10 @@ def cmp_toc_cd(x, y, what=(NUM, LEN, START)):
         return 0
     return 1
 
+
 def filesize(name):
     return os.stat(name)[stat.ST_SIZE]
+
 
 def yes(what):
     if 'save' in what and what['save'] == 0:
@@ -152,6 +164,7 @@ def yes(what):
         s = s + " +"
     return s
 
+
 def safe_float(number, message):
     try:
         return float(number)
@@ -159,10 +172,12 @@ def safe_float(number, message):
         print(message)
         sys.exit(1)
 
+
 def unusable_charmap(x):
     for i in range(len(cf['_unusable_chars'])):
         x = x.replace(cf['_unusable_chars'][i], cf['_replacement_chars'][i])
     return x
+
 
 def mkdirname(names, template):
     "generate mkdir-able directory name(s)"
@@ -178,12 +193,13 @@ def mkdirname(names, template):
     subst = template.split(os.path.sep)
     dirs = []
     for i in subst:
-        x = jack.misc.multi_replace(i, replacelist, "dir_template", unusable_charmap, warn = 2)
+        x = jack.misc.multi_replace(i, replacelist, "dir_template", unusable_charmap, warn=2)
         exec("x = x" + cf['_char_filter'])
         dirs.append(x)
     if cf['_append_year'] and year:
-        dirs[-1] += jack.misc.multi_replace(cf['_append_year'], replacelist, "append-year", warn = 1)
+        dirs[-1] += jack.misc.multi_replace(cf['_append_year'], replacelist, "append-year", warn=1)
     return dirs, os.path.join(*dirs)
+
 
 def split_dirname(name):
     "split path in components"
@@ -198,6 +214,7 @@ def split_dirname(name):
     names.reverse()
     return names
 
+
 def split_path(path, num):
     "split given path in num parts"
     new_path = []
@@ -208,12 +225,15 @@ def split_path(path, num):
     new_path.append(base)
     new_path.reverse()
 
+
 def in_path(file):
     "check if a file is an executable in PATH"
     for path in os.environ.get("PATH", "").split(os.path.pathsep):
         p = os.path.join(path, file)
-        if (os.path.isfile(p) and os.access(p, os.X_OK)): return True
+        if (os.path.isfile(p) and os.access(p, os.X_OK)):
+            return True
     return False
+
 
 def ex_edit(file):
     editor = "/usr/bin/sensible-editor"
@@ -222,9 +242,9 @@ def ex_edit(file):
     print("invoking your editor,", editor, "...")
     os.system(editor.split()[0] + " " + file)
 
+
 def has_track(l, num):
     for i in range(len(l)):
         if l[i][NUM] == num:
             return i
     return -1.5
-

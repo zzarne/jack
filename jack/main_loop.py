@@ -1,21 +1,21 @@
 # -*- coding: iso-8859-15 -*-
-### jack.main_loop: the main encoding loop for
-### jack - extract audio from a CD and encode it using 3rd party software
-### Copyright (C) 1999-2004  Arne Zellentin <zarne@users.sf.net>
+# jack.main_loop: the main encoding loop for
+# jack - extract audio from a CD and encode it using 3rd party software
+# Copyright (C) 1999-2004  Arne Zellentin <zarne@users.sf.net>
 
-### This program is free software; you can redistribute it and/or modify
-### it under the terms of the GNU General Public License as published by
-### the Free Software Foundation; either version 2 of the License, or
-### (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-### GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-### You should have received a copy of the GNU General Public License
-### along with this program; if not, write to the Free Software
-### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import signal
 import select
@@ -38,6 +38,7 @@ import jack.term
 
 from jack.globals import *
 
+
 def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
     global_error = 0    # remember if something went wrong
     actual_load = -2    # this is always smaller than max_load
@@ -53,8 +54,8 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
     enc_running = 0     # what is going on?
     dae_running = 0     # what is going on?
 
-    rotate="/-\\|"
-    rotate_ball=" .o0O0o."
+    rotate = "/-\\|"
+    rotate_ball = " .o0O0o."
     rot_cycle = len(rotate)
     rot_ball_cycle = len(rotate_ball)
     rot_count = 0
@@ -63,15 +64,14 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
     ext = jack.targets.targets[jack.helpers.helpers[cf['_encoder']]['target']]['file_extension']
     global_blocks = jack.functions.tracksize(wavs_todo)[BLOCKS] + jack.functions.tracksize(mp3s_todo)[BLOCKS]
 
-
-                           #####################
-                             ### MAIN LOOP ###
-                           #####################
+    #####################
+    ### MAIN LOOP ###
+    #####################
 
     global_start = time.time()
     while mp3s_todo or enc_queue or dae_queue or enc_running or dae_running:
         orig_space = space
-                            # feed in the WAVs which have been there from the start
+        # feed in the WAVs which have been there from the start
         if mp3s_todo and jack.functions.tracksize(mp3s_todo[0])[ENC] < space:
             waiting_space = 0
             enc_queue.append(mp3s_todo[0])
@@ -79,7 +79,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
             jack.status.enc_stat_upd(mp3s_todo[0][NUM], "waiting for encoder.")
             mp3s_todo = mp3s_todo[1:]
 
-                                                    # start new DAE subprocess
+            # start new DAE subprocess
 
         elif (len(enc_queue) + enc_running) < (cf['_read_ahead'] + cf['_encoders']) and dae_queue and dae_running < cf['_rippers'] and ((jack.functions.tracksize(dae_queue[0])[BOTH] < space) or (cf['_only_dae'] and jack.functions.tracksize(dae_queue[0])[WAV] < space) or (cf['_otf'] and jack.functions.tracksize(dae_queue[0])[ENC] < space)):
             waiting_space = 0
@@ -135,7 +135,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
                     else:
                         jack.status.dae_stat_upd(track[NUM], ":?AE: don't know how to rip this!")
 
-                                            # start new encoder subprocess
+                        # start new encoder subprocess
 
         if enc_queue and enc_running < cf['_encoders']:
             if jack.functions.tracksize(enc_queue[0])[ENC] <= space + space_waiting:
@@ -154,9 +154,9 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
                 else:
                     waiting_load = 1
 
-                                            # check for subprocess output
+                    # check for subprocess output
 
-        readfd=[sys.stdin.fileno()]
+        readfd = [sys.stdin.fileno()]
         for i in jack.children.children:
             readfd.append(i['fd'])
         try:
@@ -165,7 +165,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
             rfd, wfd, xfd = [], [], []
             jack.term.tmod.sig_winch_handler(None, None)
 
-                                            # check for keyboard commands
+            # check for keyboard commands
 
         if sys.stdin.fileno() in rfd:
             last_update = last_update - cf['_update_interval']
@@ -246,7 +246,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
         if jack.children.children:
             respid, res = os.waitpid(-1, os.WNOHANG)
             if respid != 0:
-                last_update = last_update - cf['_update_interval'] # ensure info is printed
+                last_update = last_update - cf['_update_interval']  # ensure info is printed
                 new_ch = []
                 exited_proc = []
                 for i in jack.children.children:
@@ -271,7 +271,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
                 track = exited_proc['track']
                 num = track[NUM]
                 stop_time = time.time()
-                speed = ( track[LEN] / float(CDDA_BLOCKS_PER_SECOND)) / ( stop_time - exited_proc['start_time'] )
+                speed = (track[LEN] / float(CDDA_BLOCKS_PER_SECOND)) / (stop_time - exited_proc['start_time'])
 
                 if exited_proc['type'] in ("ripper", "image_reader"):
                     dae_running = dae_running - 1
@@ -303,7 +303,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
                         if exited_proc['type'] == "image_reader":
                             jack.status.dae_stat_upd(num, jack.status.get_2_line(exited_proc['buf']))
                         else:
-                            loc = { 'final_status': None, 'exited_proc': exited_proc, 'speed': speed }
+                            loc = {'final_status': None, 'exited_proc': exited_proc, 'speed': speed}
                             if exited_proc['otf'] and 'otf-final_status_fkt' in jack.helpers.helpers[exited_proc['prog']]:
                                 exec((jack.helpers.helpers[exited_proc['prog']]['otf-final_status_fkt']), globals(), loc)
                             else:
@@ -363,12 +363,12 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
         if last_update + cf['_update_interval'] <= time.time():
             last_update = time.time()
 
-                                                # interpret subprocess output
+            # interpret subprocess output
 
             for i in jack.children.children:
                 if i['type'] == "ripper":
                     if len(i['buf']) == jack.helpers.helpers[i['prog']]['status_blocksize']:
-                        loc = { 'new_status': None, 'i': i }
+                        loc = {'new_status': None, 'i': i}
                         if i['otf'] and 'otf-status_fkt' in jack.helpers.helpers[i['prog']]:
                             exec((jack.helpers.helpers[i['prog']]['otf-status_fkt']), globals(), loc)
                         else:
@@ -391,7 +391,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
 
                         if i['percent'] > 0:
                             i['elapsed'] = time.time() - i['start_time']
-                            speed = ((i['track'][LEN] / float(CDDA_BLOCKS_PER_SECOND)) * ( i['percent'] / 100 )) / i['elapsed']
+                            speed = ((i['track'][LEN] / float(CDDA_BLOCKS_PER_SECOND)) * (i['percent'] / 100)) / i['elapsed']
                             eta = (100 - i['percent']) * i['elapsed'] / i['percent']
                             eta_ms = "%02i:%02i" % (eta // 60, eta % 60)
                             jack.status.enc_stat_upd(i['track'][NUM], '%2i%% done, ETA:%6s, %sx' % (i['percent'], eta_ms, jack.functions.pprint_speed(speed)))
@@ -456,14 +456,15 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
                 rot = rotate[rot_count % rot_cycle]
             rot_count = rot_count + 1
 
-                                                            # print status
+            # print status
 
             if blocked > 2:
                 jack.display.special_line = " ...I feel blocked - quit with 'q' if you get bored... "
                 if blocked > 5:
                     space = jack.functions.df() - cf['_keep_free']
             elif waiting_load and waiting_space >= 2:
-                jack.display.special_line = " ...waiting for load (%.2f)" % actual_load + ") < %.2f" % cf['_max_load'] + " and for " + jack.functions.pprint_i(space_adjust, "%i %sBytes") + " to be freed... "
+                jack.display.special_line = " ...waiting for load (%.2f)" % actual_load + ") < %.2f" % cf['_max_load'] + \
+                    " and for " + jack.functions.pprint_i(space_adjust, "%i %sBytes") + " to be freed... "
             elif waiting_space >= 2:
                 jack.display.special_line = " ...waiting for " + jack.functions.pprint_i(space_adjust, "%i %sBytes") + " to be freed.... "
             elif waiting_load:
@@ -471,7 +472,7 @@ def main_loop(mp3s_todo, wavs_todo, space, dae_queue, enc_queue, track1_offset):
             else:
                 jack.display.special_line = None
 
-            jack.display.bottom_line =  "(" + rot + ") " \
+            jack.display.bottom_line = "(" + rot + ") " \
                 + "SPACE:" * (space_adjust != 0) \
                 + "space:" * (space_adjust == 0) \
                 + jack.functions.pprint_i(space, "%i%sB") \

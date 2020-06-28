@@ -1,22 +1,27 @@
-### jack.freedb: freedb server for use in
-### jack - extract audio from a CD and encode it using 3rd party software
-### Copyright (C) 1999-2003  Arne Zellentin <zarne@users.sf.net>
+# jack.freedb: freedb server for use in
+# jack - extract audio from a CD and encode it using 3rd party software
+# Copyright (C) 1999-2003  Arne Zellentin <zarne@users.sf.net>
 
-### This program is free software; you can redistribute it and/or modify
-### it under the terms of the GNU General Public License as published by
-### the Free Software Foundation; either version 2 of the License, or
-### (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-### GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-### You should have received a copy of the GNU General Public License
-### along with this program; if not, write to the Free Software
-### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-import urllib.request, urllib.error, urllib.parse, urllib.request, urllib.parse, urllib.error
+import urllib.request
+import urllib.error
+import urllib.parse
+import urllib.request
+import urllib.parse
+import urllib.error
 import string
 import sys
 import os
@@ -53,11 +58,12 @@ freedb_servers = {
     },
 }
 
-def interpret_db_file(all_tracks, todo, freedb_form_file, verb, dirs = 0, warn = None):
+
+def interpret_db_file(all_tracks, todo, freedb_form_file, verb, dirs=0, warn=None):
     "read freedb file and rename dir(s)"
     global names_available, dir_created
     freedb_rename = 0
-    err, track_names, locale_names, cd_id, revision = freedb_names(freedb_id(all_tracks), all_tracks, todo, freedb_form_file, verb = verb, warn = warn)
+    err, track_names, locale_names, cd_id, revision = freedb_names(freedb_id(all_tracks), all_tracks, todo, freedb_form_file, verb=verb, warn=warn)
     if (not err) and dirs:
         freedb_rename = 1
 
@@ -99,10 +105,10 @@ def interpret_db_file(all_tracks, todo, freedb_form_file, verb, dirs = 0, warn =
                            "y": year, "g": genretxt}
             if cf['_various']:
                 replacelist["a"] = i[0]
-                newname = jack.misc.multi_replace(cf['_rename_fmt_va'], replacelist, "rename_fmt_va", warn = (num == 1))
+                newname = jack.misc.multi_replace(cf['_rename_fmt_va'], replacelist, "rename_fmt_va", warn=(num == 1))
             else:
                 replacelist["a"] = cd[0]
-                newname = jack.misc.multi_replace(cf['_rename_fmt'], replacelist, "rename_fmt", warn = (num == 1))
+                newname = jack.misc.multi_replace(cf['_rename_fmt'], replacelist, "rename_fmt", warn=(num == 1))
             exec("newname = newname" + cf['_char_filter'])
             for char_i in range(len(cf['_unusable_chars'])):
                 try:
@@ -120,14 +126,15 @@ def interpret_db_file(all_tracks, todo, freedb_form_file, verb, dirs = 0, warn =
     return err, track_names, locale_names, freedb_rename, revision
 #/ end of interpret_db_file /#
 
-def local_freedb(cd_id, freedb_dir, outfile = "/tmp/testfilefreedb"):
+
+def local_freedb(cd_id, freedb_dir, outfile="/tmp/testfilefreedb"):
     "Use file from local freedb directory"
     # Moritz Moeller-Herrmann kindly provided this functionality.
     if not os.path.isdir(freedb_dir):
         error("freedb directory not found")
     if not os.access(freedb_dir, 5):
         error("freedb directory access not permitted")
-    cat=[freedb_dir] # category listing
+    cat = [freedb_dir]  # category listing
     for entry in os.listdir(freedb_dir):
         if os.path.isdir(os.path.join(freedb_dir, entry)):
             cat.append(os.path.join(freedb_dir, entry))
@@ -149,6 +156,7 @@ def local_freedb(cd_id, freedb_dir, outfile = "/tmp/testfilefreedb"):
     print("No local matching freedb entry found")
     return 1
 
+
 def freedb_sum(n):
     "belongs to freedb_id"
     ret = 0
@@ -156,6 +164,7 @@ def freedb_sum(n):
         ret = ret + (n % 10)
         n = n // 10
     return ret
+
 
 def freedb_id(tracks, warn=0):
     from jack.globals import START, MSF_OFFSET, CDDA_BLOCKS_PER_SECOND
@@ -176,7 +185,8 @@ def freedb_id(tracks, warn=0):
 
     return "%08x" % ((n % 0xff << int(24)) | (t << 8) | (len(tracks)))
 
-def freedb_split(field, s, max = 78):
+
+def freedb_split(field, s, max=78):
     "split a field into multiple lines of 78 char max."
     x = ""
     s = field + "=" + s
@@ -185,7 +195,8 @@ def freedb_split(field, s, max = 78):
         s = field + "=" + s[max:]
     return x + s + "\n"
 
-def freedb_template(tracks, names = "", revision = 0):
+
+def freedb_template(tracks, names="", revision=0):
     "generate a freedb submission template"
     if os.path.exists(cf['_freedb_form_file']):
         os.rename(cf['_freedb_form_file'], cf['_freedb_form_file'] + ".bak")
@@ -198,7 +209,7 @@ def freedb_template(tracks, names = "", revision = 0):
     f.write("# Submitted via: " + jack.version.name + " " + jack.version.version + "\n#\n")
     f.write("DISCID=" + freedb_id(tracks) + "\n")
     if names:
-        if names[1][0]: # various
+        if names[1][0]:  # various
             if (names[0][0]).upper().find("VARIOUS") >= 0:
                 f.write(freedb_split("DTITLE", "Various / " + names[0][1]))
             else:
@@ -226,14 +237,14 @@ def freedb_template(tracks, names = "", revision = 0):
         f.write("DGENRE=\n")
     for i in tracks:
         if names:
-            if names[i[NUM]][0]: # various
+            if names[i[NUM]][0]:  # various
                 f.write(
-                        freedb_split("TTITLE" + repr(i[NUM]-1),
-                                     names[i[NUM]][0] +
-                                     " - " +
-                                     names[i[NUM]][1]
-                                    )
-                       )
+                    freedb_split("TTITLE" + repr(i[NUM]-1),
+                                 names[i[NUM]][0] +
+                                 " - " +
+                                 names[i[NUM]][1]
+                                 )
+                )
             else:
                 f.write(freedb_split("TTITLE" + repr(i[NUM]-1), names[i[NUM]][1]))
         else:
@@ -246,12 +257,13 @@ def freedb_template(tracks, names = "", revision = 0):
         f.write("EXTT" + repr(i[NUM]-1) + "=\n")
     f.write("PLAYORDER=\n")
 
+
 def freedb_query(cd_id, tracks, file):
     if cf['_freedb_dir']:
-        if local_freedb(cd_id, cf['_freedb_dir'], file)==0: # use local database (if any)
+        if local_freedb(cd_id, cf['_freedb_dir'], file) == 0:  # use local database (if any)
             return 0
 
-    qs = "cmd=cddb query " + cd_id + " " + repr(len(tracks)) + " " # query string
+    qs = "cmd=cddb query " + cd_id + " " + repr(len(tracks)) + " "  # query string
     for i in tracks:
         qs = qs + repr(i[START] + MSF_OFFSET) + " "
     qs = qs + repr((MSF_OFFSET + tracks[-1][START] + tracks[-1][LEN]) // CDDA_BLOCKS_PER_SECOND)
@@ -269,7 +281,7 @@ def freedb_query(cd_id, tracks, file):
         f = urllib.request.urlopen(url)
     buf = f.readline().decode()
     if buf and buf[0:1] == "2":
-        if buf[0:3] in ("210", "211"): # Found inexact or multiple exact matches, list follows
+        if buf[0:3] in ("210", "211"):  # Found inexact or multiple exact matches, list follows
             if buf[0:3] == "211":
                 global freedb_inexact_match
                 freedb_inexact_match = 1
@@ -330,7 +342,7 @@ def freedb_query(cd_id, tracks, file):
         url = "http://" + freedb_servers[cf['_freedb_server']]['host'] + "/~cddb/cddb.cgi?" + urllib.parse.quote_plus(cmd + "&" + hello + "&proto=6", "=&")
         f = urllib.request.urlopen(url)
         buf = f.readline().decode()
-        if buf and buf[0:3] == "210": # entry follows
+        if buf and buf[0:3] == "210":  # entry follows
             if os.path.exists(file):
                 os.rename(file, file + ".bak")
             of = open(file, "w")
@@ -358,12 +370,13 @@ def freedb_query(cd_id, tracks, file):
     f.close()
     return err
 
-def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
+
+def freedb_names(cd_id, tracks, todo, name, verb=0, warn=1):
     "returns err, [(artist, albumname), (track_01-artist, track_01-name), ...], cd_id, revision"
     err = 0
     tracks_on_cd = tracks[-1][NUM]
     freedb = {}
-    f = open(name, "rb") # first the freedb info is read in...
+    f = open(name, "rb")  # first the freedb info is read in...
     while 1:
         line = f.readline()
         if not line:
@@ -373,7 +386,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
         except UnicodeDecodeError:
             line = line.decode("latin-1")
         line = line.replace("\n", "")  # cannot use rstrip, we need trailing
-                                        # spaces
+        # spaces
         line = line.replace("\r", "")  # I consider "\r"s as bugs in db info
         if line.startswith("# Revision:"):
             revision = int(line[11:])
@@ -400,7 +413,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
                 warning("no freedb info for track %02i (\"TTITLE%i\")" % (i[NUM], i[NUM] - 1))
             freedb["TTITLE%i" % (i[NUM] - 1)] = "[not set]"
 
-    for i in list(freedb.keys()):# check that there is no extra info
+    for i in list(freedb.keys()):  # check that there is no extra info
         if i[0:6] == "TTITLE":
             if int(i[6:]) > tracks_on_cd - 1:
                 err = 2
@@ -447,7 +460,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
     dtitle = dtitle.replace(" / ", "/")    # kill superflous slashes
     dtitle = dtitle.replace("/ ", "/")
     dtitle = dtitle.replace(" /", "/")
-    dtitle = dtitle.replace("(unknown disc title)", "(unknown artist)/(unknown disc title)") # yukk!
+    dtitle = dtitle.replace("(unknown disc title)", "(unknown artist)/(unknown disc title)")  # yukk!
     if not dtitle:
         dtitle = "(unknown artist)/(unknown disc title)"
     if dtitle.find("/") == -1:
@@ -482,7 +495,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
                     cf['_id3_genre'] = genre
                 elif cf['_id3_genre'] != genre:
                     warning("Specified and FreeDB genre differ (%s vs %s)" %
-                        (id3genres[cf['_id3_genre']], id3genres[genre]))
+                            (id3genres[cf['_id3_genre']], id3genres[genre]))
         else:
             warning("DGENRE should be a string, not an integer.")
     if 'EXTD' in freedb and 'DYEAR' not in freedb:
@@ -546,18 +559,18 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
 
 # now try to find a string common to all titles with length 3...1
 
-        for i in (3,2,1):
+        for i in (3, 2, 1):
             candidate_found = 0
             for j in range(len(titles[0])-(i-1)):
 
-# choose a possible candidate
+                # choose a possible candidate
 
                 candidate = titles[0][j:j+i]
                 illegal_letter = 0
                 for k in candidate:
                     if k in ignore:
 
-# candidate must not have characters from ignore
+                        # candidate must not have characters from ignore
 
                         illegal_letter = 1
                         break
@@ -581,7 +594,7 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
                                 where2 = l.find(candidate) + len(candidate)
                                 where = where2
                                 while l.find(b[1], where) != -1:
-                                    where = l.find( b[1], where) + len(candidate)
+                                    where = l.find(b[1], where) + len(candidate)
                                     matches = matches + 1
                                 where = where2
                                 if not b[1] in candidate:
@@ -662,7 +675,8 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
         else:
             err = 7
             if verb:
-                warning("could not separate artist and title in all TTITLEs. Try setting freedb_pedantic = 0 or use --various=no. Maybe additional information is contained in the EXTT fields. check %s and use either --extt-is-artist or --extt-is-title." % cf['_freedb_form_file'])
+                warning("could not separate artist and title in all TTITLEs. Try setting freedb_pedantic = 0 or use --various=no. Maybe additional information is contained in the EXTT fields. check %s and use either --extt-is-artist or --extt-is-title." %
+                        cf['_freedb_form_file'])
     else:
         for i in range(tracks_on_cd):
             buf = freedb['TTITLE'+repr(i)]
@@ -695,7 +709,8 @@ def freedb_names(cd_id, tracks, todo, name, verb = 0, warn = 1):
         locale_names.append(t)
     return err, names, locale_names, read_id, revision
 
-def choose_cat(cat = ["blues", "classical", "country", "data", "folk", "jazz", "misc", "newage", "reggae", "rock", "soundtrack"]):
+
+def choose_cat(cat=["blues", "classical", "country", "data", "folk", "jazz", "misc", "newage", "reggae", "rock", "soundtrack"]):
     print("choose a category:")
     cat.sort()
     for i in range(0, len(cat)):
@@ -721,7 +736,8 @@ def choose_cat(cat = ["blues", "classical", "country", "data", "folk", "jazz", "
 
     return cat[x-1]
 
-def do_freedb_submit(file, cd_id, cat = None):
+
+def do_freedb_submit(file, cd_id, cat=None):
     import http.client
 
     if not cat:
@@ -761,20 +777,22 @@ def do_freedb_submit(file, cd_id, cat = None):
     proxy = ""
     if 'http_proxy' in os.environ:
         proxy = os.environ['http_proxy']
+
         def splittype(url):
             import re
             _typeprog = re.compile('^([^/:]+):')
             match = _typeprog.match(url)
             if match:
-                    scheme = match.group(1)
-                    return scheme, url[len(scheme) + 1:]
+                scheme = match.group(1)
+                return scheme, url[len(scheme) + 1:]
             return None, url
 
         def splithost(url):
             import re
             _hostprog = re.compile('^//([^/]+)(.*)$')
             match = _hostprog.match(url)
-            if match: return match.group(1, 2)
+            if match:
+                return match.group(1, 2)
             return None, url
 
         type, proxy = splittype(proxy)
@@ -828,7 +846,8 @@ def do_freedb_submit(file, cd_id, cat = None):
         print("consider submitting via mail (" + progname + " -m). full error:\n")
     print(err, msg)
 
-def do_freedb_mailsubmit(file, cd_id, cat = None):
+
+def do_freedb_mailsubmit(file, cd_id, cat=None):
     warning("Support for freedb submission via e-mail may be dropped in future versions. Please begin to use HTTP to submit your entries (--submit)")
     sendmail = '/usr/lib/sendmail -t'
     #sendmail = 'cat > /tmp/jack-test-mailsubmit'
@@ -839,6 +858,7 @@ def do_freedb_mailsubmit(file, cd_id, cat = None):
         return os.system("( echo 'To: " + freedb_servers[cf['_freedb_server']]['mail'] + "'; echo From: '" + freedb_servers[cf['_freedb_server']]['my_mail'] + "'; echo 'Subject: cddb " + cat + " " + cd_id + "' ; cat '" + file + "' ) | " + sendmail)
     else:
         print("please set your e-mail address. aborting...")
+
 
 def update_revision(file):
     "Update the revision (and submitted-via) information in a FreeDB template"
@@ -879,4 +899,3 @@ def update_revision(file):
         os.unlink(tmpname)
     except IOError:
         print("Cannot remove temporary file %s." % tmpname)
-

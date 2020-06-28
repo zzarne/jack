@@ -1,21 +1,23 @@
-### jack.t_curses: curses terminal functions for
-### jack - extract audio from a CD and encode it using 3rd party software
-### Copyright (C) 1999-2004  Arne Zellentin <zarne@users.sf.net>
+# jack.t_curses: curses terminal functions for
+# jack - extract audio from a CD and encode it using 3rd party software
+# Copyright (C) 1999-2004  Arne Zellentin <zarne@users.sf.net>
 
-### This program is free software; you can redistribute it and/or modify
-### it under the terms of the GNU General Public License as published by
-### the Free Software Foundation; either version 2 of the License, or
-### (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-### GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-### You should have received a copy of the GNU General Public License
-### along with this program; if not, write to the Free Software
-### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+from curses import endwin, A_REVERSE, newwin, newpad, initscr, noecho, \
+    cbreak, echo, nocbreak, error, resizeterm
 import termios
 import sys
 import signal
@@ -32,8 +34,6 @@ from jack.globals import *
 
 enabled = None
 
-from curses import endwin, A_REVERSE, newwin, newpad, initscr, noecho, \
-                   cbreak, echo, nocbreak, error, resizeterm
 
 # screen objects
 stdscr = status_pad = usage_win = None
@@ -57,6 +57,7 @@ map_track_num = None        # list track number -> line number
 extra_lines = None
 had_special = None
 
+
 def enable():
     # Initialize curses
     global stdscr
@@ -73,7 +74,7 @@ def enable():
         return
 
     had_special = 0
-    extra_lines = 2 # top + bottom status lines
+    extra_lines = 2  # top + bottom status lines
     if jack.display.discname:
         extra_lines = extra_lines + 1
     stdscr = initscr()
@@ -81,7 +82,8 @@ def enable():
     jack.term.sig_winch_cache = signal.signal(signal.SIGWINCH, signal.SIG_IGN)
     # Turn off echoing of keys, and enter cbreak mode,
     # where no buffering is performed on keyboard input
-    noecho() ; cbreak()
+    noecho()
+    cbreak()
 
     # In keypad mode, escape sequences for special keys
     # (like the cursor keys) will be interpreted and
@@ -99,6 +101,7 @@ def enable():
 
     sig_winch_handler(None, None)
 
+
 def disable():
     global enabled
     if enabled:
@@ -107,10 +110,12 @@ def disable():
         signal.signal(signal.SIGWINCH, signal.SIG_IGN)
         # Set everything back to normal
         stdscr.keypad(0)
-        echo() ; nocbreak()
+        echo()
+        nocbreak()
         # Terminate curses, back to normal screen
         endwin()
         enabled = 0
+
 
 def sig_winch_handler(sig, frame):
     global staus_pad, stdscr, usage_win
@@ -157,8 +162,8 @@ def sig_winch_handler(sig, frame):
         scroll_keys = scroll_keys + " "
     if extra_lines < jack.term.size_y:
         if jack.display.discname:
-            stdscr.addstr(0, 0, (jack.display.center_line(jack.display.options_string + " [" + scroll_keys + "]", fill = " ", width = jack.term.size_x))[:jack.term.size_x], A_REVERSE)
-            stdscr.addstr(1, 0, jack.display.center_line(jack.display.discname, fill = "- ", fill_r = " -", width = jack.term.size_x)[:jack.term.size_x], A_REVERSE)
+            stdscr.addstr(0, 0, (jack.display.center_line(jack.display.options_string + " [" + scroll_keys + "]", fill=" ", width=jack.term.size_x))[:jack.term.size_x], A_REVERSE)
+            stdscr.addstr(1, 0, jack.display.center_line(jack.display.discname, fill="- ", fill_r=" -", width=jack.term.size_x)[:jack.term.size_x], A_REVERSE)
         else:
             stdscr.addstr(0, 0, (jack.display.options_string + " " * (jack.term.size_x - len(jack.display.options_string) - (0 + 4)) + scroll_keys)[:jack.term.size_x], A_REVERSE)
 
@@ -166,12 +171,12 @@ def sig_winch_handler(sig, frame):
             spec_pos = 1
             if jack.display.discname:
                 spec_pos = 2
-            stdscr.addstr(spec_pos, 0, jack.display.center_line(jack.display.special_line, fill = " ", width = jack.term.size_x)[:jack.term.size_x], A_REVERSE)
+            stdscr.addstr(spec_pos, 0, jack.display.center_line(jack.display.special_line, fill=" ", width=jack.term.size_x)[:jack.term.size_x], A_REVERSE)
 
         if jack.display.bottom_line:
             c_bottom = jack.display.bottom_line
             c_bottom += " " * (jack.term.size_x
-                               - len(jack.display.bottom_line) - 1 )
+                               - len(jack.display.bottom_line) - 1)
             c_bottom = c_bottom[:jack.term.size_x - 1]
             stdscr.addstr(jack.term.size_y - 1, 0, c_bottom, A_REVERSE)
 
@@ -198,6 +203,7 @@ def sig_winch_handler(sig, frame):
     signal.signal(signal.SIGWINCH, sig_winch_handler)
 #/ end of sig_winch_handler(sig, frame) /#
 
+
 def move_pad(cmd):
     global pad_disp_start_y, pad_disp_start_x, splash_reserve
     if cmd in ("j", 'KEY_DOWN') and pad_disp_start_y < pad_height - 1:
@@ -219,14 +225,17 @@ def move_pad(cmd):
     sig_winch_handler(None, None)
     return True
 
+
 def disp_bottom_line(bottom_line):
     stdscr.addstr(jack.term.size_y - 1, 0, (bottom_line + " " * (jack.term.size_x - len(bottom_line)))[:jack.term.size_x - 1], A_REVERSE)
     if pad_start_y < pad_end_y:
         status_pad.refresh(pad_y, pad_x, pad_start_y, pad_start_x, pad_end_y, pad_end_x)
     stdscr.refresh()
 
+
 def getkey():
     return stdscr.getkey()
+
 
 def update(special_line, bottom_line):
     global had_special
@@ -243,9 +252,11 @@ def update(special_line, bottom_line):
     if 1 < jack.term.size_y:
         disp_bottom_line(bottom_line)
 
+
 def enc_stat_upd(num, string):
     status_pad.addstr(map_track_num[num], jack.ripstuff.max_name_len + 40, " " + jack.status.enc_status[num])
     status_pad.clrtoeol()
+
 
 def dae_stat_upd(num, string, reverse=-1):
     track = jack.ripstuff.all_tracks[num-1]

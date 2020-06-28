@@ -1,20 +1,20 @@
-### jack.display: screen presentation module for
-### jack - extract audio from a CD and encode it using 3rd party software
-### Copyright (C) 1999-2003  Arne Zellentin <zarne@users.sf.net>
+# jack.display: screen presentation module for
+# jack - extract audio from a CD and encode it using 3rd party software
+# Copyright (C) 1999-2003  Arne Zellentin <zarne@users.sf.net>
 
-### This program is free software; you can redistribute it and/or modify
-### it under the terms of the GNU General Public License as published by
-### the Free Software Foundation; either version 2 of the License, or
-### (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-### GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-### You should have received a copy of the GNU General Public License
-### along with this program; if not, write to the Free Software
-### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import termios
 import sys
@@ -42,6 +42,7 @@ old_tc = None
 
 smile = " :-)"
 
+
 def init():
     global global_total
     global options_string
@@ -56,8 +57,8 @@ def init():
         + " read-ahead=" + repr(cf['_read_ahead']) \
         + " keep-wavs" * cf['_keep_wavs'] \
         + " id=" + jack.freedb.freedb_id(jack.ripstuff.all_tracks) \
-        + (" len=%02i:%02i" % (global_total / jack.globals.CDDA_BLOCKS_PER_SECOND \
-            / 60, global_total / jack.globals.CDDA_BLOCKS_PER_SECOND % 60)) \
+        + (" len=%02i:%02i" % (global_total / jack.globals.CDDA_BLOCKS_PER_SECOND
+                               / 60, global_total / jack.globals.CDDA_BLOCKS_PER_SECOND % 60)) \
         + " | press Q to quit"
     jack.term.tmod.extra_lines = 2
     if jack.freedb.names_available:
@@ -65,7 +66,9 @@ def init():
         if jack.term.term_type == "curses":
             discname = jack.tag.locale_names[0][0] + " - " + jack.tag.locale_names[0][1]
         else:
-            options_string = center_line(jack.tag.locale_names[0][0] + " - " + jack.tag.locale_names[0][1], fill = "- ", fill_r = " -", width = jack.term.size_x) + "\n" + center_line(options_string, fill = " ", fill_r = " ", width = jack.term.size_x)
+            options_string = center_line(jack.tag.locale_names[0][0] + " - " + jack.tag.locale_names[0][1], fill="- ", fill_r=" -",
+                                         width=jack.term.size_x) + "\n" + center_line(options_string, fill=" ", fill_r=" ", width=jack.term.size_x)
+
 
 def sig_handler(sig, frame):
     "signal handler and general cleanup procedure"
@@ -76,9 +79,9 @@ def sig_handler(sig, frame):
     sigint_handler = signal.getsignal(signal.SIGINT)
     signal.signal(signal.SIGINT, signal.SIG_IGN)
     if sig:
-        jack.term.disable(all = 0)
+        jack.term.disable(all=0)
     else:
-        jack.term.disable(all = 1)
+        jack.term.disable(all=1)
 
     if sig:
         exit_code = 2
@@ -101,14 +104,15 @@ def sig_handler(sig, frame):
             input("press ENTER to exit\n")
 
     if sig:
-        jack.term.enable(all = 0)
+        jack.term.enable(all=0)
     signal.signal(signal.SIGINT, sigint_handler)
 
     sys.exit(exit_code)
 
 #/ end of sig_handler /#
 
-def center_line(s, fill = " ", fill_sep = " ", fill_r = "", width = 80):
+
+def center_line(s, fill=" ", fill_sep=" ", fill_r="", width=80):
     "return s centered, filled with fill chars"
     width = jack.term.size_x
     free = width - len(s)
@@ -124,7 +128,7 @@ def center_line(s, fill = " ", fill_sep = " ", fill_r = "", width = 80):
     else:
         return s
 
+
 def exit():
     "call my own cleanum fkt. and exit"
     sig_handler(None, None)
-

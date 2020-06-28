@@ -1,20 +1,20 @@
-### jack.rc: read/write config file, a module for
-### jack - extract audio from a CD and encode it using 3rd party software
-### Copyright (C) 1999-2004  Arne Zellentin <zarne@users.sf.net>
+# jack.rc: read/write config file, a module for
+# jack - extract audio from a CD and encode it using 3rd party software
+# Copyright (C) 1999-2004  Arne Zellentin <zarne@users.sf.net>
 
-### This program is free software; you can redistribute it and/or modify
-### it under the terms of the GNU General Public License as published by
-### the Free Software Foundation; either version 2 of the License, or
-### (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-### GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-### You should have received a copy of the GNU General Public License
-### along with this program; if not, write to the Free Software
-### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 import os
 import sys
@@ -27,6 +27,7 @@ from jack.globals import *
 # exported functions:
 # load
 # save
+
 
 def read(file):
     read_rc = []
@@ -72,6 +73,7 @@ def read(file):
         warning("config file %s is of unknown version %s." % (file, repr(version)))
     return read_rc
 
+
 def get_version(rc):
     if not rc:
         return None
@@ -88,6 +90,7 @@ def get_version(rc):
             return int(vers[1])
     return None
 
+
 def load(cf, file):
     rc = read(expand(file))
     rc_cf = {}
@@ -103,6 +106,7 @@ def load(cf, file):
                 warning(file + ":%s: unknown option `%s'" % (i[3], i[0]))
     return rc_cf
 
+
 def merge(old, new):
     old = old[:]
     new = new[:]
@@ -117,7 +121,7 @@ def merge(old, new):
                 found = 1
                 break
         if not found:
-            append.append(new[i][:2] + [None,])
+            append.append(new[i][:2] + [None, ])
         else:
             if new[i][2] == 'toggle':
                 remove.append(old[j])
@@ -130,7 +134,8 @@ def merge(old, new):
     old.reverse()
     return old + append
 
-def write(file, rc, rcfile_exists = True):
+
+def write(file, rc, rcfile_exists=True):
     f = open(file, "w")
     if not rcfile_exists:
         f.write("# jackrc-version:%d\n" % jack.version.rcversion)
@@ -146,11 +151,13 @@ def write(file, rc, rcfile_exists = True):
             f.write("#" + i[2])
         f.write("\n")
 
+
 def write_yes(x):
     if x:
         return "yes"
     else:
         return "no"
+
 
 def convert(cf):
     rc = []
@@ -168,6 +175,7 @@ def convert(cf):
         else:
             error("don't know how to handle " + repr(cf[i]['type']))
     return rc
+
 
 def save(file, cf):
     file = expand(file)

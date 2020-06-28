@@ -1,26 +1,26 @@
 #!/usr/bin/python3
-### jack - extract audio from a CD and encode it using 3rd party software
-### Copyright (C) 1999-2004  Arne Zellentin <zarne@users.sf.net>
+# jack - extract audio from a CD and encode it using 3rd party software
+# Copyright (C) 1999-2004  Arne Zellentin <zarne@users.sf.net>
 
-### This program is free software; you can redistribute it and/or modify
-### it under the terms of the GNU General Public License as published by
-### the Free Software Foundation; either version 2 of the License, or
-### (at your option) any later version.
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
 
-### This program is distributed in the hope that it will be useful,
-### but WITHOUT ANY WARRANTY; without even the implied warranty of
-### MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-### GNU General Public License for more details.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 
-### You should have received a copy of the GNU General Public License
-### along with this program; if not, write to the Free Software
-### Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 ### If you want to comment on this program, contact me: zarne@users.sf.net ###
-### Visit the homepage: http://www.home.unix-ag.org/arne/jack/
+# Visit the homepage: http://www.home.unix-ag.org/arne/jack/
 
-### see CHANGELOG for recent changes in this program
-### see TODO if you want to see what needs to be implemented
+# see CHANGELOG for recent changes in this program
+# see TODO if you want to see what needs to be implemented
 
 import os
 import sys
@@ -70,7 +70,7 @@ def main():
     # say hello...
     print("This is", jack.version.name, jack.version.version, jack.version.copyright, jack.version.devemail)
 
-    ### interpret options
+    # interpret options
     global_cf = jack.rc.load(cf, cf['global_rc']['val'])
     jack.checkopts.checkopts(cf, global_cf)
     cf.rupdate(global_cf, "global_rc")
@@ -97,28 +97,28 @@ def main():
 
     ext = jack.targets.targets[jack.helpers.helpers[cf['_encoder']]['target']]['file_extension']
 
-    ### search for a dir containing a toc-file or do the multi-mode
+    # search for a dir containing a toc-file or do the multi-mode
     toc_just_read = jack.prepare.find_workdir()
     os.environ["JACK_CUR_DIR"] = os.getcwd()
     os.environ["JACK_BASE_DIR"] = cf['_base_dir']
     # now we are set to go as we know we are in the right dir
 
-    ### check toc (operation mode)
+    # check toc (operation mode)
     if cf['_check_toc']:
         jack.prepare.check_toc()
         sys.exit(0)
 
-    ### read and interpret toc_file
+    # read and interpret toc_file
     is_submittable, track1_offset = jack.prepare.read_toc_file()
 
-    ### make sure we have a freedb file
+    # make sure we have a freedb file
     if not os.path.exists(cf['_freedb_form_file']):
         jack.freedb.freedb_template(jack.ripstuff.all_tracks)
 
-    ### init status
+    # init status
     jack.status.init(jack.ripstuff.all_tracks)
 
-    #XXX## read progress info into status
+    # XXX## read progress info into status
 
     jack.ripstuff.all_tracks_orig = []
     for i in jack.ripstuff.all_tracks:
@@ -130,23 +130,23 @@ def main():
     for i in jack.ripstuff.all_tracks:
         jack.prepare.tracknum[i[NUM]] = i
 
-    ### now read in the progress file
+    # now read in the progress file
     status = jack.prepare.read_progress(status, jack.ripstuff.all_tracks)
 
-    ### filter out data tracks
+    # filter out data tracks
     jack.prepare.filter_tracks(toc_just_read, status)
 
-    ### Parse tracks from argv, generate todo
+    # Parse tracks from argv, generate todo
     todo = jack.prepare.gen_todo()
     if len(todo) == 0:
         error("nothing to do. bye.")
 
-    ### submit freedb data on user's request
+    # submit freedb data on user's request
     if cf['_freedb_submit'] or cf['_freedb_mailsubmit']:
         jack.prepare.freedb_submit()
         sys.exit(0)
 
-    ### do query on start
+    # do query on start
     freedb_rename = 0
     if cf['_query_if_needed']:
         if not os.path.exists(cf['_freedb_form_file'] + ".bak"):
@@ -154,37 +154,37 @@ def main():
     if cf['_query_on_start']:
         freedb_rename = jack.prepare.query_on_start(todo)
 
-    ### update freedb dbfile
+    # update freedb dbfile
     if cf['_update_freedb']:
         if not jack.tag.track_names:
-            err, jack.tag.track_names, jack.tag.locale_names, freedb_rename, revision = jack.freedb.interpret_db_file(jack.ripstuff.all_tracks, todo, cf['_freedb_form_file'], verb = 1, dirs = 0)
+            err, jack.tag.track_names, jack.tag.locale_names, freedb_rename, revision = jack.freedb.interpret_db_file(jack.ripstuff.all_tracks, todo, cf['_freedb_form_file'], verb=1, dirs=0)
         jack.freedb.freedb_template(jack.ripstuff.all_tracks, jack.tag.track_names, revision + 1)
         jack.utils.ex_edit(cf['_freedb_form_file'])
         info("now submit your changes if you like, using the option --submit (via http POST). Don't forget to activate your changes locally with -R")
         sys.exit(0)
 
-    ### update progress file at user's request (operation mode)
+    # update progress file at user's request (operation mode)
     if cf['_upd_progress']:
         jack.prepare.update_progress(status, todo)
         sys.exit(0)
 
-    ### undo renaming (operation mode)
+    # undo renaming (operation mode)
     if cf['_undo_rename']:
         jack.prepare.undo_rename(status, todo)
         sys.exit(0)
 
-    #### Reorder if told so
+    # Reorder if told so
     if cf['_reorder']:
         todo.sort(jack.utils.cmp_toc)
         todo.reverse()
 
-    #### check how much bytes we can burn
+    # check how much bytes we can burn
     if cf['space_from_argv']['history'][-1][0] == "argv":
         space = jack.ripstuff.raw_space = cf['_space_from_argv']
     else:
         space = jack.ripstuff.raw_space = jack.functions.df()
 
-    #### check what is already there
+    # check what is already there
     space, remove_q, wavs_todo, mp3s_todo, dae_queue, enc_queue = jack.prepare.what_todo(space, todo)
 
     if cf['_todo_exit']:           # print what needs to be done, then exit
@@ -196,37 +196,36 @@ def main():
     # has been filled from wavs_todo (todo is superflous now). The main_loop
     # will handle the tracks in mp3s_todo.
 
-    ### make sure we have enough space to rip the whole thing
+    # make sure we have enough space to rip the whole thing
     jack.prepare.check_space(space, wavs_todo, mp3s_todo)
 
-    cf['_max_load'] = cf['_max_load'] + cf['_encoders'] #XXX
+    cf['_max_load'] = cf['_max_load'] + cf['_encoders']  # XXX
 
     if not cf['_dont_work'] and dae_queue:     # check if inserted cd matches toc.
-        jack.prepare.check_cd() # why? paranoia or needed? XXX
+        jack.prepare.check_cd()  # why? paranoia or needed? XXX
         if cf['_rip_from_device']:
             all_tracks_on_cd = jack.functions.gettoc(cf['_toc_prog'])
             if not cf['_force'] and not jack.utils.cmp_toc_cd(jack.ripstuff.all_tracks_orig, all_tracks_on_cd, what=(NUM, LEN)):
                 error("you did not insert the right cd")
 
-    ### if we have work to do, we may have to remove some files first
+    # if we have work to do, we may have to remove some files first
     if remove_q:
         jack.prepare.remove_files(remove_q)
 
-    ### bail out now if told so
+    # bail out now if told so
     if cf['_dont_work']:
         info("quitting now as requested.")
         sys.exit(0)
 
-    ### install signal handlers
+    # install signal handlers
     signal.signal(signal.SIGTERM, jack.display.sig_handler)
     signal.signal(signal.SIGINT, jack.display.sig_handler)
     signal.signal(signal.SIGQUIT, jack.display.sig_handler)
     signal.signal(signal.SIGHUP, jack.display.sig_handler)
 
-
-           #\                         /#
+    #\                         /#
     #########> real work starts here <#############################################
-           #/                         \#
+    #/                         \#
 
     global_error = None
     if (wavs_todo or mp3s_todo):
@@ -240,7 +239,7 @@ def main():
             jack.term.disable()
             print(jack.display.options_string)
             print("--- Last status: ---------------------------------------------------------------")
-            jack.status.print_status(form = 'short')
+            jack.status.print_status(form='short')
             sys.exit(0)
         except:
             jack.term.disable()
@@ -259,7 +258,7 @@ def main():
             jack.display.exit()
 
     if cf['_query_when_ready'] or cf['_read_freedb_file'] or cf['_query_on_start']:
-        err, jack.tag.track_names, jack.tag.locale_names, freedb_rename, revision = jack.freedb.interpret_db_file(jack.ripstuff.all_tracks, todo, cf['_freedb_form_file'], verb = 1, dirs = 1)
+        err, jack.tag.track_names, jack.tag.locale_names, freedb_rename, revision = jack.freedb.interpret_db_file(jack.ripstuff.all_tracks, todo, cf['_freedb_form_file'], verb=1, dirs=1)
         if err:
             error("could not read freedb file")
 
@@ -267,7 +266,7 @@ def main():
         if jack.display.options_string:
             print(jack.display.options_string)
         print("The final status was:")
-        jack.status.print_status(form = 'short')
+        jack.status.print_status(form='short')
 
     if global_error:
         if cf['_exec_when_done']:
@@ -289,6 +288,7 @@ def main():
         os.system(cf['_exec_no_err'])
 
     jack.display.exit()      # call the cleanup function & exit
+
 
 if __name__ == "__main__":
     sys.exit(main())
