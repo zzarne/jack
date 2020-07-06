@@ -1,3 +1,7 @@
+# Project status
+
+This project is for reference only and will not get any new features.. Please use [this one](https://github.com/jack-cli-cd-ripper/jack) instead.
+
 # Jack - Rip and encode CDs with one command
 
 Jack has been developed with one main goal: making OGGs (or MP3s)
@@ -27,8 +31,3 @@ to ~/.jack_plugins/ (create directory). Then run
 ```bash
 jack --server plugin_gnudb --save
 ```
-## Project status
-
-This project will stay at Python 2 and will not get any new features.
-
-New features and Python 3 support can be found [here](https://github.com/pimzand/jack).
