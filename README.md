@@ -22,11 +22,11 @@ Jack is different from other such tools in a number of ways:
 - it can do a gnudb query based on OGGs alone, like if you don't remember from which CD those OGGs came from.
 - gnudb submissions
 
-Many thanks to the [friendly Debian maintainers](https://github.com/zzarne/jack/blob/master/debian/copyright) who kept Jack alive all these years!
+Many thanks to the [friendly Debian maintainers](https://github.com/zzarne/oldjack/blob/master/debian/copyright) who kept Jack alive all these years!
 
 ## Freedb
 
-Freedb servers are gone. For using gnudb.org in existing installations, [download this plugin](https://github.com/zzarne/jack/raw/master/jack_plugin_gnudb.py)
+Freedb servers are gone. For using gnudb.org in existing installations, [download this plugin](https://github.com/zzarne/oldjack/raw/master/jack_plugin_gnudb.py)
 to ~/.jack_plugins/ (create directory). Then run
 ```bash
 jack --server plugin_gnudb --save
